@@ -1,4 +1,5 @@
 {
+    "$schema": "https://www.schemastore.org/package.json",
 	"name": "den",
 	"version": "0.0.1",
 	"type": "module",
@@ -48,5 +49,68 @@
 	"dependencies": {
 		"cookie": "^1.0.2",
 		"esbuild": "^0.25.9"
+	},
+	"exports": {
+		"./package.json": "./package.json",
+		"./assets/images/gideon-animated.webp": "./package/assets/images/gideon-animated.webp",
+		"./assets/images/gideon.webp": "./package/assets/images/gideon.webp",
+		"./assets/images/nothing.png": "./package/assets/images/nothing.png",
+		"./components/BlogPost.svelte": {
+			"types": "./package/components/BlogPost.svelte.d.ts",
+			"svelte": "./package/components/BlogPost.svelte",
+			"default": "./package/components/BlogPost.svelte"
+		},
+		"./layout/Footer.svelte": {
+			"types": "./package/layout/Footer.svelte.d.ts",
+			"svelte": "./package/layout/Footer.svelte",
+			"default": "./package/layout/Footer.svelte"
+		},
+		"./layout/Header.svelte": {
+			"types": "./package/layout/Header.svelte.d.ts",
+			"svelte": "./package/layout/Header.svelte",
+			"default": "./package/layout/Header.svelte"
+		},
+		"./site-config": {
+			"types": "./package/site-config.d.ts",
+			"default": "./package/site-config.js"
+		},
+		"./style/abstracts/colorscheme.css": "./package/style/abstracts/colorscheme.css",
+		"./style/abstracts/font.css": "./package/style/abstracts/font.css",
+		"./style/abstracts/global.css": "./package/style/abstracts/global.css",
+		"./style/abstracts/util.css": "./package/style/abstracts/util.css",
+		"./style/abstracts/variables.css": "./package/style/abstracts/variables.css",
+		"./types": {
+			"types": "./package/types.d.ts",
+			"default": "./package/types.js"
+		},
+		"./utils": {
+			"types": "./package/utils.d.ts",
+			"default": "./package/utils.js"
+		}
+	},
+	"files": [
+		"package"
+	],
+	"typesVersions": {
+		">4.0": {
+			"components/BlogPost.svelte": [
+				"./package/components/BlogPost.svelte.d.ts"
+			],
+			"layout/Footer.svelte": [
+				"./package/layout/Footer.svelte.d.ts"
+			],
+			"layout/Header.svelte": [
+				"./package/layout/Header.svelte.d.ts"
+			],
+			"site-config": [
+				"./package/site-config.d.ts"
+			],
+			"types": [
+				"./package/types.d.ts"
+			],
+			"utils": [
+				"./package/utils.d.ts"
+			]
+		}
 	}
 }
