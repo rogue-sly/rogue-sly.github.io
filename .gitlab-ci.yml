@@ -12,3 +12,4 @@ pages:
   publish: build # this might be the default
   only:
   - master
+  
