@@ -9,6 +9,6 @@ pages:
   artifacts:
     paths:
     - build
-  publish: public # this might be the default
+  publish: build # this might be the default
   only:
   - master
