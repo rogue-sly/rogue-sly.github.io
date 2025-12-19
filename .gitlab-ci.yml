@@ -5,11 +5,8 @@ pages:
   stage: deploy
   script:
     - npm ci
-    - npm run build # even though this appears to create things in `.svelte-kit/output/{client,server}/*`, @sveltejs/adapter-static puts things into the `public/` dir...
+    - npm run build
   artifacts:
     paths:
     - build
-  publish: build # this might be the default
-  only:
-  - master
-  
+  publish: build
