@@ -8,7 +8,7 @@ pages:
     - npm run build # even though this appears to create things in `.svelte-kit/output/{client,server}/*`, @sveltejs/adapter-static puts things into the `public/` dir...
   artifacts:
     paths:
-    - public
+    - build
   publish: public # this might be the default
   only:
   - master
