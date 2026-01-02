@@ -1,5 +1,5 @@
 default:
-  image: oven:bun:alpine
+  image: oven/bun:alpine
 
 stages:
   - build
@@ -7,10 +7,8 @@ stages:
 build:
   stage: build
   script:
-    - echo "building..."
     - bun ci
     - bun run build
-    - echo "deploying..."
 
   artifacts:
     paths:
