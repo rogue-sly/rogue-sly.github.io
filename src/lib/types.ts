@@ -19,7 +19,7 @@ export type DiscordUser = {
     display_name: string;
 };
 
-export interface Presence {
+export interface DiscordPresence {
     kv: object;
     spotify: Spotify | null;
     discord_user: DiscordUser;

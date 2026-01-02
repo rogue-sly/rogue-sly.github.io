@@ -1,8 +1,8 @@
 import { writable, type Writable } from "svelte/store";
-import type { Presence } from "$lib/types";
+import type { DiscordPresence } from "$lib/types";
 import { dev } from "$app/environment";
 
-export const presenceData: Writable<Presence> = writable({} as Presence);
+export const presenceData: Writable<DiscordPresence> = writable({} as DiscordPresence);
 
 type OpCode = 0 | 1 | 2 | 3;
 type EventType = "INIT_STATE" | "PRESENCE_UPDATE";
@@ -10,7 +10,7 @@ type Data = {
     op: OpCode;
     seq: 1 | 2;
     t: EventType;
-    d: Presence;
+    d: DiscordPresence;
 };
 
 export class LanyardSocket extends WebSocket {
