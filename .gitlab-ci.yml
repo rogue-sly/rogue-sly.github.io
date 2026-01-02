@@ -1,11 +1,18 @@
-image: node:latest
-pages:
-  stage: deploy
+default:
+  image: oven:bun:alpine
+
+stages:
+  - build
+
+build:
+  stage: build
   script:
-    - npm ci
-    - npm run build
+    - echo "building..."
+    - bun ci
+    - bun run build
+    - echo "deploying..."
+
   artifacts:
     paths:
-      - build
-  publish: build
+      - public
   when: manual
