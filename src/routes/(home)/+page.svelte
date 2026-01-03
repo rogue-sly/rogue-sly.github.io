@@ -30,7 +30,7 @@
 
 <section class="hero">
     <div class="pfp">
-        <img src={gideon} alt="gideon" width="125px" height="125px" />
+        <img src={gideon} alt="gideon" width="150px" />
     </div>
 
     <h1>Hi there 👋, my name is Rogue/Ac!d.</h1>
@@ -63,7 +63,7 @@
 
     h1 {
         text-align: center;
-        font-size: clamp(1.5rem, 5vw, 2.5rem); /* Fluid size for mobile/desktop */
+        font-size: clamp(1.5rem, 5vw, 2.0rem); /* Fluid size for mobile/desktop */
         font-weight: 800; /* Bold headers look great with Inter/Archivo */
         line-height: 1.2;
         max-width: 20ch; /* Prevents the header from being too wide */
