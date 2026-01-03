@@ -48,8 +48,8 @@
                     ><circle cx="12" cy="12" r="10" /><path
                         d="M7.5 12.069c1.1-.37 2.276-.569 3.5-.569c2.024 0 3.92.547 5.549 1.5M18 10c-1.85-1.262-4.088-2-6.5-2c-1.597 0-3.118.324-4.5.908M15.129 16a9.04 9.04 0 0 0-6.497-.685"
                     /></g
-                ></svg
-            >
+                >
+            </svg>
         </div>
         <div class="song-info">
             <div class="song">not listening to anything...</div>
@@ -63,6 +63,7 @@
         background-color: var(--bg-primary-dark);
         height: 80px;
         border-radius: 16px;
+        width: 100%;
     }
 
     .album {
@@ -75,6 +76,7 @@
             background-color: var(--bg-primary-light);
             background-size: cover;
             background-position: center;
+            box-sizing: content-box;
         }
     }
 

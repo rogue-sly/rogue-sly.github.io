@@ -37,11 +37,15 @@
 {/key}
 
 <style>
+    p,
+    h3 {
+        margin: 0;
+    }
     a {
         display: block;
         color: var(--fg-primary);
         background-color: var(--bg-primary-dark);
-        border-radius: 16px;
+        border-radius: 12px;
         padding: 32px;
         text-decoration: none;
         border: 1px solid var(--border-primary);

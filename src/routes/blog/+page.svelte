@@ -8,7 +8,7 @@
     <title>blog</title>
 </svelte:head>
 
-<section style:padding="24px 0">
+<section>
     <ul>
         {#each data.posts as post}
             <BlogPost {post} />
@@ -19,8 +19,7 @@
         <a href={`${url}/rss.xml`} aria-label="rss">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="2.4rem"
-                height="2.4rem"
+                width="2rem"
                 viewBox="0 0 16 16"
             >
                 <path
@@ -43,7 +42,7 @@
         display: flex;
         background-color: var(--bg-primary-dark);
         color: var(--fg-primary);
-        padding: 16px;
+        padding: 24px;
         border-radius: 100%;
         transition: background-color 200ms ease-in-out;
 

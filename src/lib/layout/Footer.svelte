@@ -18,12 +18,15 @@
     p {
         text-wrap: balance;
         text-align: center;
+        margin: 0;
     }
     footer {
         padding: 16px;
         background-color: var(--bg-primary-dark);
         border-top: 1px solid var(--fg-accent);
         display: flex;
+        justify-content: center;
+        align-items: center;
         flex-direction: column;
         gap: 8px;
     }

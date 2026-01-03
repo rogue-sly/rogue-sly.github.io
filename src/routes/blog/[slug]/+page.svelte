@@ -2,7 +2,6 @@
     import { formatDate } from "$lib/utils";
     import { url, title } from "$lib/site-config";
     import type { PageData } from "./$types";
-    import "$lib/style/abstracts/util.css";
 
     let { data }: { data: PageData } = $props();
 </script>
@@ -22,7 +21,7 @@
 </svelte:head>
 
 <div>
-    <article style:padding="24px 0">
+    <article>
         <hgroup>
             <h1>{data.meta.title}</h1>
             <!-- <img src={data.meta.image} alt="blog banner" /> -->
@@ -42,24 +41,20 @@
 </div>
 
 <style>
-    hgroup,
-    .content {
-        padding: 16px;
-        border-radius: 16px;
-        border: 1px solid var(--border-primary);
+    h1 {
+        margin: 0;
     }
 
     hgroup {
+        padding: 16px;
+        border-radius: 12px;
+        /* border: 1px solid var(--border-primary); */
         background-color: var(--bg-primary-dark);
         margin-bottom: 16px;
-
-        & h1 {
-            font-size: 1.75em;
-        }
     }
 
     .content {
-        background-color: var(--bg-primary-light);
+        margin-top: 16px;
     }
 
     .post-date {

@@ -44,42 +44,40 @@
 </section>
 
 <style>
-    h1 {
-        font-size: 2em;
-        font-weight: bold;
-        text-align: center;
-    }
-
-    p {
-        font-size: 1.25rem;
-    }
-
     .hero {
-        min-height: calc(100dvh - var(--header-height));
-        height: auto;
+        /* min-height matches layout but removes extra scroll padding */
+        min-height: calc(100svh - var(--header-height) - 4rem); 
         display: flex;
         flex-direction: column;
         justify-content: center;
-        gap: 32px;
-    }
-
-    .pfp {
-        display: flex;
-        justify-content: center;
+        align-items: center; /* Centers the whole block */
+        gap: 2rem;
     }
 
     .pfp img {
-        border-radius: 16px;
-        border: 2px solid var(--border-primary);
+        border-radius: 20px; /* Slightly more rounded for a modern feel */
+        border: 2px solid var(--fg-accent);
+        /* Use object-fit if your images aren't perfectly square */
+        object-fit: cover; 
+    }
+
+    h1 {
+        text-align: center;
+        font-size: clamp(1.5rem, 5vw, 2.5rem); /* Fluid size for mobile/desktop */
+        font-weight: 800; /* Bold headers look great with Inter/Archivo */
+        line-height: 1.2;
+        max-width: 20ch; /* Prevents the header from being too wide */
+        margin: 0;
+        letter-spacing: -0.02em; /* Tighter tracking makes large text look "pro" */
     }
 
     .intro {
         text-align: center;
-    }
-
-    @media screen and (600px <= width <= 915px) and (orientation: landscape) {
-        .hero {
-            padding: 24px 0;
-        }
+        font-size: 1.125rem;
+        line-height: 1.6;
+        color: var(--fg-primary);
+        max-width: 50ch; /* The magic number for easy-to-read intro text */
+        margin: 0;
+        opacity: 0.9; /* Slight reduction in contrast helps eye strain */
     }
 </style>

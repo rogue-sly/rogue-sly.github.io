@@ -1,76 +1,71 @@
 <script lang="ts">
     import { email } from "$lib/site-config";
-    let svg = {
-        width: "2.25rem",
-        height: "2.25rem",
-    };
+    let svg = { width: "1.4rem", height: "1.4rem" };
 
-    $effect(() => {
-        let discord = document.getElementById("discord") as HTMLElement;
-        let title = document.getElementById("discord-title") as HTMLElement;
+    let discordHandle = "rogue.sly";
+    let discordText = $state(`discord: ${discordHandle}`);
+    let emailText = $state(`email: ${email}`);
 
-        discord.addEventListener("click", () => {
-            navigator.clipboard.writeText("rogue.sly");
-            title.textContent = "copied to clipboard 👍";
+    function copyToClipboard(text: string, type: "discord" | "email") {
+        navigator.clipboard.writeText(text);
+        if (type === "discord") {
+            discordText = "copied to clipboard 👍";
             setTimeout(() => {
-                title.textContent = "discord: rogue.sly";
+                discordText = `discord: ${discordHandle}`;
             }, 2000);
-        });
-    });
+        } else {
+            emailText = "copied to clipboard 👍";
+            setTimeout(() => {
+                emailText = `email: ${email}`;
+            }, 2000);
+        }
+    }
 </script>
 
 <div class="socials-base">
-    <a href="https://github.com/rogue-87" target="_blank" aria-label="github">
-        <div class="social">
-            <!-- lineicons--github -->
+    <h2 class="divider">Socials</h2>
+
+    <div class="links-grid">
+        <a href="https://github.com/rogue-87" target="_blank" class="social">
             <div class="social-inner">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={svg.width}
                     height={svg.height}
                     viewBox="0 0 24 24"
-                >
-                    <path
+                    ><path
                         fill="currentColor"
                         d="M12 2.249c-5.484 0-10 4.452-10 10c0 4.387 2.871 8.13 6.871 9.484c.516.097.677-.226.677-.452s0-.87-.032-1.742c-2.774.645-3.355-1.355-3.355-1.355c-.451-1.129-1.129-1.451-1.129-1.451c-.903-.645.033-.645.033-.645c1 .032 1.548 1.032 1.548 1.032c.87 1.548 2.355 1.097 2.903.806c.097-.645.355-1.096.645-1.354c-2.193-.226-4.548-1.097-4.548-4.904c0-1.096.42-1.967 1.032-2.645c-.097-.226-.451-1.258.097-2.645c0 0 .87-.258 2.774 1.032a9.3 9.3 0 0 1 2.516-.355c.871 0 1.742.097 2.516.355c1.904-1.258 2.742-1.032 2.742-1.032c.549 1.355.226 2.42.097 2.645c.645.678 1.032 1.58 1.032 2.645c0 3.807-2.355 4.678-4.548 4.904c.355.322.677.967.677 1.87c0 1.355-.032 2.42-.032 2.742c0 .259.194.549.678.452C19.129 20.314 22 16.604 22 12.185c-.032-5.484-4.516-9.936-10-9.936"
-                    />
-                </svg>
+                    /></svg
+                >
             </div>
-
             <span>github</span>
-        </div>
-    </a>
-    <a href="https://gitlab.com/acid32" target="_blank" aria-label="gitlab">
-        <div class="social">
-            <!-- akar-icons--gitlab -->
+        </a>
+
+        <a href="https://gitlab.com/rogue87" target="_blank" class="social">
             <div class="social-inner">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={svg.width}
                     height={svg.height}
                     viewBox="0 0 24 24"
-                >
-                    <path
+                    ><path
                         fill="currentColor"
                         d="m22.749 9.769l-.031-.08l-3.027-7.9a.79.79 0 0 0-.782-.495a.8.8 0 0 0-.456.17a.8.8 0 0 0-.268.408L16.14 8.125H7.865L5.822 1.872a.8.8 0 0 0-.269-.409a.81.81 0 0 0-.926-.05c-.14.09-.25.22-.312.376L1.283 9.684l-.03.08a5.62 5.62 0 0 0 1.864 6.496l.01.008l.028.02l4.61 3.453l2.282 1.726l1.39 1.049a.935.935 0 0 0 1.13 0l1.389-1.05l2.281-1.726l4.639-3.473l.011-.01A5.62 5.62 0 0 0 22.75 9.77"
                     />
                 </svg>
             </div>
-
             <span>gitlab</span>
-        </div>
-    </a>
-    <a href="https://www.youtube.com/@rogue87dotsly" target="_blank" aria-label="youtube">
-        <div class="social">
-            <!-- flowbite--youtube -->
+        </a>
+
+        <a href="https://www.youtube.com/@rogue87dotsly" target="_blank" class="social">
             <div class="social-inner">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={svg.width}
                     height={svg.height}
                     viewBox="0 0 24 24"
-                >
-                    <path
+                    ><path
                         fill="currentColor"
                         fill-rule="evenodd"
                         d="M21.7 8.037a4.26 4.26 0 0 0-.789-1.964a2.84 2.84 0 0 0-1.984-.839c-2.767-.2-6.926-.2-6.926-.2s-4.157 0-6.928.2a2.84 2.84 0 0 0-1.983.839a4.2 4.2 0 0 0-.79 1.965a30 30 0 0 0-.2 3.206v1.5a30 30 0 0 0 .2 3.206c.094.712.364 1.39.784 1.972c.604.536 1.38.837 2.187.848c1.583.151 6.731.2 6.731.2s4.161 0 6.928-.2a2.84 2.84 0 0 0 1.985-.84a4.3 4.3 0 0 0 .787-1.965a30 30 0 0 0 .2-3.206v-1.516a31 31 0 0 0-.202-3.206m-11.692 6.554v-5.62l5.4 2.819z"
@@ -79,19 +74,16 @@
                 </svg>
             </div>
             <span>youtube</span>
-        </div>
-    </a>
-    <a href="https://bsky.app/profile/rogue-sly.bsky.social" target="_blank" aria-label="bluesky">
-        <div class="social">
-            <!-- tabler--brand-bluesky -->
+        </a>
+
+        <a href="https://bsky.app/profile/rogue-sly.bsky.social" target="_blank" class="social">
             <div class="social-inner">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={svg.width}
                     height={svg.height}
                     viewBox="0 0 24 24"
-                >
-                    <path
+                    ><path
                         fill="none"
                         stroke="currentColor"
                         stroke-linecap="round"
@@ -101,42 +93,21 @@
                     />
                 </svg>
             </div>
-
             <span>bluesky</span>
-        </div>
-    </a>
-
-    <h2 style="text-align: center;">Chat with me!</h2>
-    <div class="social" id="discord">
-        <!-- flowbite--discord -->
-        <div class="social-inner">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={svg.width}
-                height={svg.height}
-                viewBox="0 0 24 24"
-            >
-                <path
-                    fill="currentColor"
-                    d="M18.942 5.556a16.3 16.3 0 0 0-4.126-1.3a12 12 0 0 0-.529 1.1a15.2 15.2 0 0 0-4.573 0a12 12 0 0 0-.535-1.1a16.3 16.3 0 0 0-4.129 1.3a17.4 17.4 0 0 0-2.868 11.662a15.8 15.8 0 0 0 4.963 2.521q.616-.847 1.084-1.785a10.6 10.6 0 0 1-1.706-.83q.215-.16.418-.331a11.66 11.66 0 0 0 10.118 0q.206.172.418.331q-.817.492-1.71.832a12.6 12.6 0 0 0 1.084 1.785a16.5 16.5 0 0 0 5.064-2.595a17.3 17.3 0 0 0-2.973-11.59M8.678 14.813a1.94 1.94 0 0 1-1.8-2.045a1.93 1.93 0 0 1 1.8-2.047a1.92 1.92 0 0 1 1.8 2.047a1.93 1.93 0 0 1-1.8 2.045m6.644 0a1.94 1.94 0 0 1-1.8-2.045a1.93 1.93 0 0 1 1.8-2.047a1.92 1.92 0 0 1 1.8 2.047a1.93 1.93 0 0 1-1.8 2.045"
-                />
-            </svg>
-        </div>
-
-        <span id="discord-title">discord: rogue.sly</span>
+        </a>
     </div>
 
-    <a href="https://matrix.to/#/@rogue87:matrix.org" target="_blank" aria-label="matrix">
-        <div class="social">
-            <!-- tabler--brand-matrix -->
+    <h2 class="divider">Chat with me!</h2>
+
+    <div class="links-grid">
+        <a href="https://matrix.to/#/@rogue87:matrix.org" target="_blank" class="social">
             <div class="social-inner">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={svg.width}
                     height={svg.height}
                     viewBox="0 0 24 24"
-                >
-                    <path
+                    ><path
                         fill="none"
                         stroke="currentColor"
                         stroke-linecap="round"
@@ -146,92 +117,128 @@
                     />
                 </svg>
             </div>
+            <span>matrix: @rogue87:matrix.org</span>
+        </a>
 
-            <span>matrix</span>
-        </div>
-    </a>
-
-    <a href={`mailto:${email}`} target="_blank" aria-label={email}>
-        <div class="social">
-            <!-- tabler:mail-filled -->
+        <button class="social" onclick={() => copyToClipboard(discordHandle, "discord")}>
             <div class="social-inner">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={svg.width}
                     height={svg.height}
                     viewBox="0 0 24 24"
-                >
-                    <g fill="currentColor">
-                        <path
-                            d="M22 7.535V17a3 3 0 0 1-2.824 2.995L19 20H5a3 3 0 0 1-2.995-2.824L2 17V7.535l9.445 6.297l.116.066a1 1 0 0 0 .878 0l.116-.066z"
-                        />
-                        <path
-                            d="M19 4c1.08 0 2.027.57 2.555 1.427L12 11.797l-9.555-6.37a3 3 0 0 1 2.354-1.42L5 4z"
-                        />
-                    </g>
+                    ><path
+                        fill="currentColor"
+                        d="M18.942 5.556a16.3 16.3 0 0 0-4.126-1.3a12 12 0 0 0-.529 1.1a15.2 15.2 0 0 0-4.573 0a12 12 0 0 0-.535-1.1a16.3 16.3 0 0 0-4.129 1.3a17.4 17.4 0 0 0-2.868 11.662a15.8 15.8 0 0 0 4.963 2.521q.616-.847 1.084-1.785a10.6 10.6 0 0 1-1.706-.83q.215-.16.418-.331a11.66 11.66 0 0 0 10.118 0q.206.172.418.331q-.817.492-1.71.832a12.6 12.6 0 0 0 1.084 1.785a16.5 16.5 0 0 0 5.064-2.595a17.3 17.3 0 0 0-2.973-11.59M8.678 14.813a1.94 1.94 0 0 1-1.8-2.045a1.93 1.93 0 0 1 1.8-2.047a1.92 1.92 0 0 1 1.8 2.047a1.93 1.93 0 0 1-1.8 2.045m6.644 0a1.94 1.94 0 0 1-1.8-2.045a1.93 1.93 0 0 1 1.8-2.047a1.92 1.92 0 0 1 1.8 2.047a1.93 1.93 0 0 1-1.8 2.045"
+                    />
                 </svg>
             </div>
+            <span>{discordText}</span>
+        </button>
 
-            <span>email</span>
-        </div>
-    </a>
+        <button class="social" onclick={() => copyToClipboard(email, "email")}>
+            <div class="social-inner">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width={svg.width}
+                    height={svg.height}
+                    viewBox="0 0 24 24"
+                    ><g fill="currentColor"
+                        ><path
+                            d="M22 7.535V17a3 3 0 0 1-2.824 2.995L19 20H5a3 3 0 0 1-2.995-2.824L2 17V7.535l9.445 6.297l.116.066a1 1 0 0 0 .878 0l.116-.066z"
+                        /><path
+                            d="M19 4c1.08 0 2.027.57 2.555 1.427L12 11.797l-9.555-6.37a3 3 0 0 1 2.354-1.42L5 4z"
+                        /></g
+                    >
+                </svg>
+            </div>
+            <span>{emailText}</span>
+        </button>
+    </div>
 </div>
 
 <style>
     .socials-base {
         display: flex;
         flex-direction: column;
-        justify-content: center;
         width: 100%;
-        min-height: 75%;
-        height: auto;
+        max-width: var(--global-width);
+        margin: 0.5rem auto;
         background: var(--bg-primary-light);
-        border-radius: 16px;
-        gap: 16px;
+        border-radius: 12px;
         padding: 16px;
+        gap: 12px;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (max-width: 480px) and (orientation: portrait) {
+        .socials-base {
+            max-width: none;
+            width: 100%;
+            padding: 12px;
+        }
+        
+        .social:hover {
+            transform: none;
+        }
+    }
+
+    .links-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .divider {
+        font-family: "Quantico";
+        font-size: 0.80rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        text-align: center;
+        margin: 0.75rem 0 0.25rem;
     }
 
     .social {
         display: flex;
         align-items: center;
-        align-self: center;
-        font-size: 1.25rem;
-        width: 60%;
-        gap: 8px;
-        border-radius: 16px;
         background: var(--bg-primary);
-
-        border: transparent solid 1px;
-        transition: border-color 200ms ease-in-out;
-
+        border: 1px solid transparent;
+        border-radius: 12px;
+        width: 100%;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: pointer;
+        overflow: hidden;
+        text-decoration: none;
+        padding: 0;
+        font-family: inherit;
+        color: inherit;
+        text-align: left;
+        outline: none;
+    }
 
-        &:hover {
-            border-color: var(--fg-primary);
-        }
+    .social:hover {
+        border-color: var(--fg-accent);
+        transform: translateX(6px);
+        background: var(--bg-primary-dark);
     }
 
     .social-inner {
         display: flex;
-        background-color: var(--bg-primary-dark);
-        justify-content: center;
         align-items: center;
-        transition: background-color 200ms ease-in-out;
+        background: var(--bg-primary-dark);
+        padding: 12px;
         color: var(--fg-primary);
-        padding: 8px;
-        border-top-left-radius: 16px;
-        border-bottom-left-radius: 16px;
+        border-right: 1px solid var(--border-primary);
     }
 
-    a {
-        display: contents;
+    span {
+        font-family: "Quantico";
+        font-size: 1rem;
+        padding-left: 12px;
         color: var(--fg-primary);
-        text-decoration: none;
-    }
-
-    @media screen and (240px <= width <= 980px) {
-        .social {
-            width: 100%;
-        }
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 </style>
