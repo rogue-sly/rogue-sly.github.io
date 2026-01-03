@@ -1,9 +1,36 @@
+:root {
+    /* font */
+    font-family: "Quantico", sans-serif, system-ui;
+
+    /* variables for layout */
+    --header-height: 64px;
+    --global-width: min(800px, 100% - 3rem);
+
+    /* colorscheme */
+    --bg-primary-light: #29292f;
+    --bg-primary: #232329;
+    --bg-primary-dark: #101012;
+    --bg-accent: #4b0202;
+
+    --fg-primary-light: #ffffff;
+    --fg-primary: #cdcdcd;
+    --fg-primary-dark: #717171;
+    --fg-accent: #675757;
+
+    --border-primary: #4f4d4d;
+}
+
 * {
-    font-family: "Quantico", Arial, Helvetica, system-ui;
-    font-weight: 400;
-    font-style: normal;
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    /* Fluid typography works great here */
+    font-size: clamp(16px, 1.2vw + 12px, 22px);
+    /* Prevents layout shift when scrollbars appear */
+    scrollbar-gutter: stable;
 }
 
 body {
@@ -11,16 +38,49 @@ body {
     background-color: var(--bg-primary);
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--fg-primary-light);
+    line-height: 1.0;
+    margin-bottom: 1rem;
+    letter-spacing: 0.02em;
+}
+
+p {
+    margin-bottom: 0.95rem;
+    /* Limit line length for better readability */
+    max-width: 80ch;
+}
+
 a {
     color: var(--fg-accent);
+    text-underline-offset: 4px;
+    transition: color 0.2s ease;
+
+    &:hover {
+        color: var(--fg-primary-light);
+    }
 }
 
 li,
 ol {
     list-style-position: inside;
+    margin-bottom: 0.5rem;
 }
 
 pre {
     padding: 16px;
     border-radius: 8px;
+    border: 1px solid var(--border-primary);
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+code {
+    font-size: 0.78em;
+    font-family: "JetBrains Mono", "Quantico", monospace;
 }
