@@ -2,15 +2,14 @@ default:
   image: oven/bun:alpine
 
 stages:
-  - build
+  - deploy 
 
-build:
-  stage: build
+pages:
+  stage: deploy
   script:
-    - bun ci
+    - bun install
     - bun run build
-
   artifacts:
     paths:
-      - public
-  when: manual
+      - public 
+  when: manual 
