@@ -1,7 +1,7 @@
 <script lang="ts">
     import Header from "$lib/layout/Header.svelte";
     import Footer from "$lib/layout/Footer.svelte";
-    import "$lib/style/abstracts/_index.css";
+    import "$lib/style/_index.css";
     import { fade } from "svelte/transition";
     import { page } from "$app/state";
 
@@ -11,7 +11,7 @@
 <Header />
 
 {#key page.url.pathname}
-    <main class="push-under-header" in:fade>
+    <main in:fade={{ duration: 400 }}>
         {@render children()}
     </main>
 {/key}
@@ -19,20 +19,12 @@
 <Footer />
 
 <style>
-    :root {
-        --global-width: 50vw;
-    }
-
     main {
-        min-height: calc(100svh - var(--header-height));
-        height: auto;
-        width: var(--global-width);
-        margin: 0 auto;
-    }
+        margin-top: var(--header-height); /* push content down so it's not hidden behind header */
+        min-height: calc(100svh - var(--header-height)); /* ensure footer stays at bottom */
 
-    @media screen and (320px <= width <= 480px) and (orientation: portrait) {
-        :root {
-            --global-width: 90vw;
-        }
+        width: var(--global-width);
+        margin-inline: auto;
+        padding-block: 2rem;
     }
 </style>
