@@ -19,5 +19,3 @@ once I'm satisfied with my website, I'll finally start working on some REEEEEAAA
 Just a random webdev wannabe, but if you wanna know more about me, then check [whoami](https://rogue-87.github.io/whoami/) page.
 
 okay I really need to sleep, it's almost 3am lol.
-
-<style> @import "./style/default.css" </style>

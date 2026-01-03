@@ -38,5 +38,3 @@ You may run into some issues while setting this package manager up(e.g. pissing 
 
 One issue I ran into when using nix... I CAN'T INSTALL GUI PROGRAMS >:[
 You won't have that problem if you're using NixOS, but in case you're using it on a linux distro like archlinux or fedora, yeah you're gonna run into that problem. That shouldn't really be a problem if you're using it ONLY for development, but in case you want to install literally everything using nix then you may wanna consider using NixOS at that point.
-
-<style> @import "./style/default.css" </style>
