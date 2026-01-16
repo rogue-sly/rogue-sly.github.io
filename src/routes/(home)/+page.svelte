@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Activity from "$lib/components/Activity.svelte";
+    import Activity from "./Activity.svelte";
     import { LanyardSocket, presenceData } from "../../stores/websocket.svelte";
     import gideon from "$lib/assets/images/gideon-animated.webp";
     import { title, author, url, desc } from "$lib/site-config";
@@ -62,7 +62,7 @@
         that interests you here.
     </p>
 
-    <Activity activities={activities} {isLoading} />
+    <Activity {activities} {isLoading} />
 </section>
 
 <style>

@@ -178,6 +178,12 @@
         transform: scale(0.95);
     }
 
+    @media (max-width: 768px) {
+        .nav-btn {
+            display: none;
+        }
+    }
+
     .activity-skeleton {
         display: flex;
         background-color: var(--bg-primary-dark);
