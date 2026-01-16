@@ -28,7 +28,7 @@
 
 html {
     /* Fluid typography works great here */
-    font-size: clamp(16px, 1.2vw + 12px, 22px);
+    font-size: clamp(16px, 1.2vw + 12px, 20px);
     /* Prevents layout shift when scrollbars appear */
     scrollbar-gutter: stable;
 }
