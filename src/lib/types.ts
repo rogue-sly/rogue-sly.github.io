@@ -19,11 +19,35 @@ export type DiscordUser = {
     display_name: string;
 };
 
+export type Activity = {
+    type: number;
+    name: string;
+    id: string;
+    details?: string;
+    state?: string;
+    application_id?: string;
+    timestamps?: {
+        start?: number;
+        end?: number;
+    };
+    assets?: {
+        large_image?: string;
+        large_text?: string;
+        small_image?: string;
+        small_text?: string;
+    };
+    emoji?: {
+        name: string;
+        id?: string;
+        animated?: boolean;
+    };
+};
+
 export interface DiscordPresence {
     kv: object;
     spotify: Spotify | null;
     discord_user: DiscordUser;
-    activities: Array<object>;
+    activities: Activity[];
     discord_status: "online" | "idle" | "dnd" | "offline";
     active_on_discord_web: boolean;
     active_on_discord_desktop: boolean;
