@@ -1,53 +1,248 @@
 <script lang="ts">
     import type { Activity } from "$lib/types";
 
-    let { activity }: { activity: Activity } = $props();
+    type ActivityComponent = { activities: Activity[] | undefined; isLoading: boolean };
+    let { activities, isLoading }: ActivityComponent = $props();
 
     function getImageUrl(appId: string | undefined, assetId: string | undefined) {
-        if (!assetId) return null;
-        if (assetId.startsWith("mp:")) {
-            return `https://media.discordapp.net/${assetId.replace("mp:", "")}`;
+        if (!assetId || !appId) return null;
+
+        switch (true) {
+            case assetId.startsWith("mp:"):
+                return `https://media.discordapp.net/${assetId.replace("mp:", "")}`;
+            case assetId.startsWith("spotify:"):
+                return `https://i.scdn.co/image/${assetId.replace("spotify:", "")}`;
+            default:
+                return `https://cdn.discordapp.com/app-assets/${appId}/${assetId}.png`;
         }
-        if (assetId.startsWith("spotify:")) {
-            return `https://i.scdn.co/image/${assetId.replace("spotify:", "")}`;
-        }
-        if (!appId) return null;
-        return `https://cdn.discordapp.com/app-assets/${appId}/${assetId}.png`;
     }
 
-    let largeImage = $derived(getImageUrl(activity.application_id, activity.assets?.large_image));
-    let smallImage = $derived(getImageUrl(activity.application_id, activity.assets?.small_image));
+    let carouselContainer: HTMLElement | undefined = $state();
+
+    function scrollCarousel(direction: number) {
+        if (carouselContainer) {
+            const scrollAmount = carouselContainer.clientWidth;
+            carouselContainer.scrollBy({
+                left: direction * scrollAmount,
+                behavior: "smooth",
+            });
+        }
+    }
 </script>
 
-<div class="activity">
-    <div class="icon-wrapper">
-        {#if largeImage}
-            <img src={largeImage} alt={activity.name} class="large-icon" />
-        {:else}
-            <div class="fallback-icon">
-                {activity.name.substring(0, 2)}
+<div class="carousel-wrapper">
+    {#if isLoading}
+        <div class="activity-skeleton">
+            <div class="skeleton-icon"></div>
+            <div class="skeleton-content">
+                <div class="skeleton-line"></div>
+                <div class="skeleton-line short"></div>
             </div>
-        {/if}
-        {#if smallImage}
-            <img src={smallImage} alt="status" class="small-icon" />
-        {/if}
-    </div>
-    <div class="info">
-        <div class="name">{activity.name}</div>
-        {#if activity.details}
-            <div class="details">{activity.details}</div>
-        {/if}
-        {#if activity.state}
-            <div class="state">{activity.state}</div>
-        {/if}
-    </div>
+        </div>
+    {:else if activities && activities.length > 0}
+        <button
+            onclick={() => scrollCarousel(-1)}
+            class="nav-btn prev"
+            aria-label="Previous Activity"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg
+            >
+        </button>
+
+        <div class="activity-carousel" bind:this={carouselContainer}>
+            {#each activities as activity (activity.id)}
+                {@const largeImage = getImageUrl(
+                    activity.application_id,
+                    activity.assets?.large_image,
+                )}
+                {@const smallImage = getImageUrl(
+                    activity.application_id,
+                    activity.assets?.small_image,
+                )}
+                <div class="carousel-item">
+                    <div class="activity">
+                        <div class="icon-wrapper">
+                            {#if largeImage}
+                                <img src={largeImage} alt={activity.name} class="large-icon" />
+                            {:else}
+                                <div class="fallback-icon">
+                                    {activity.name.substring(0, 2)}
+                                </div>
+                            {/if}
+                            {#if smallImage}
+                                <img src={smallImage} alt="status" class="small-icon" />
+                            {/if}
+                        </div>
+                        <div class="info">
+                            <div class="name">{activity.name}</div>
+                            {#if activity.details}
+                                <div class="details">{activity.details}</div>
+                            {/if}
+                            {#if activity.state}
+                                <div class="state">{activity.state}</div>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            {/each}
+        </div>
+
+        <button onclick={() => scrollCarousel(1)} class="nav-btn next" aria-label="Next Activity">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg
+            >
+        </button>
+    {:else}
+        <div class="empty-state">
+            <p>Not doing anything right now...</p>
+        </div>
+    {/if}
 </div>
 
 <style>
+    .carousel-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .activity-carousel {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        width: 100%;
+        margin: auto;
+        overflow-x: auto;
+        scrollbar-width: none;
+        align-items: center;
+        scroll-snap-type: x mandatory;
+        box-sizing: border-box;
+        scroll-behavior: smooth;
+    }
+
+    .activity-carousel::-webkit-scrollbar {
+        display: none;
+    }
+
+    .carousel-item {
+        flex: 0 0 100%;
+        width: 100%;
+        min-width: 100%;
+        scroll-snap-align: center;
+    }
+
+    .nav-btn {
+        background: var(--bg-primary-light);
+        border: none;
+        color: var(--fg-primary);
+        cursor: pointer;
+        padding: 0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        opacity: 0.7;
+    }
+
+    .nav-btn:hover {
+        background-color: var(--fg-accent);
+        color: var(--bg-primary);
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    .nav-btn:active {
+        transform: scale(0.95);
+    }
+
+    .activity-skeleton {
+        display: flex;
+        background-color: var(--bg-primary-dark);
+        height: 115px;
+        border-radius: 16px;
+        width: 90%;
+        align-items: center;
+        padding: 0 12px;
+        gap: 1rem;
+        animation: pulse 1.5s infinite ease-in-out;
+    }
+
+    .skeleton-icon {
+        width: 80px;
+        height: 80px;
+        background-color: var(--bg-primary);
+        border-radius: 12px;
+        flex-shrink: 0;
+    }
+
+    .skeleton-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        flex: 1;
+    }
+
+    .skeleton-line {
+        height: 12px;
+        background-color: var(--bg-primary);
+        border-radius: 6px;
+        width: 60%;
+    }
+    .skeleton-line.short {
+        width: 40%;
+    }
+
+    @keyframes pulse {
+        0% {
+            opacity: 0.6;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0.6;
+        }
+    }
+
+    .empty-state {
+        width: 100%;
+        height: 115px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--bg-primary-dark);
+        border-radius: 16px;
+        color: var(--fg-primary-dark);
+        font-style: italic;
+    }
+
     .activity {
         display: flex;
         background-color: var(--bg-primary-dark);
-        height: 100px;
+        height: 115px;
         border-radius: 16px;
         width: 100%;
         position: relative;
@@ -56,7 +251,7 @@
 
     .icon-wrapper {
         position: relative;
-        width: 100px;
+        padding: 12px;
         flex-shrink: 0;
         display: flex;
         align-items: center;
@@ -64,7 +259,7 @@
     }
 
     .large-icon {
-        width: 75px;
+        width: 80px;
         border-radius: 12px;
         object-fit: cover;
     }
@@ -99,7 +294,6 @@
         padding: 12px;
         overflow-x: hidden;
         width: 100%;
-        gap: 4px;
     }
 
     .name {
@@ -110,7 +304,8 @@
         text-overflow: ellipsis;
     }
 
-    .details, .state {
+    .details,
+    .state {
         font-size: 0.875rem;
         color: var(--fg-secondary);
         white-space: nowrap;
