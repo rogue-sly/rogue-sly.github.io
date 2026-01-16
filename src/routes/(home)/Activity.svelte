@@ -117,10 +117,15 @@
 </div>
 
 <style>
+    :root {
+        --activity-height: 115px;
+    }
+
     .carousel-wrapper {
         display: flex;
         align-items: center;
         justify-content: center;
+        height: 115px;
         width: 100%;
         gap: 0.5rem;
     }
@@ -187,7 +192,7 @@
     .activity-skeleton {
         display: flex;
         background-color: var(--bg-primary-dark);
-        height: 115px;
+        height: var(--activity-height);
         border-radius: 16px;
         width: 90%;
         align-items: center;
@@ -235,7 +240,7 @@
 
     .empty-state {
         width: 100%;
-        height: 115px;
+        height: var(--activity-height);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -243,12 +248,16 @@
         border-radius: 16px;
         color: var(--fg-primary-dark);
         font-style: italic;
+
+        & * {
+            margin: 0;
+        }
     }
 
     .activity {
         display: flex;
         background-color: var(--bg-primary-dark);
-        height: 115px;
+        height: var(--activity-height);
         border-radius: 16px;
         width: 100%;
         position: relative;
