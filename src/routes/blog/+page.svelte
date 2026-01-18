@@ -2,17 +2,47 @@
     import BlogPost from "$lib/components/BlogPost.svelte";
     import { url } from "$lib/site-config.js";
     let { data } = $props();
+
+    type SortOptions = "date-asc" | "date-desc" | "title-asc" | "title-desc";
+    let sortOption: SortOptions = $state("date-desc");
+
+    let sortedPosts = $derived(
+        [...data.posts].sort((a, b) => {
+            switch (sortOption) {
+                case "title-asc":
+                    return a.title.localeCompare(b.title);
+                case "title-desc":
+                    return b.title.localeCompare(a.title);
+                case "date-asc":
+                    return new Date(a.date).getTime() - new Date(b.date).getTime();
+                default: // date-desc
+                    return new Date(b.date).getTime() - new Date(a.date).getTime();
+            }
+        }),
+    );
 </script>
 
 <svelte:head>
     <title>blog</title>
 </svelte:head>
 
-<ul>
-    {#each data.posts as post}
-        <BlogPost {post} />
-    {/each}
-</ul>
+<div>
+    <div class="controls">
+        <label for="sort">Sort by:</label>
+        <select id="sort" bind:value={sortOption}>
+            <option value="date-desc">Date (Newest First)</option>
+            <option value="date-asc">Date (Oldest First)</option>
+            <option value="title-asc">Title (A-Z)</option>
+            <option value="title-desc">Title (Z-A)</option>
+        </select>
+    </div>
+
+    <ul>
+        {#each sortedPosts as post}
+            <BlogPost {post} />
+        {/each}
+    </ul>
+</div>
 
 <div class="rss">
     <a href={`${url}/rss.xml`} aria-label="rss">
@@ -26,6 +56,55 @@
 </div>
 
 <style>
+    .controls {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 1rem;
+        gap: 0.5rem;
+        color: var(--fg-primary);
+
+        &:has(select:focus),
+        &:has(select:hover) {
+            color: var(--fg-primary-light);
+        }
+    }
+
+    select {
+        appearance: base-select;
+        width: 18ch;
+        field-sizing: content;
+        font-size: 0.75rem;
+        background-color: var(--bg-primary-dark);
+        color: var(--fg-primary);
+        border: 1px solid var(--border-primary);
+        padding: 0.5rem;
+        border-radius: 4px;
+        font-family: inherit;
+        cursor: pointer;
+        border-radius: 8px;
+
+        &::picker(select) {
+            background-color: var(--bg-primary-dark);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            padding: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+    }
+
+    option {
+        padding: 0.5rem;
+        border-radius: 4px;
+        color: var(--fg-primary);
+        cursor: pointer;
+
+        &:checked {
+            background-color: var(--bg-primary-light);
+            color: var(--fg-primary-light);
+        }
+    }
+
     .rss {
         margin-top: 16px;
         display: flex;
