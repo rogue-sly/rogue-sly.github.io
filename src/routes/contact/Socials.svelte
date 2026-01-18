@@ -190,7 +190,6 @@
 
     .social:hover {
         border-color: var(--fg-accent);
-        transform: translateX(6px);
         background: var(--bg-primary-dark);
     }
 

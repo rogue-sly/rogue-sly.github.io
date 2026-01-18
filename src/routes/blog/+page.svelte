@@ -105,18 +105,16 @@
         margin-bottom: 1rem;
         gap: 1rem;
         color: var(--fg-primary);
-        flex-wrap: wrap;
-
-        & label,
-        & select {
-            font-size: 0.65rem;
-        }
     }
 
     .control-group {
         display: flex;
         align-items: center;
         gap: 0.5rem;
+
+        & select {
+            width: 100%;
+        }
 
         &:has(select:focus),
         &:has(select:hover) {
@@ -126,7 +124,6 @@
 
     select {
         appearance: base-select;
-        field-sizing: content;
         background-color: var(--bg-primary-dark);
         color: var(--fg-primary);
         border: 1px solid var(--border-primary);
