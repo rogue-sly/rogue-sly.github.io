@@ -1,24 +1,37 @@
 <script lang="ts">
     import BlogPost from "$lib/components/BlogPost.svelte";
     import { url } from "$lib/site-config.js";
+    import { page } from "$app/state";
+
     let { data } = $props();
 
     type SortOptions = "date-asc" | "date-desc" | "title-asc" | "title-desc";
     let sortOption: SortOptions = $state("date-desc");
+    let selectedTag = $state(page.url.searchParams.get("tag") ?? "");
+
+    let uniqueTags = $derived.by(() => {
+        const tags = new Set<string>();
+        data.posts.forEach((post) => {
+            post.tags?.forEach((tag) => tags.add(tag));
+        });
+        return Array.from(tags).sort();
+    });
 
     let sortedPosts = $derived(
-        [...data.posts].sort((a, b) => {
-            switch (sortOption) {
-                case "title-asc":
-                    return a.title.localeCompare(b.title);
-                case "title-desc":
-                    return b.title.localeCompare(a.title);
-                case "date-asc":
-                    return new Date(a.date).getTime() - new Date(b.date).getTime();
-                default: // date-desc
-                    return new Date(b.date).getTime() - new Date(a.date).getTime();
-            }
-        }),
+        data.posts
+            .filter((post) => selectedTag === "" || post.tags?.includes(selectedTag))
+            .sort((a, b) => {
+                switch (sortOption) {
+                    case "title-asc":
+                        return a.title.localeCompare(b.title);
+                    case "title-desc":
+                        return b.title.localeCompare(a.title);
+                    case "date-asc":
+                        return new Date(a.date).getTime() - new Date(b.date).getTime();
+                    default: // date-desc
+                        return new Date(b.date).getTime() - new Date(a.date).getTime();
+                }
+            }),
     );
 </script>
 
@@ -28,13 +41,25 @@
 
 <div>
     <div class="controls">
-        <label for="sort">Sort by:</label>
-        <select id="sort" bind:value={sortOption}>
-            <option value="date-desc">Date (Newest First)</option>
-            <option value="date-asc">Date (Oldest First)</option>
-            <option value="title-asc">Title (A-Z)</option>
-            <option value="title-desc">Title (Z-A)</option>
-        </select>
+        <div class="control-group">
+            <label for="tag-filter">Filter:</label>
+            <select id="tag-filter" bind:value={selectedTag}>
+                <option value="">All Tags</option>
+                {#each uniqueTags as tag}
+                    <option value={tag}>{tag}</option>
+                {/each}
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="sort">Sort:</label>
+            <select id="sort" bind:value={sortOption}>
+                <option value="date-desc">Date (Newest)</option>
+                <option value="date-asc">Date (Oldest)</option>
+                <option value="title-asc">Name (A-Z)</option>
+                <option value="title-desc">Name (Z-A)</option>
+            </select>
+        </div>
     </div>
 
     <ul>
@@ -58,11 +83,23 @@
 <style>
     .controls {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: center;
         margin-bottom: 1rem;
-        gap: 0.5rem;
+        gap: 1rem;
         color: var(--fg-primary);
+        flex-wrap: wrap;
+
+        & label,
+        & select {
+            font-size: 0.65rem;
+        }
+    }
+
+    .control-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
 
         &:has(select:focus),
         &:has(select:hover) {
@@ -72,9 +109,7 @@
 
     select {
         appearance: base-select;
-        width: 18ch;
         field-sizing: content;
-        font-size: 0.75rem;
         background-color: var(--bg-primary-dark);
         color: var(--fg-primary);
         border: 1px solid var(--border-primary);

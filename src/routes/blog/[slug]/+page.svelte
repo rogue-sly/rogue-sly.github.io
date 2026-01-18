@@ -30,7 +30,7 @@
 
         <div class="tags">
             {#each data.meta.tags as tag}
-                <div class="tag">&num;{tag}</div>
+                <a href={`/blog?tag=${tag}`} class="tag">&num;{tag}</a>
             {/each}
         </div>
 
@@ -74,5 +74,12 @@
         border-radius: 16px;
         background-color: var(--fg-accent);
         margin-bottom: 16px;
+        color: inherit;
+        text-decoration: none;
+        transition: opacity 0.2s;
+
+        &:hover {
+            opacity: 0.8;
+        }
     }
 </style>
