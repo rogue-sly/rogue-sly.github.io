@@ -5,10 +5,10 @@
 <header>
     <!-- prettier-ignore -->
     <ul class="container">
-        <li><a href="/"         class:selected={page.url.pathname === "/"}>home             </a></li>
-        <li><a href="/whoami"   class:selected={page.url.pathname === "/whoami/"}>whoami    </a></li>
-        <li><a href="/blog"     class:selected={page.url.pathname.startsWith("/blog")}>blog </a></li>
-        <li><a href="/contact"  class:selected={page.url.pathname === "/contact/"}>contact   </a></li>
+        <li><a href="/"         class:selected={page.url.pathname === "/"}>home                 </a></li>
+        <li><a href="/whoami"   class:selected={page.url.pathname === "/whoami/"}>whoami        </a></li>
+        <li><a href="/blog"     class:selected={page.url.pathname.startsWith("/blog")}>blog     </a></li>
+        <li><a href="/contact"  class:selected={page.url.pathname === "/contact/"}>contact      </a></li>
     </ul>
 </header>
 
@@ -25,13 +25,12 @@
 
     .container {
         width: var(--global-width);
+        height: var(--header-height);
         margin-inline: auto;
-        padding: 0;
 
         display: flex;
         justify-content: space-between;
         align-items: center;
-        height: calc(var(--header-height) + 1rem);
     }
 
     li {
