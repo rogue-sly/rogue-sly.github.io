@@ -163,7 +163,6 @@
         flex-direction: column;
         width: 100%;
         max-width: var(--global-width);
-        margin: 0.5rem auto;
         background: var(--bg-primary-light);
         border-radius: 12px;
         padding: 16px;

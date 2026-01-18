@@ -11,7 +11,11 @@
 <Header />
 
 {#key page.url.pathname}
-    <main in:fade={{ duration: 400 }}>
+    <main
+        in:fade={{ duration: 400 }}
+        class:center={page.url.pathname === "/" || page.url.pathname === "/contact/"}
+        class:padded={page.url.pathname.startsWith("/whoami") || page.url.pathname.startsWith("/blog")}
+    >
         {@render children()}
     </main>
 {/key}
@@ -25,6 +29,16 @@
 
         width: var(--global-width);
         margin-inline: auto;
+    }
+
+    main.center {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    main.padded {
         padding-block: 2rem;
     }
 </style>

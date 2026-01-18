@@ -6,6 +6,4 @@
     <title>contact</title>
 </svelte:head>
 
-<div class="contacts">
-    <Socials />
-</div>
+<Socials />
