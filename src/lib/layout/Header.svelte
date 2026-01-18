@@ -41,7 +41,7 @@
     a {
         color: var(--fg-primary);
         text-decoration: none;
-        font-size: 0.95rem;
+        font-size: 0.85rem;
         padding: 8px 12px;
         border-radius: 8px;
         transition:
