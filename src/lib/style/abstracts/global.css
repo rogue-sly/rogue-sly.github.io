@@ -18,6 +18,9 @@
     --fg-accent: #675757;
 
     --border-primary: #4f4d4d;
+
+    /* blog post specific colorschemes */
+    --highlight: #717171;
 }
 
 * {
@@ -45,7 +48,7 @@ h4,
 h5,
 h6 {
     color: var(--fg-primary-light);
-    line-height: 1.0;
+    line-height: 1;
     margin-bottom: 1rem;
     letter-spacing: 0.02em;
 }
@@ -74,6 +77,7 @@ ol {
 
 pre {
     padding: 16px;
+    margin-bottom: 16px;
     border-radius: 8px;
     border: 1px solid var(--border-primary);
     overflow-x: auto;
@@ -81,6 +85,7 @@ pre {
 }
 
 code {
+    color: var(--highlight);
     font-size: 0.78em;
     font-family: "JetBrains Mono", "Quantico", monospace;
 }
