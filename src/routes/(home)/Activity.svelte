@@ -40,11 +40,7 @@
             </div>
         </div>
     {:else if activities && activities.length > 0}
-        <button
-            onclick={() => scrollCarousel(-1)}
-            class="nav-btn prev"
-            aria-label="Previous Activity"
-        >
+        <button onclick={() => scrollCarousel(-1)} class="nav-btn prev" aria-label="Previous Activity">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -60,14 +56,8 @@
 
         <div class="activity-carousel" bind:this={carouselContainer}>
             {#each activities as activity (activity.id)}
-                {@const largeImage = getImageUrl(
-                    activity.application_id,
-                    activity.assets?.large_image,
-                )}
-                {@const smallImage = getImageUrl(
-                    activity.application_id,
-                    activity.assets?.small_image,
-                )}
+                {@const largeImage = getImageUrl(activity.application_id, activity.assets?.large_image)}
+                {@const smallImage = getImageUrl(activity.application_id, activity.assets?.small_image)}
                 <div class="carousel-item">
                     <div class="activity">
                         <div class="icon-wrapper">

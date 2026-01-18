@@ -1,8 +1,7 @@
 <footer>
     <p>
         font name is "Quantico", and is licensed under
-        <a href="https://openfontlicense.org/open-font-license-official-text/">open font license</a
-        >.
+        <a href="https://openfontlicense.org/open-font-license-official-text/">open font license</a>.
     </p>
     <p>
         icons are licensed under the

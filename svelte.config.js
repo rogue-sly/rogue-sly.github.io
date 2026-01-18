@@ -36,9 +36,7 @@ const mdsvexOptions = {
             });
 
             highlighter.loadLanguage(...shikiConfig.langs);
-            const html = escapeSvelte(
-                highlighter.codeToHtml(code, { lang, theme: shikiConfig.themes[0] }),
-            );
+            const html = escapeSvelte(highlighter.codeToHtml(code, { lang, theme: shikiConfig.themes[0] }));
             return `{@html \`${html}\` }`;
         },
     },

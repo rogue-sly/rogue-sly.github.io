@@ -107,9 +107,7 @@ function inlineFootnotes(dom: JSDOM): void {
         const href = link.getAttribute("href");
         if (href?.startsWith(footnoteLinkPrefix)) {
             const newFootnoteHref = "#" + href.slice(prefixToRemove.length);
-            const footnoteContentElem = dom.window.document.getElementById(
-                href.slice(1),
-            ) as HTMLLIElement | null;
+            const footnoteContentElem = dom.window.document.getElementById(href.slice(1)) as HTMLLIElement | null;
             footnoteContentElem?.setAttribute("id", newFootnoteHref.slice(1));
             link.setAttribute("href", newFootnoteHref);
         }
