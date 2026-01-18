@@ -2,12 +2,13 @@
     import BlogPost from "$lib/components/BlogPost.svelte";
     import { url } from "$lib/site-config.js";
     import { page } from "$app/state";
+    import { goto } from "$app/navigation";
 
     let { data } = $props();
 
     type SortOptions = "date-asc" | "date-desc" | "title-asc" | "title-desc";
-    let sortOption: SortOptions = $state("date-desc");
-    let selectedTag = $state(page.url.searchParams.get("tag") ?? "");
+    let selectedSortOption = $derived((page.url.searchParams.get("sort") as SortOptions) ?? "date-desc");
+    let selectedTag = $derived(page.url.searchParams.get("tag") ?? "");
 
     let uniqueTags = $derived.by(() => {
         const tags = new Set<string>();
@@ -17,11 +18,11 @@
         return Array.from(tags).sort();
     });
 
-    let sortedPosts = $derived(
+    let posts = $derived(
         data.posts
             .filter((post) => selectedTag === "" || post.tags?.includes(selectedTag))
             .sort((a, b) => {
-                switch (sortOption) {
+                switch (selectedSortOption) {
                     case "title-asc":
                         return a.title.localeCompare(b.title);
                     case "title-desc":
@@ -33,6 +34,22 @@
                 }
             }),
     );
+
+    function updateTag(e: Event & { currentTarget: HTMLSelectElement }) {
+        const tag = e.currentTarget.value;
+        const params = new URLSearchParams(page.url.searchParams);
+
+        tag ? params.set("tag", tag) : params.delete("tag");
+        goto(`?${params.toString()}`, { keepFocus: true, noScroll: true });
+    }
+
+    function updateSort(e: Event & { currentTarget: HTMLSelectElement }) {
+        const sort = e.currentTarget.value;
+        const params = new URLSearchParams(page.url.searchParams);
+
+        sort !== "date-desc" ? params.set("sort", sort) : params.delete("sort");
+        goto(`?${params.toString()}`, { keepFocus: true, noScroll: true });
+    }
 </script>
 
 <svelte:head>
@@ -43,7 +60,7 @@
     <div class="controls">
         <div class="control-group">
             <label for="tag-filter">Filter:</label>
-            <select id="tag-filter" bind:value={selectedTag}>
+            <select id="tag-filter" value={selectedTag} onchange={updateTag}>
                 <option value="">All Tags</option>
                 {#each uniqueTags as tag}
                     <option value={tag}>{tag}</option>
@@ -53,7 +70,7 @@
 
         <div class="control-group">
             <label for="sort">Sort:</label>
-            <select id="sort" bind:value={sortOption}>
+            <select id="sort" value={selectedSortOption} onchange={updateSort}>
                 <option value="date-desc">Date (Newest)</option>
                 <option value="date-asc">Date (Oldest)</option>
                 <option value="title-asc">Name (A-Z)</option>
@@ -63,7 +80,7 @@
     </div>
 
     <ul>
-        {#each sortedPosts as post}
+        {#each posts as post}
             <BlogPost {post} />
         {/each}
     </ul>
