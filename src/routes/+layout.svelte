@@ -13,6 +13,7 @@
 {#key page.url.pathname}
     <main
         in:fade={{ duration: 400 }}
+        class:blog={page.url.pathname === "/blog/"}
         class:center={page.url.pathname === "/" || page.url.pathname === "/contact/"}
         class:padded={page.url.pathname.startsWith("/whoami") || page.url.pathname.startsWith("/blog")}
     >
@@ -40,5 +41,11 @@
 
     main.padded {
         padding-block: 2rem;
+    }
+
+    main.blog {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 </style>

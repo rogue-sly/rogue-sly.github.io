@@ -38,15 +38,17 @@
 
 <style>
     p,
-    h3 {
+    h3,
+    h4 {
         margin: 0;
     }
+
     a {
         display: block;
         color: var(--fg-primary);
         background-color: var(--bg-primary-dark);
         border-radius: 12px;
-        padding: 32px;
+        padding: 16px;
         text-decoration: none;
         border: 1px solid var(--border-primary);
 
