@@ -3,12 +3,15 @@
     import { url } from "$lib/site-config.js";
     import { page } from "$app/state";
     import { goto } from "$app/navigation";
+    import { browser } from "$app/environment";
 
     let { data } = $props();
 
     type SortOptions = "date-asc" | "date-desc" | "title-asc" | "title-desc";
-    let selectedSortOption = $derived((page.url.searchParams.get("sort") as SortOptions) ?? "date-desc");
-    let selectedTag = $derived(page.url.searchParams.get("tag") ?? "");
+    let selectedSortOption = $derived(
+        browser ? ((page.url.searchParams.get("sort") as SortOptions) ?? "date-desc") : "date-desc",
+    );
+    let selectedTag = $derived(browser ? (page.url.searchParams.get("tag") ?? "") : "");
 
     let uniqueTags = $derived.by(() => {
         const tags = new Set<string>();
