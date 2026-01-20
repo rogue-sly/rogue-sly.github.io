@@ -140,6 +140,25 @@
     .toc nav {
         position: sticky;
         top: calc(var(--header-height) + 2rem);
+        max-height: calc(100vh - var(--header-height) - 4rem);
+        overflow-y: auto;
+        padding-right: 0.5rem;
+        /* for firefox */
+        scrollbar-width: thin;
+        scrollbar-color: var(--fg-primary-dark) transparent;
+    }
+
+    .toc nav::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .toc nav::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .toc nav::-webkit-scrollbar-thumb {
+        background-color: var(--fg-primary-dark);
+        border-radius: 4px;
     }
 
     .toc-header {
