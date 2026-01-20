@@ -45,7 +45,6 @@
     <article>
         <hgroup>
             <h1>{data.meta.title}</h1>
-            <!-- <img src={data.meta.image} alt="blog banner" /> -->
             <p class="post-date">Published at {formatDate(data.meta.date)}</p>
         </hgroup>
 
