@@ -42,21 +42,6 @@
 </svelte:head>
 
 <div class="page-container">
-    <aside class="toc">
-        {#if headings.length > 0}
-            <nav>
-                <p class="toc-header">Jump to</p>
-                <ul>
-                    {#each headings as heading}
-                        <li class="level-{heading.level}">
-                            <a href="#{heading.id}">{heading.text}</a>
-                        </li>
-                    {/each}
-                </ul>
-            </nav>
-        {/if}
-    </aside>
-
     <article>
         <hgroup>
             <h1>{data.meta.title}</h1>
@@ -69,6 +54,21 @@
                 <a href={`/blog?tag=${tag}`} class="tag">&num;{tag}</a>
             {/each}
         </div>
+
+        <aside class="toc">
+            {#if headings.length > 0}
+                <nav>
+                    <p class="toc-header">Jump to</p>
+                    <ul>
+                        {#each headings as heading}
+                            <li class="level-{heading.level}">
+                                <a href="#{heading.id}">{heading.text}</a>
+                            </li>
+                        {/each}
+                    </ul>
+                </nav>
+            {/if}
+        </aside>
 
         <div class="content">
             {@render data.content()}
@@ -137,7 +137,7 @@
     hgroup {
         padding: 16px;
         border-radius: 12px;
-        /* border: 1px solid var(--border-primary); */
+        border: 1px solid var(--border-primary);
         background-color: var(--bg-primary-dark);
         margin-bottom: 16px;
     }
@@ -174,7 +174,22 @@
 
     @media (max-width: 1200px) {
         .toc {
-            display: none;
+            position: static;
+            width: 100%;
+            height: auto;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: var(--bg-primary-dark);
+            border-radius: 12px;
+            border: 1px solid var(--border-primary);
+        }
+
+        .toc nav {
+            position: static;
+        }
+
+        .toc-header {
+            margin-bottom: 0.5rem;
         }
     }
 </style>
