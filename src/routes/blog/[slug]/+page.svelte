@@ -6,11 +6,22 @@
 
     let { data }: { data: PageData } = $props();
 
-    let headings = $state<{ id: string; text: string; level: number }[]>([]);
+    type TocItem = {
+        id: string;
+        text: string;
+        level: number;
+        children: TocItem[];
+        expanded: boolean;
+    };
+
+    let headings = $state<TocItem[]>([]);
 
     onMount(() => {
-        const elements = document.querySelectorAll(".content h2, .content h3");
-        headings = Array.from(elements).map((elem) => {
+        const elements = document.querySelectorAll(
+            ".content h1, .content h2, .content h3, .content h4, .content h5, .content h6",
+        );
+
+        const nodes: TocItem[] = Array.from(elements).map((elem) => {
             if (!elem.id) {
                 elem.id =
                     elem.textContent
@@ -22,8 +33,23 @@
                 id: elem.id,
                 text: elem.textContent || "",
                 level: Number(elem.tagName.substring(1)),
+                children: [],
+                expanded: true,
             };
         });
+
+        const stack: TocItem[] = [];
+        const roots: TocItem[] = [];
+
+        for (const node of nodes) {
+            while (stack.length > 0 && stack[stack.length - 1].level >= node.level) {
+                stack.pop();
+            }
+            stack.length > 0 ? stack[stack.length - 1].children.push(node) : roots.push(node);
+            stack.push(node);
+        }
+
+        headings = roots;
     });
 </script>
 
@@ -54,15 +80,38 @@
             {/each}
         </div>
 
+        {#snippet tocNode(node: TocItem)}
+            <li class="level-{node.level}">
+                <div class="toc-row">
+                    {#if node.children.length > 0}
+                        <button
+                            class="toc-toggle"
+                            onclick={() => (node.expanded = !node.expanded)}
+                            aria-label="Toggle section"
+                        >
+                            {node.expanded ? "▼" : "▶"}
+                        </button>
+                    {/if}
+                    <a href="#{node.id}">{node.text}</a>
+                </div>
+
+                {#if node.children.length > 0}
+                    <ul class:collapsed={!node.expanded}>
+                        {#each node.children as child}
+                            {@render tocNode(child)}
+                        {/each}
+                    </ul>
+                {/if}
+            </li>
+        {/snippet}
+
         <aside class="toc">
             {#if headings.length > 0}
                 <nav>
                     <p class="toc-header">Jump to</p>
                     <ul>
                         {#each headings as heading}
-                            <li class="level-{heading.level}">
-                                <a href="#{heading.id}">{heading.text}</a>
-                            </li>
+                            {@render tocNode(heading)}
                         {/each}
                     </ul>
                 </nav>
@@ -106,17 +155,55 @@
         list-style: none;
         padding: 0;
         margin: 0;
+        font-size: 0.75rem;
+    }
+
+    .toc ul.collapsed {
+        display: none;
+    }
+
+    .toc ul ul {
+        padding-left: 0.75rem;
     }
 
     .toc li {
         margin-bottom: 0.5rem;
     }
 
+    .toc-row {
+        display: flex;
+        align-items: flex-start;
+        position: relative;
+    }
+
+    .toc-toggle {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        color: var(--fg-primary-dark);
+        font-size: 0.6rem;
+        width: 1rem;
+        height: 1.4em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        left: -1rem;
+        transition: color 0.2s;
+    }
+
+    .toc-toggle:hover {
+        color: var(--fg-accent);
+    }
+
     .toc a {
         text-decoration: none;
         color: var(--fg-primary-dark);
         transition: color 0.2s;
-        display: block;
+        display: flex;
+        align-items: flex-start;
         line-height: 1.4;
     }
 
@@ -124,9 +211,8 @@
         color: var(--fg-accent);
     }
 
-    .level-3 {
-        padding-left: 1rem;
-        font-size: 0.95em;
+    .level-1 {
+        font-weight: bold;
     }
 
     h1 {
@@ -189,6 +275,18 @@
 
         .toc-header {
             margin-bottom: 0.5rem;
+        }
+
+        .toc-toggle {
+            display: none;
+        }
+
+        .toc ul.collapsed {
+            display: block;
+        }
+
+        .toc-row {
+            align-items: baseline;
         }
     }
 </style>
