@@ -55,7 +55,7 @@
         {/if}
     </div>
 
-    <h1>Hi there! my name is Rogue/Ac!d.</h1>
+    <h1>Hi there! my name is Ali, but you can call me Rogue</h1>
 
     <p class="intro">
         Yet another CS student. Trying to make something out of himself. Hope you find something that interests you
@@ -93,9 +93,15 @@
         align-items: center;
         gap: 0.4rem;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        max-width: 250px;
+        max-width: 180px;
         z-index: 20;
         transition: all 0.3s ease;
+    }
+
+    @media (max-width: 480px) {
+        .status-bubble {
+            max-width: 140px;
+        }
     }
 
     @media (max-height: 700px) {
@@ -156,10 +162,7 @@
         font-size: 0.6rem;
         font-weight: 500;
         color: var(--fg-primary);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 20ch;
+        word-break: break-word;
     }
 
     .pfp img {
