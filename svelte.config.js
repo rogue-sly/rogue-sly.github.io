@@ -3,9 +3,10 @@ import { createHighlighter } from "shiki";
 import adapter from "@sveltejs/adapter-static";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
-const shikiConfig = {
-    /** @type {import('shiki').BundledTheme[]} */
-    themes: ["kanagawa-dragon"],
+/** @type {import('shiki').BundledTheme} */
+const theme = "kanagawa-dragon";
+const highlighter = await createHighlighter({
+    themes: [theme],
     /** @type {import('shiki').BundledLanguage[]} */
     langs: [
         "c",
@@ -23,20 +24,14 @@ const shikiConfig = {
         "toml",
         "typescript",
     ],
-};
+});
 
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
     extensions: [".md"],
     highlight: {
         highlighter: async (code, lang = "text") => {
-            const highlighter = await createHighlighter({
-                themes: shikiConfig.themes,
-                langs: shikiConfig.langs,
-            });
-
-            highlighter.loadLanguage(...shikiConfig.langs);
-            const html = escapeSvelte(highlighter.codeToHtml(code, { lang, theme: shikiConfig.themes[0] }));
+            const html = escapeSvelte(highlighter.codeToHtml(code, { lang, theme: theme }));
             return `{@html \`${html}\` }`;
         },
     },
