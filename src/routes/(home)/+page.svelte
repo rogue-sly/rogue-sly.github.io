@@ -34,7 +34,6 @@
 
 <section class="hero">
     <div class="pfp">
-        <img src={gideon} alt="gideon" />
         {#if customStatus}
             <div class="status-bubble">
                 {#if customStatus.emoji}
@@ -53,6 +52,7 @@
                 {/if}
             </div>
         {/if}
+        <img src={gideon} alt="gideon" />
     </div>
 
     <h1>Hi there! my name is Ali, but you can call me Rogue</h1>
@@ -77,25 +77,25 @@
     }
 
     .pfp {
-        position: relative;
-        display: inline-block;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
     }
 
     .status-bubble {
-        position: absolute;
-        top: -25px;
-        transform: translateX(140px);
+        position: relative;
         background-color: var(--bg-primary-light);
         border: 2px solid var(--border-primary);
         border-radius: 16px;
         padding: 0.4rem 0.6rem;
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
+        justify-content: center;
         gap: 0.4rem;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        max-width: 180px;
-        z-index: 20;
-        transition: all 0.3s ease;
+        max-width: 200px;
     }
 
     @media (max-width: 480px) {
@@ -104,53 +104,32 @@
         }
     }
 
-    @media (max-height: 700px) {
-        .status-bubble {
-            top: auto;
-            bottom: -20px;
-        }
-    }
-
     .status-bubble::before {
         content: "";
         position: absolute;
-        bottom: -10px;
-        left: 10px;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-20%);
         width: 12px;
         height: 12px;
         background-color: var(--bg-primary-light);
         border: 2px solid var(--border-primary);
         border-radius: 50%;
-        transition: all 0.3s ease;
-    }
-
-    @media (max-height: 700px) {
-        .status-bubble::before {
-            bottom: auto;
-            top: -10px;
-            left: 10px;
-        }
+        margin-top: 4px;
     }
 
     .status-bubble::after {
         content: "";
         position: absolute;
-        bottom: -22px;
-        left: -5px;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-60%);
         width: 8px;
         height: 8px;
         background-color: var(--bg-primary-light);
         border: 2px solid var(--border-primary);
         border-radius: 50%;
-        transition: all 0.3s ease;
-    }
-
-    @media (max-height: 700px) {
-        .status-bubble::after {
-            bottom: auto;
-            top: -22px;
-            left: -5px;
-        }
+        margin-top: 14px;
     }
 
     .status-bubble .emoji {
@@ -163,6 +142,7 @@
         font-weight: 500;
         color: var(--fg-primary);
         word-break: break-word;
+        min-width: 0;
     }
 
     .pfp img {
