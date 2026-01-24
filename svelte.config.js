@@ -9,20 +9,22 @@ const highlighter = await createHighlighter({
     themes: [theme],
     /** @type {import('shiki').BundledLanguage[]} */
     langs: [
+        "bash",
         "c",
         "c++",
+        "fish",
         "html",
         "java",
         "javascript",
         "json",
         "lua",
-        "luau",
         "nix",
         "rust",
         "sh",
         "svelte",
         "toml",
         "typescript",
+        "zsh",
     ],
 });
 
