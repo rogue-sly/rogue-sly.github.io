@@ -1,6 +1,5 @@
 import { writable, type Writable } from "svelte/store";
 import type { DiscordPresence } from "$lib/types";
-import { dev } from "$app/environment";
 
 export const presenceData: Writable<DiscordPresence> = writable({} as DiscordPresence);
 
@@ -46,16 +45,16 @@ export class LanyardSocket extends WebSocket {
         };
 
         this.onerror = (event: Event) => {
-            if (dev) {
-                console.error("WebSocket error:", event);
-            }
+            // if (dev) {
+            //     console.error("WebSocket error:", event);
+            // }
             clearInterval(this.hearbeat);
         };
 
         this.onclose = (event: CloseEvent) => {
-            if (dev) {
-                console.log(`WebSocket connection closed: ${event.code} ${event.reason}`);
-            }
+            // if (dev) {
+            //     console.log(`WebSocket connection closed: ${event.code} ${event.reason}`);
+            // }
         };
     }
 
