@@ -23,7 +23,7 @@
             if (cancelled) return;
 
             player = AsciinemaPlayer.create(src, playerElement, {
-                fit: "width",
+                preload: true,
                 ...options,
             });
         }
@@ -37,4 +37,10 @@
     });
 </script>
 
-<div bind:this={playerElement} {id}></div>
+<div class="player" bind:this={playerElement} {id}></div>
+
+<style>
+    .player {
+        margin-bottom: 0.95rem;
+    }
+</style>
