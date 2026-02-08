@@ -1,5 +1,5 @@
 ---
-title: "Alternatives to Mason.nvim"
+title: "Alternatives to mason.nvim"
 desc: "Looking for another way to manage tools in nvim"
 date: "2026-02-07"
 tags: ["package manager", "tool manager", "neovim", "tooling"]
@@ -24,7 +24,7 @@ So if you're looking for a separate tool for managing installations of `language
 
 ### 1. Default Package Manager
 
-Most Linux distributions' software repositories offer some tooling, but they are often outdated or incomplete, which is why mason.nvim exists.
+Most Linux distributions software repositories offer some tooling, but they are often outdated or incomplete, which is why mason.nvim exists.
 
 It's also possible to use language-specific package managers (e.g., `npm install -g typescript-language-server`). While straightforward, it requires manual upkeep and forces the user to manage updates for every tool individually.
 
@@ -34,7 +34,7 @@ One could argue that shell scripts can automate this process, but they tend to b
 
 <Asciinema src="/posts/alternatives-to-mason-nvim/mise.cast" />
 
-This tool is pretty much a more modern and faster [asdf](https://asdf-vm.com/). It supports installing directly from GitHub and other services like GitLab and Codeberg. It works similarly to mason.nvim but is more flexible; since it operates at the shell level, you can use these tools with any editor, such as Helix or VS Code, not just Neovim.
+This tool is pretty much a more modern and faster [asdf](https://asdf-vm.com/). It supports installing directly from GitHub and other services like GitLab and Codeberg. It works similarly to mason.nvim but is more flexible; since it operates at the shell level, you can use these tools with any editor, such as Helix or Sublime, not just Neovim (Any LSP compliant editor in general).
 
 Mise identifies itself as a polyglot tool manager. It uses `toml` for configuration, making it easy to set up and maintain. Here is an example of what a configuration file looks like:
 
@@ -277,7 +277,7 @@ return {
 
 Start with mise. It is really easy and simple to use. You can use it like a regular package manager or specify your packages in the config file.
 
-Mise does more than just package management. It also has a builtin runner which I find really good and can store environment variables in the config file.
+Mise does more than just package management. It also has a [builtin task runner](https://mise.jdx.dev/tasks/) which I find really good and can [store/manage environment variables](https://mise.jdx.dev/environments/) in the config file.
 
 <style>
     img[alt="tool-logo"] {
