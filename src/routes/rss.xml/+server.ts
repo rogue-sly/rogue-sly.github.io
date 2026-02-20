@@ -76,6 +76,7 @@ async function generateXml(): Promise<string> {
             .ele("subtitle").txt(config.desc).up();
 
     for await (const post of posts) {
+        if (!post.metadata.published) continue;
         const pubDate = post.metadata.date;
         const postUrl = `${config.url}/blog/${post.postPath}`;
         const postHtml = await getHtmlForPost(post.postPath, post.metadata.image, post.metadata.caption);
