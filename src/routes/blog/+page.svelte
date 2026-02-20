@@ -168,8 +168,9 @@
         background-color: var(--bg-primary-dark);
         color: var(--fg-primary);
         padding: 24px;
-        border-radius: 100%;
         transition: background-color 200ms ease-in-out;
+        border-radius: 100%;
+        border: 1px solid var(--fg-accent);
 
         &:hover {
             background-color: var(--bg-primary);

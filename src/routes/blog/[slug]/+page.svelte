@@ -198,6 +198,10 @@
         border: 1px solid var(--border-primary);
         background-color: var(--bg-primary-dark);
         margin-bottom: 16px;
+
+        & p {
+            margin-bottom: 0;
+        }
     }
 
     .content {

@@ -63,16 +63,16 @@
     .home-link {
         margin-top: 1rem;
         padding: 0.8rem 1.5rem;
-        background: var(--bg-primary-light);
+        background: var(--bg-primary-dark);
         color: var(--fg-primary-light);
         text-decoration: none;
         border: 1px solid var(--border-primary);
-        border-radius: 4px;
+        border-radius: 16px;
         transition: all 0.2s ease;
     }
 
     .home-link:hover {
-        background: var(--bg-accent);
-        border-color: var(--fg-accent);
+        background: var(--bg-primary-light);
+        border-color: var(--border-primary);
     }
 </style>

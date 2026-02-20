@@ -148,7 +148,7 @@
         scroll-behavior: smooth;
         height: 100%;
         border-radius: 16px;
-        outline: 2px solid var(--fg-accent);
+        outline: 1px solid var(--fg-accent);
     }
 
     .activity-carousel::-webkit-scrollbar {
@@ -179,6 +179,7 @@
         width: 32px;
         height: 32px;
         opacity: 0.7;
+        outline: 1px solid var(--fg-accent);
     }
 
     .nav-btn:disabled {
