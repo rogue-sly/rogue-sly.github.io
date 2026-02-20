@@ -1,6 +1,7 @@
 <script lang="ts">
     import Header from "$lib/layout/Header.svelte";
     import Footer from "$lib/layout/Footer.svelte";
+    import Scanner from "$lib/components/Scanner.svelte";
     import "$lib/style/_index.css";
     import { fade } from "svelte/transition";
     import { page } from "$app/state";
@@ -22,6 +23,8 @@
 {/key}
 
 <Footer />
+
+<Scanner />
 
 <style>
     main {
