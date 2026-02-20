@@ -1,6 +1,6 @@
 import * as config from "$lib/site-config";
 import type { ServerLoadEvent } from "@sveltejs/kit";
-import { base } from "$app/paths";
+import { resolve } from "$app/paths";
 import { create } from "xmlbuilder2";
 import { getAllPosts } from "$lib/utils";
 
@@ -47,7 +47,8 @@ async function getHtmlForPost(
 
     if (leadImageFilename) {
         const leadImage = postDom.window.document.createElement("img");
-        leadImage.src = `${base}/${leadImageFilename}`;
+        // @ts-ignore - resolve is typed for routes but works for assets too
+        leadImage.src = resolve(leadImageFilename);
         if (leadImageCaption) {
             const caption = postDom.window.document.createElement("caption");
             caption.textContent = leadImageCaption;
