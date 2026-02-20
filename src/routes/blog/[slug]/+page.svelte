@@ -67,7 +67,7 @@
         </div>
 
         {#snippet tocNode(node: TocStateItem)}
-            <li class="level-{node.level}">
+            <li>
                 <div class="toc-row">
                     <a href="#{node.id}">{node.text}</a>
                 </div>
@@ -160,6 +160,7 @@
 
     .toc li {
         margin-bottom: 0.5rem;
+        font-weight: bold;
     }
 
     .toc-row {
@@ -179,10 +180,6 @@
 
     .toc a:hover {
         color: var(--fg-accent);
-    }
-
-    .level-1 {
-        font-weight: bold;
     }
 
     h1 {
