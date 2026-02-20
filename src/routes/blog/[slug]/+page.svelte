@@ -1,56 +1,47 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import { formatDate } from "$lib/utils";
     import { url, title } from "$lib/site-config";
     import type { PageData } from "./$types";
+    import type { TocItem } from "$lib/types";
 
     let { data }: { data: PageData } = $props();
 
-    type TocItem = {
-        id: string;
-        text: string;
-        level: number;
-        children: TocItem[];
+    type TocStateItem = TocItem & {
         expanded: boolean;
+        children: TocStateItem[];
     };
 
-    let headings = $state<TocItem[]>([]);
+    let headings = $derived<TocStateItem[]>(createHeadings(data.meta.toc || []));
 
-    onMount(() => {
-        const elements = document.querySelectorAll(
-            ".content h1, .content h2, .content h3, .content h4, .content h5, .content h6",
-        );
+    $effect(() => {
+        headings = createHeadings(data.meta.toc || []);
+    });
 
-        const nodes: TocItem[] = Array.from(elements).map((elem) => {
-            if (!elem.id) {
-                elem.id =
-                    elem.textContent
-                        ?.toLowerCase()
-                        .replace(/[^a-z0-9]+/g, "-")
-                        .replace(/(^-|-$)/g, "") || "";
-            }
-            return {
-                id: elem.id,
-                text: elem.textContent || "",
-                level: Number(elem.tagName.substring(1)),
-                children: [],
-                expanded: true,
-            };
-        });
+    function createHeadings(toc: TocItem[]): TocStateItem[] {
+        const stack: TocStateItem[] = [];
+        const roots: TocStateItem[] = [];
 
-        const stack: TocItem[] = [];
-        const roots: TocItem[] = [];
+        // Map incoming items to state items
+        const nodes: TocStateItem[] = toc.map((item) => ({
+            ...item,
+            expanded: true,
+            children: [],
+        }));
 
         for (const node of nodes) {
             while (stack.length > 0 && stack[stack.length - 1].level >= node.level) {
                 stack.pop();
             }
-            stack.length > 0 ? stack[stack.length - 1].children.push(node) : roots.push(node);
+            if (stack.length > 0) {
+                stack[stack.length - 1].children.push(node);
+            } else {
+                roots.push(node);
+            }
             stack.push(node);
         }
 
-        headings = roots;
-    });
+        return roots;
+    }
 </script>
 
 <svelte:head>
@@ -80,7 +71,7 @@
             {/each}
         </div>
 
-        {#snippet tocNode(node: TocItem)}
+        {#snippet tocNode(node: TocStateItem)}
             <li class="level-{node.level}">
                 <div class="toc-row">
                     {#if node.children.length > 0}

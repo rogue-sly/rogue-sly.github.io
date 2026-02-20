@@ -55,6 +55,13 @@ export interface DiscordPresence {
     listening_to_spotify: boolean;
 }
 
+export type TocItem = {
+    level: number;
+    text: string;
+    id: string;
+    children?: TocItem[];
+};
+
 export type PostMetadata = {
     title: string;
     slug: string;
@@ -64,6 +71,7 @@ export type PostMetadata = {
     date: string;
     tags: string[];
     published: boolean;
+    toc?: TocItem[];
 };
 
 export type PostLink = {
