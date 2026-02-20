@@ -1,17 +1,18 @@
 import * as config from "$lib/site-config";
-import { getAllPosts } from "$lib/utils";
-import { create } from "xmlbuilder2";
 import type { ServerLoadEvent } from "@sveltejs/kit";
+import { base } from "$app/paths";
+import { create } from "xmlbuilder2";
+import { getAllPosts } from "$lib/utils";
 
-import { readFile } from "fs/promises";
-import { unified } from "unified";
 import rehypeStringify from "rehype-stringify";
+import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
-import remarkGfm from "remark-gfm";
-
-import { base } from "$app/paths";
 import { JSDOM } from "jsdom";
+import { readFile } from "fs/promises";
+import { unified } from "unified";
+
+export const prerender = true;
 
 export async function GET({ fetch }: ServerLoadEvent) {
     const headers = {
@@ -28,12 +29,7 @@ async function getHtmlForPost(
     leadImageCaption?: string,
 ): Promise<string> {
     const postMarkdownWithFrontmatter = await readFile(`src/posts/${postPath}.md`, "utf-8");
-    // prettier-ignore
-    const postMarkdown = postMarkdownWithFrontmatter
-		.split("---")
-		.slice(2)
-		.join("---")
-		.trim();
+    const postMarkdown = postMarkdownWithFrontmatter.split("---").slice(2).join("---").trim();
 
     const processedMarkdown = await unified()
         .use(remarkParse)
@@ -64,39 +60,38 @@ async function getHtmlForPost(
 
 // prettier-ignore
 async function generateXml(): Promise<string> {
-	const posts = await getAllPosts();
-	const rssUrl = `${config.url}/rss.xml`;
-	const root = create({ version: '1.0', encoding: 'utf-8' })
-	.ele('feed', { xmlns: 'http://www.w3.org/2005/Atom' })
-      .ele('title').txt(config.title).up()
-      .ele('link', { href: config.url }).up()
-      .ele('link', { rel: 'self', href: rssUrl }).up()
-      .ele('updated').txt(new Date().toISOString()).up()
-      .ele('id').txt(config.url).up()
-      .ele('author')
-	    .ele('name').txt(config.author).up()
-        .ele('email').txt(config.email).up()
-      .up()
-      .ele('subtitle').txt(config.desc).up()
+    const posts = await getAllPosts();
+    const rssUrl = `${config.url}/rss.xml`;
+    const root = create({ version: "1.0", encoding: "utf-8" })
+        .ele("feed", { xmlns: "http://www.w3.org/2005/Atom" })
+            .ele("title").txt(config.title).up()
+            .ele("link", { href: config.url }).up()
+            .ele("link", { rel: "self", href: rssUrl }).up()
+            .ele("updated").txt(new Date().toISOString()).up()
+            .ele("id").txt(config.url).up()
+            .ele("author")
+                .ele("name").txt(config.author).up()
+                .ele("email").txt(config.email).up()
+            .up()
+            .ele("subtitle").txt(config.desc).up();
 
-	for await (const post of posts) {
-		const pubDate = post.metadata.date;
-		const postUrl = `${config.url}/blog/${post.postPath}`;
-		const postHtml = await getHtmlForPost(post.postPath, post.metadata.image, post.metadata.caption);
-		const summary = post.metadata.desc;
+    for await (const post of posts) {
+        const pubDate = post.metadata.date;
+        const postUrl = `${config.url}/blog/${post.postPath}`;
+        const postHtml = await getHtmlForPost(post.postPath, post.metadata.image, post.metadata.caption);
+        const summary = post.metadata.desc;
 
-		root
-		  .ele('entry')
-			.ele('title').txt(post.metadata.title).up()
-			.ele('link', { href: postUrl }).up()
-			.ele('updated').txt(pubDate).up()
-			.ele('id').txt(postUrl).up()
-			.ele('content', { type: 'html' }).txt(postHtml).up()
-			.ele('summary').txt(summary).up()
-		  .up();
-	}
+        root.ele("entry")
+                .ele("title").txt(post.metadata.title).up()
+                .ele("link", { href: postUrl }).up()
+                .ele("updated").txt(pubDate).up()
+                .ele("id").txt(postUrl).up()
+                .ele("content", { type: "html" }).txt(postHtml).up()
+                .ele("summary").txt(summary).up()
+            .up();
+    }
 
-	return root.end()
+    return root.end();
 }
 
 function inlineFootnotes(dom: JSDOM): void {
@@ -113,6 +108,3 @@ function inlineFootnotes(dom: JSDOM): void {
         }
     });
 }
-
-// NOTE: Page Settings 󰒓
-export const prerender = true;
