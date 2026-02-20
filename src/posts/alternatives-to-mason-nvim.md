@@ -30,7 +30,7 @@ It's also possible to use language-specific package managers (e.g., `npm install
 
 One could argue that shell scripts can automate this process, but they tend to be brittle and break easily.
 
-### 2. ![tool-logo](/posts/alternatives-to-mason-nvim/mise.svg) [mise-en-place](https://mise.jdx.dev/)
+### 2. <img src="/posts/alternatives-to-mason-nvim/mise.svg" alt="tool-logo" width="50" style="vertical-align: middle;"> [mise-en-place](https://mise.jdx.dev/)
 
 <Asciinema src="/posts/alternatives-to-mason-nvim/mise.cast" />
 
@@ -104,7 +104,7 @@ echo 'mise activate fish | source' >> ~/.config/fish/config.fish
 
 To install a package globally, run `mise use -g <package>`. Running `mise use <package>` without the `-g` flag will add it to a `mise.toml` in your current directory, making the tool available only when you are in that project.
 
-### 3. ![tool-logo](/posts/alternatives-to-mason-nvim/brew.svg) [Brew/LinuxBrew](https://brew.sh/)
+### 3. <img src="/posts/alternatives-to-mason-nvim/brew.svg" alt="tool-logo" width="50" style="vertical-align: middle;"> [Brew/LinuxBrew](https://brew.sh/)
 
 Brew is a popular alternative package manager written in Ruby. On Linux, it installs packages and their dependencies into a separate directory in your home folder. This isolation is convenient because it doesn't interfere with your system libraries, though it does mean downloading extra copies of common dependencies.
 
@@ -116,7 +116,7 @@ It covers a wide range of language servers, linters, and formatters. However, th
 
 It favors macOS over other platforms sometimes.
 
-### 4. ![tool-logo](/posts/alternatives-to-mason-nvim/nix.png) [Nix Package Manager](https://nixos.org/)
+### 4. <img src="/posts/alternatives-to-mason-nvim/nix.png" alt="tool-logo" width="50" style="vertical-align: middle;"> [Nix Package Manager](https://nixos.org/)
 
 Nix has a steeper learning curve because it uses its own functional language, but it isn't as daunting as it might seem; however, the language wasn't made with beauty in mind (bit of an eye sore sometimes).
 
@@ -278,10 +278,3 @@ return {
 Start with mise. It is really easy and simple to use. You can use it like a regular package manager or specify your packages in the config file.
 
 Mise does more than just package management. It also has a [builtin task runner](https://mise.jdx.dev/tasks/) which I find really good and can [store/manage environment variables](https://mise.jdx.dev/environments/) in the config file.
-
-<style>
-    img[alt="tool-logo"] {
-        vertical-align: middle;
-        width: 50px;
-    }
-</style>

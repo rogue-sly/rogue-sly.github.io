@@ -37,10 +37,23 @@
     });
 </script>
 
-<div class="player" bind:this={playerElement} {id}></div>
+<div class="player-wrapper">
+    <div
+        class="player"
+        bind:this={playerElement}
+        {id}
+        style="max-width: 100%; overflow-x: auto; display: block;"
+    ></div>
+</div>
 
 <style>
-    .player {
+    .player-wrapper {
         margin-bottom: 0.95rem;
+    }
+
+    @media print {
+        .player-wrapper {
+            display: none !important;
+        }
     }
 </style>
