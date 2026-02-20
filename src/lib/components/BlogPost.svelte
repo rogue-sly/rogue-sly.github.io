@@ -1,21 +1,9 @@
 <script lang="ts">
     import { formatDate } from "$lib/utils";
-    import { title, desc, url } from "$lib/site-config";
     import type { PostMetadata } from "$lib/types";
 
     let { post }: { post: PostMetadata } = $props();
 </script>
-
-<svelte:head>
-    <meta name="description" content={desc} />
-
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content={`${url}/blog`} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={desc} />
-    <meta property="og:site_name" content={title} />
-    <!-- <meta property="og:image" content="/blog-banner.webp" /> -->
-</svelte:head>
 
 {#key post.slug}
     <a href={`/blog/${post.slug}`}>
@@ -32,14 +20,15 @@
 
         <!-- <hr /> -->
 
-        <div class="date"><h4>Posted on {formatDate(post.date)}</h4></div>
+        <div class="date">
+            Posted on <time datetime={post.date}>{formatDate(post.date)}</time>
+        </div>
     </a>
 {/key}
 
 <style>
     p,
-    h3,
-    h4 {
+    h3 {
         margin: 0;
     }
 

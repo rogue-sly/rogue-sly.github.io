@@ -2,7 +2,7 @@
     import Activity from "./Activity.svelte";
     import { LanyardSocket, presenceData } from "../../stores/websocket.svelte";
     import gideon from "$lib/assets/images/gideon-animated.webp";
-    import { title, author, url, desc } from "$lib/site-config";
+    import SEO from "$lib/components/SEO.svelte";
 
     let activities = $derived($presenceData.activities?.filter((a) => a.type !== 4));
     let isLoading = $derived(Object.keys($presenceData).length === 0);
@@ -18,18 +18,7 @@
     });
 </script>
 
-<svelte:head>
-    <title>home</title>
-
-    <meta property="author" content={author} />
-    <meta name="description" content={desc} />
-
-    <meta property="og:title" content={title} />
-    <meta property="og:site_name" content={author} />
-    <meta property="og:description" content={desc} />
-    <meta property="og:url" content={url} />
-    <meta property="og:image" content="/images/gideon-graves.png" />
-</svelte:head>
+<SEO title="Home" type="profile" />
 
 <section class="hero">
     <div class="pfp">

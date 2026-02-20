@@ -1,5 +1,6 @@
 <script lang="ts">
     import BlogPost from "$lib/components/BlogPost.svelte";
+    import SEO from "$lib/components/SEO.svelte";
     import { url } from "$lib/site-config.js";
     import { page } from "$app/state";
     import { goto } from "$app/navigation";
@@ -55,9 +56,7 @@
     }
 </script>
 
-<svelte:head>
-    <title>blog</title>
-</svelte:head>
+<SEO title="Blog" />
 
 <div>
     <div class="controls">

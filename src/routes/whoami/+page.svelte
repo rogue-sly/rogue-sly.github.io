@@ -1,6 +1,8 @@
-<svelte:head>
-    <title>whoami</title>
-</svelte:head>
+<script lang="ts">
+    import SEO from "$lib/components/SEO.svelte";
+</script>
+
+<SEO title="Who Am I" type="profile" />
 
 <section>
     <p>ah! so you're actually interested in reading a random guy's web page that you know nothing about? cool!</p>

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { formatDate } from "$lib/utils";
-    import { url, title } from "$lib/site-config";
+    import SEO from "$lib/components/SEO.svelte";
     import type { PageData } from "./$types";
     import type { TocItem } from "$lib/types";
 
@@ -42,19 +42,14 @@
     }
 </script>
 
-<svelte:head>
-    <title>{data.meta.title}</title>
-
-    <link rel="canonical" href={`${url}`} />
-    <meta name="description" content={data.meta.desc} />
-
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content={url} />
-    <meta property="og:title" content={data.meta.title} />
-    <meta property="og:description" content={data.meta.desc} />
-    <meta property="og:site_name" content={title} />
-    <meta property="og:image" content={data.meta.image} />
-</svelte:head>
+<SEO
+    title={data.meta.title}
+    desc={data.meta.desc}
+    type="article"
+    image={data.meta.image || "/images/gideon-graves.png"}
+    imageAlt={data.meta.title}
+    publishedTime={data.meta.date}
+/>
 
 <div class="page-container">
     <article>

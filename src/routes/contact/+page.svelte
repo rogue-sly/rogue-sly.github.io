@@ -1,9 +1,8 @@
-<script>
+<script lang="ts">
     import Socials from "./Socials.svelte";
+    import SEO from "$lib/components/SEO.svelte";
 </script>
 
-<svelte:head>
-    <title>contact</title>
-</svelte:head>
+<SEO title="Contact" />
 
 <Socials />
