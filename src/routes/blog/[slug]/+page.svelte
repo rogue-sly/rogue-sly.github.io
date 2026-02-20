@@ -7,7 +7,6 @@
     let { data }: { data: PageData } = $props();
 
     type TocStateItem = TocItem & {
-        expanded: boolean;
         children: TocStateItem[];
     };
 
@@ -24,7 +23,6 @@
         // Map incoming items to state items
         const nodes: TocStateItem[] = toc.map((item) => ({
             ...item,
-            expanded: true,
             children: [],
         }));
 
@@ -74,20 +72,11 @@
         {#snippet tocNode(node: TocStateItem)}
             <li class="level-{node.level}">
                 <div class="toc-row">
-                    {#if node.children.length > 0}
-                        <button
-                            class="toc-toggle"
-                            onclick={() => (node.expanded = !node.expanded)}
-                            aria-label="Toggle section"
-                        >
-                            {node.expanded ? "▼" : "▶"}
-                        </button>
-                    {/if}
                     <a href="#{node.id}">{node.text}</a>
                 </div>
 
                 {#if node.children.length > 0}
-                    <ul class:collapsed={!node.expanded}>
+                    <ul>
                         {#each node.children as child}
                             {@render tocNode(child)}
                         {/each}
@@ -168,10 +157,6 @@
         font-size: 0.75rem;
     }
 
-    .toc ul.collapsed {
-        display: none;
-    }
-
     .toc ul ul {
         padding-left: 0.75rem;
     }
@@ -184,28 +169,6 @@
         display: flex;
         align-items: flex-start;
         position: relative;
-    }
-
-    .toc-toggle {
-        background: none;
-        border: none;
-        padding: 0;
-        margin: 0;
-        cursor: pointer;
-        color: var(--fg-primary-dark);
-        font-size: 0.6rem;
-        width: 1rem;
-        height: 1.4em;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        left: -1rem;
-        transition: color 0.2s;
-    }
-
-    .toc-toggle:hover {
-        color: var(--fg-accent);
     }
 
     .toc a {
@@ -285,14 +248,6 @@
 
         .toc-header {
             margin-bottom: 0.5rem;
-        }
-
-        .toc-toggle {
-            display: none;
-        }
-
-        .toc ul.collapsed {
-            display: block;
         }
 
         .toc-row {
