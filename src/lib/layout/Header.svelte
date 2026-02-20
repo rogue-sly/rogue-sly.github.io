@@ -1,15 +1,15 @@
 <script lang="ts">
-    import { page } from "$app/state";
+    import { ui } from "$lib/stores/ui.svelte";
 </script>
 
 <header>
-    <!-- prettier-ignore -->
-    <ul class="container">
-        <li><a href="/"         class:selected={page.url.pathname === "/"}>home                 </a></li>
-        <li><a href="/whoami"   class:selected={page.url.pathname === "/whoami/"}>whoami        </a></li>
-        <li><a href="/blog"     class:selected={page.url.pathname.startsWith("/blog")}>blog     </a></li>
-        <li><a href="/contact"  class:selected={page.url.pathname === "/contact/"}>contact      </a></li>
-    </ul>
+    <div class="container">
+        <div class="logo">
+            <a href="/">Rogue87</a>
+        </div>
+
+        <button class="menu-btn" onclick={() => ui.toggle()} aria-label="Toggle Menu"> [MENU] </button>
+    </div>
 </header>
 
 <style>
@@ -33,37 +33,25 @@
         align-items: center;
     }
 
-    li {
-        list-style-type: none;
-        margin: 0;
-    }
-
-    a {
+    .logo a {
         color: var(--fg-primary);
         text-decoration: none;
-        font-size: 0.85rem;
-        padding: 8px 12px;
-        border-radius: 8px;
-        transition:
-            color 200ms,
-            background-color 200ms;
-
-        &:hover {
-            color: var(--fg-primary-light);
-            background-color: var(--bg-primary);
-        }
+        font-weight: bold;
+        letter-spacing: 2px;
     }
 
-    .selected {
-        background-color: var(--bg-primary-light);
-        color: var(--fg-primary-light);
-        font-weight: 500;
+    .menu-btn {
+        background: transparent;
+        border: 1px solid var(--fg-accent);
+        color: var(--fg-accent);
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.2s;
     }
 
-    @media (max-width: 480px) {
-        a {
-            padding: 6px 8px;
-            font-size: 0.85rem;
-        }
+    .menu-btn:hover {
+        background: var(--fg-accent);
+        color: var(--bg-primary);
     }
 </style>

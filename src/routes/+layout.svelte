@@ -1,7 +1,8 @@
 <script lang="ts">
     import Header from "$lib/layout/Header.svelte";
     import Footer from "$lib/layout/Footer.svelte";
-    import Scanner from "$lib/components/Scanner.svelte";
+    import Sidebar from "$lib/layout/Sidebar.svelte";
+    import { audioState } from "$lib/stores/audio.svelte";
     import "$lib/style/_index.css";
     import { fade } from "svelte/transition";
     import { page } from "$app/state";
@@ -10,6 +11,8 @@
 </script>
 
 <Header />
+
+<Sidebar />
 
 {#key page.url.pathname}
     <main
@@ -24,7 +27,13 @@
 
 <Footer />
 
-<Scanner />
+<audio
+    bind:this={audioState.element}
+    src="https://stream.nightride.fm/nightride.m4a"
+    crossorigin="anonymous"
+    loop
+    preload="none"
+></audio>
 
 <style>
     main {
