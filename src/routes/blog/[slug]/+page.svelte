@@ -60,7 +60,9 @@
     <article>
         <hgroup>
             <h1>{data.meta.title}</h1>
-            <p class="post-date">Published at {formatDate(data.meta.date)}</p>
+            <p class="post-date">
+                Published at <time datetime={data.meta.date}>{formatDate(data.meta.date)}</time>
+            </p>
         </hgroup>
 
         <div class="tags">
