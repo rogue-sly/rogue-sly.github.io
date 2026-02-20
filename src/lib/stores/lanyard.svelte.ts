@@ -63,3 +63,5 @@ export class LanyardSocket extends WebSocket {
         this.close();
     }
 }
+
+export const lanyard = new LanyardSocket("369982847496355841");

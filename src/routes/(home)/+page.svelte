@@ -1,6 +1,6 @@
 <script lang="ts">
     import Activity from "./Activity.svelte";
-    import { LanyardSocket, presenceData } from "../../stores/websocket.svelte";
+    import { lanyard, presenceData } from "$lib/stores/lanyard.svelte";
     import gideon from "$lib/assets/images/gideon-animated.webp";
     import SEO from "$lib/components/SEO.svelte";
 
@@ -8,12 +8,10 @@
     let isLoading = $derived(Object.keys($presenceData).length === 0);
 
     $effect(() => {
-        const socket = new LanyardSocket("369982847496355841");
-
-        socket.connect();
+        lanyard.connect();
 
         return () => {
-            socket.disconnect();
+            lanyard.disconnect();
         };
     });
 </script>
