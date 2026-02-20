@@ -31,30 +31,37 @@
 </script>
 
 <div class="carousel-wrapper">
-    {#if isLoading}
-        <div class="activity-skeleton">
-            <div class="skeleton-icon"></div>
-            <div class="skeleton-content">
-                <div class="skeleton-line"></div>
-                <div class="skeleton-line short"></div>
-            </div>
-        </div>
-    {:else if activities && activities.length > 0}
-        <button onclick={() => scrollCarousel(-1)} class="nav-btn prev" aria-label="Previous Activity">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg
-            >
-        </button>
+    <button
+        onclick={() => scrollCarousel(-1)}
+        class="nav-btn prev"
+        aria-label="Previous Activity"
+        disabled={!activities || activities.length === 0 || isLoading}
+    >
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg
+        >
+    </button>
 
-        <div class="activity-carousel" bind:this={carouselContainer}>
+    <div class="activity-carousel" bind:this={carouselContainer}>
+        {#if isLoading}
+            <div class="carousel-item">
+                <div class="activity-skeleton">
+                    <div class="skeleton-icon"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                    </div>
+                </div>
+            </div>
+        {:else if activities && activities.length > 0}
             {#each activities as activity (activity.id)}
                 {@const largeImage = getImageUrl(activity.application_id, activity.assets?.large_image)}
                 {@const smallImage = getImageUrl(activity.application_id, activity.assets?.small_image)}
@@ -84,26 +91,33 @@
                     </div>
                 </div>
             {/each}
-        </div>
+        {:else}
+            <div class="carousel-item">
+                <div class="empty-state">
+                    <p>Not doing anything right now...</p>
+                </div>
+            </div>
+        {/if}
+    </div>
 
-        <button onclick={() => scrollCarousel(1)} class="nav-btn next" aria-label="Next Activity">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg
-            >
-        </button>
-    {:else}
-        <div class="empty-state">
-            <p>Not doing anything right now...</p>
-        </div>
-    {/if}
+    <button
+        onclick={() => scrollCarousel(1)}
+        class="nav-btn next"
+        aria-label="Next Activity"
+        disabled={!activities || activities.length === 0 || isLoading}
+    >
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg
+        >
+    </button>
 </div>
 
 <style>
@@ -132,6 +146,9 @@
         scroll-snap-type: x mandatory;
         box-sizing: border-box;
         scroll-behavior: smooth;
+        height: 100%;
+        border-radius: 16px;
+        outline: 2px solid var(--fg-accent);
     }
 
     .activity-carousel::-webkit-scrollbar {
@@ -142,7 +159,9 @@
         flex: 0 0 100%;
         width: 100%;
         min-width: 100%;
+        height: 100%;
         scroll-snap-align: center;
+        display: flex;
     }
 
     .nav-btn {
@@ -162,14 +181,20 @@
         opacity: 0.7;
     }
 
-    .nav-btn:hover {
+    .nav-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .nav-btn:hover:not(:disabled) {
         background-color: var(--fg-accent);
         color: var(--bg-primary);
         opacity: 1;
         transform: scale(1.1);
     }
 
-    .nav-btn:active {
+    .nav-btn:active:not(:disabled) {
         transform: scale(0.95);
     }
 
@@ -183,12 +208,12 @@
         display: flex;
         background-color: var(--bg-primary-dark);
         height: var(--activity-height);
-        border-radius: 16px;
         width: 100%;
         align-items: center;
         padding: 0 12px;
         gap: 1rem;
         animation: pulse 1.5s infinite ease-in-out;
+        box-sizing: border-box;
     }
 
     .skeleton-icon {
@@ -235,9 +260,9 @@
         align-items: center;
         justify-content: center;
         background-color: var(--bg-primary-dark);
-        border-radius: 16px;
         color: var(--fg-primary-dark);
         font-style: italic;
+        box-sizing: border-box;
 
         & * {
             margin: 0;
@@ -248,10 +273,10 @@
         display: flex;
         background-color: var(--bg-primary-dark);
         height: var(--activity-height);
-        border-radius: 16px;
         width: 100%;
         position: relative;
         overflow: hidden;
+        box-sizing: border-box;
     }
 
     .icon-wrapper {
