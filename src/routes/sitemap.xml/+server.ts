@@ -5,7 +5,7 @@ import { url } from "$lib/site-config";
 
 export const prerender = true;
 
-export async function GET({ fetch }: ServerLoadEvent) {
+export async function GET({}: ServerLoadEvent) {
     const posts = await getAllPosts();
     const staticPages = ["", "whoami", "contact", "blog"];
 
