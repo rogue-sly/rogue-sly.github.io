@@ -184,7 +184,7 @@
         background-color: var(--bg-primary-dark);
         height: var(--activity-height);
         border-radius: 16px;
-        width: 90%;
+        width: 100%;
         align-items: center;
         padding: 0 12px;
         gap: 1rem;
