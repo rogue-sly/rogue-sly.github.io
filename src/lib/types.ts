@@ -78,3 +78,14 @@ export type PostLink = {
     metadata: PostMetadata;
     postPath: string;
 };
+
+export interface Project {
+    title: string;
+    description: string;
+    techStack: string[];
+    links: {
+        repo?: string;
+        live?: string;
+    };
+    image?: string;
+}

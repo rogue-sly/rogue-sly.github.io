@@ -37,6 +37,11 @@
                     <a href="/blog" class:active={page.url.pathname.startsWith("/blog")} onclick={close}>/blog</a>
                 </li>
                 <li>
+                    <a href="/projects/" class:active={page.url.pathname === "/projects/"} onclick={close}>
+                        /projects
+                    </a>
+                </li>
+                <li>
                     <a href="/contact" class:active={page.url.pathname === "/contact/"} onclick={close}>/contact</a
                     >
                 </li>
