@@ -83,7 +83,7 @@ ol {
 pre {
     padding: 16px;
     margin-bottom: 16px;
-    border-radius: 8px;
+    border-radius: 4px;
     border: 1px solid var(--border-primary);
     overflow-x: auto;
     max-width: 100%;

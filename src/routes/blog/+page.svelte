@@ -133,7 +133,7 @@
         border-radius: 4px;
         font-family: inherit;
         cursor: pointer;
-        border-radius: 8px;
+        border-radius: 4px;
 
         &::picker(select) {
             background-color: var(--bg-primary-dark);
@@ -168,7 +168,7 @@
         color: var(--fg-primary);
         padding: 24px;
         transition: background-color 200ms ease-in-out;
-        border-radius: 100%;
+        border-radius: 4px;
         border: 1px solid var(--fg-accent);
 
         &:hover {

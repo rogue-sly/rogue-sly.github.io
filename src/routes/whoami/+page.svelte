@@ -58,7 +58,7 @@
             margin-bottom: 1rem;
             width: 45%;
             align-self: center;
-            border-radius: 16px;
+            border-radius: 4px;
         }
     }
 

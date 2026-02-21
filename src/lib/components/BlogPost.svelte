@@ -36,7 +36,7 @@
         display: block;
         color: var(--fg-primary);
         background-color: var(--bg-primary-dark);
-        border-radius: 12px;
+        border-radius: 4px;
         padding: 16px;
         text-decoration: none;
         border: 1px solid var(--border-primary);

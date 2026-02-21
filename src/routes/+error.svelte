@@ -67,7 +67,7 @@
         color: var(--fg-primary-light);
         text-decoration: none;
         border: 1px solid var(--border-primary);
-        border-radius: 16px;
+        border-radius: 4px;
         transition: all 0.2s ease;
     }
 

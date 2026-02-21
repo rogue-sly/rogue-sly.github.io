@@ -108,6 +108,8 @@
         gap: 2rem;
         box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
         font-family: "JetBrains Mono", "Quantico", monospace;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
     }
 
     .sidebar::before {
@@ -117,11 +119,31 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(
-            rgba(18, 16, 16, 0) 50%,
-            rgba(0, 0, 0, 0.25) 50%
-        ), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-        background-size: 100% 2px, 3px 100%;
+        background:
+            linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+            linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+        background-size:
+            100% 2px,
+            3px 100%;
+        pointer-events: none;
+        z-index: -1;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+
+    .sidebar::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background:
+            linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+            linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+        background-size:
+            100% 2px,
+            3px 100%;
         pointer-events: none;
         z-index: -1;
         border-top-left-radius: 16px;
@@ -163,7 +185,7 @@
         transition: all 0.2s;
         border: 1px solid transparent;
         text-transform: uppercase;
-        border-radius: 8px;
+        border-radius: 2px;
     }
 
     nav a:hover,
@@ -173,7 +195,7 @@
         border-color: var(--border-primary);
         padding-left: 1rem;
     }
-    
+
     nav a.active::before {
         content: "> ";
         color: var(--fg-accent);
@@ -184,7 +206,7 @@
         padding: 1rem;
         border: 1px solid var(--border-primary);
         background: rgba(0, 0, 0, 0.3);
-        border-radius: 12px;
+        border-radius: 4px;
     }
 
     .display {
@@ -215,7 +237,7 @@
         background-color: var(--fg-primary);
         transition: height 0.1s ease;
         min-height: 2px;
-        border-radius: 2px;
+        border-radius: 1px;
     }
 
     button {
@@ -226,7 +248,7 @@
         cursor: pointer;
         transition: all 0.2s;
         text-transform: uppercase;
-        border-radius: 4px;
+        border-radius: 2px;
     }
 
     button:hover {
@@ -239,7 +261,7 @@
         font-weight: bold;
         font-size: 0.9rem;
     }
-    
+
     .btn-close:hover {
         background: var(--bg-accent);
         color: var(--fg-primary-light);

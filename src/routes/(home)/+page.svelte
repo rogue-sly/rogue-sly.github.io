@@ -55,7 +55,7 @@
     .pfp img {
         width: 150px;
         height: 150px;
-        border-radius: 24px;
+        border-radius: 4px;
         border: 3px solid var(--fg-accent);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         object-fit: cover;
