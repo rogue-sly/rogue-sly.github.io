@@ -28,7 +28,7 @@ async function getHtmlForPost(
     leadImageFilename?: string,
     leadImageCaption?: string,
 ): Promise<string> {
-    const postMarkdownWithFrontmatter = await readFile(`src/posts/${postPath}.md`, "utf-8");
+    const postMarkdownWithFrontmatter = await readFile(`src/lib/data/posts/${postPath}.md`, "utf-8");
     const postMarkdown = postMarkdownWithFrontmatter.split("---").slice(2).join("---").trim();
 
     const processedMarkdown = await unified()

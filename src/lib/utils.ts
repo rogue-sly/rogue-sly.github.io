@@ -10,8 +10,8 @@ export function formatDate(date: string, dateStyle: DateStyle = "long", locales 
 }
 
 export async function getAllPosts(): Promise<PostLink[]> {
-    const pathPrefix = "../posts/";
-    const allPostFiles = import.meta.glob("../posts/*.md");
+    const pathPrefix = "./data/posts/";
+    const allPostFiles = import.meta.glob("./data/posts/*.md");
     const iterablePostFiles = Object.entries(allPostFiles);
     const postJobs = iterablePostFiles.map(async ([path, resolver]) => {
         const { metadata } = (await resolver()) as { metadata: PostMetadata };

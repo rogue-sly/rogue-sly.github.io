@@ -9,7 +9,7 @@ export async function GET() {
 async function getPosts() {
     let posts: PostMetadata[] = [];
 
-    const paths = import.meta.glob("/src/posts/*.md", { eager: true });
+    const paths = import.meta.glob("/src/lib/data/posts/*.md", { eager: true });
 
     for (const path in paths) {
         const file = paths[path];

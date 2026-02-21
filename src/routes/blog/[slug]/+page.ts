@@ -6,7 +6,7 @@ type Post = { default: () => any; metadata: PostMetadata };
 
 export async function load({ params }: ServerLoadEvent) {
     try {
-        const post: Post = await import(`../../../posts/${params.slug}.md`);
+        const post: Post = await import(`../../../lib/data/posts/${params.slug}.md`);
 
         return {
             content: post.default,
