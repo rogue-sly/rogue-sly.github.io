@@ -135,7 +135,7 @@
 
     .toc nav::-webkit-scrollbar-thumb {
         background-color: var(--fg-primary-dark);
-        border-radius: 2px;
+        border-radius: calc(var(--radius) / 2);
     }
 
     .toc-header {
@@ -188,7 +188,7 @@
 
     hgroup {
         padding: 16px;
-        border-radius: 4px;
+        border-radius: var(--radius);
         border: 1px solid var(--border-primary);
         background-color: var(--bg-primary-dark);
         margin-bottom: 16px;
@@ -216,7 +216,7 @@
 
     .tag {
         padding: 8px;
-        border-radius: 4px;
+        border-radius: var(--radius);
         background-color: var(--fg-accent);
         margin-bottom: 16px;
         color: inherit;
@@ -236,7 +236,7 @@
             margin-bottom: 2rem;
             padding: 1rem;
             background-color: var(--bg-primary-dark);
-            border-radius: 4px;
+            border-radius: var(--radius);
             border: 1px solid var(--border-primary);
         }
 

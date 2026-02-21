@@ -130,15 +130,15 @@
         color: var(--fg-primary);
         border: 1px solid var(--border-primary);
         padding: 0.5rem;
-        border-radius: 4px;
+        border-radius: var(--radius);
         font-family: inherit;
         cursor: pointer;
-        border-radius: 4px;
+        border-radius: var(--radius);
 
         &::picker(select) {
             background-color: var(--bg-primary-dark);
             border: 1px solid var(--border-primary);
-            border-radius: 4px;
+            border-radius: var(--radius);
             padding: 4px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
@@ -146,7 +146,7 @@
 
     option {
         padding: 0.5rem;
-        border-radius: 4px;
+        border-radius: var(--radius);
         color: var(--fg-primary);
         cursor: pointer;
 
@@ -168,7 +168,7 @@
         color: var(--fg-primary);
         padding: 24px;
         transition: background-color 200ms ease-in-out;
-        border-radius: 4px;
+        border-radius: var(--radius);
         border: 1px solid var(--fg-accent);
 
         &:hover {

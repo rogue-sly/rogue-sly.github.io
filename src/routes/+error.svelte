@@ -56,7 +56,7 @@
     .path {
         background: var(--bg-primary-light);
         padding: 0.2rem 0.4rem;
-        border-radius: 4px;
+        border-radius: var(--radius);
         color: var(--fg-accent);
     }
 
@@ -67,7 +67,7 @@
         color: var(--fg-primary-light);
         text-decoration: none;
         border: 1px solid var(--border-primary);
-        border-radius: 4px;
+        border-radius: var(--radius);
         transition: all 0.2s ease;
     }
 

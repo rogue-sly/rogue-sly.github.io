@@ -5,6 +5,7 @@
     /* variables for layout */
     --header-height: 64px;
     --global-width: min(800px, 100% - 3rem);
+    --radius: 4px;
 
     /* colorscheme */
     --bg-primary-light: #29292f;
@@ -83,7 +84,7 @@ ol {
 pre {
     padding: 16px;
     margin-bottom: 16px;
-    border-radius: 4px;
+    border-radius: var(--radius);
     border: 1px solid var(--border-primary);
     overflow-x: auto;
     max-width: 100%;

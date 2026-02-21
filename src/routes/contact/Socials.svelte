@@ -136,7 +136,7 @@
         width: 100%;
         max-width: var(--global-width);
         background: var(--bg-primary-light);
-        border-radius: 4px;
+        border-radius: var(--radius);
         padding: 16px;
         gap: 12px;
         box-sizing: border-box;
@@ -175,7 +175,7 @@
         align-items: center;
         background: var(--bg-primary);
         border: 1px solid transparent;
-        border-radius: 4px;
+        border-radius: var(--radius);
         width: 100%;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: pointer;

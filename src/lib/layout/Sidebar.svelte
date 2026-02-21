@@ -185,7 +185,7 @@
         transition: all 0.2s;
         border: 1px solid transparent;
         text-transform: uppercase;
-        border-radius: 2px;
+        border-radius: calc(var(--radius) / 2);
     }
 
     nav a:hover,
@@ -206,7 +206,7 @@
         padding: 1rem;
         border: 1px solid var(--border-primary);
         background: rgba(0, 0, 0, 0.3);
-        border-radius: 4px;
+        border-radius: var(--radius);
     }
 
     .display {
@@ -237,7 +237,7 @@
         background-color: var(--fg-primary);
         transition: height 0.1s ease;
         min-height: 2px;
-        border-radius: 1px;
+        border-radius: calc(var(--radius) / 4);
     }
 
     button {
@@ -248,7 +248,7 @@
         cursor: pointer;
         transition: all 0.2s;
         text-transform: uppercase;
-        border-radius: 2px;
+        border-radius: calc(var(--radius) / 2);
     }
 
     button:hover {
