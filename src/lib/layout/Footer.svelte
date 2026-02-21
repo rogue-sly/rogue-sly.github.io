@@ -1,11 +1,14 @@
 <footer>
     <p>
-        font name is "Quantico", and is licensed under
-        <a href="https://openfontlicense.org/open-font-license-official-text/">open font license</a>.
+        music provided by <a href="https://nightride.fm">nightride.fm</a>.
     </p>
     <p>
         icons are licensed under the
         <a href="https://en.wikipedia.org/wiki/MIT_License">MIT license</a>.
+    </p>
+    <p>
+        font name is "Quantico", and is licensed under
+        <a href="https://openfontlicense.org/open-font-license-official-text/">open font license</a>.
     </p>
     <p>
         consider other content is licensed under the
