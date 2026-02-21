@@ -69,6 +69,8 @@
 
         return baseSchema;
     });
+
+    const jsonLdScript = $derived(`<script type="application/ld+json">${JSON.stringify(schemaOrgJSON)}<\/script>`);
 </script>
 
 <svelte:head>
@@ -91,5 +93,5 @@
     <meta property="twitter:image" content={imageUrl} />
     <meta property="twitter:image:alt" content={imageAlt} />
     <!-- Schema.org JSON-LD -->
-    {@html `<script type="application/ld+json">${JSON.stringify(schemaOrgJSON)}</script>`}
+    {@html jsonLdScript}
 </svelte:head>
