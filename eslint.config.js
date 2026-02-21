@@ -7,7 +7,7 @@ import globals from "globals";
 
 export default defineConfig(
     // eslint.configs["recommended"],
-    tseslint.configs["recommended"],
+    tseslint.configs["base"],
     svelte.configs["flat/base"],
     prettier,
     {
