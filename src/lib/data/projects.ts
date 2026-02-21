@@ -6,7 +6,7 @@ export const projects: Project[] = [
         description: "My personal portfolio and blog built with SvelteKit and Svelte 5 Runes.",
         techStack: ["SvelteKit 5", "TypeScript", "Static Website"],
         links: {
-            repo: "https://github.com/rogue87/rogue87.github.io",
+            repo: "https://gitlab.com/rogue87/rogue87.gitlab.io",
             live: "https://rogue87.gitlab.io",
         },
     },
