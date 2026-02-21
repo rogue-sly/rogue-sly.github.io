@@ -1,4 +1,5 @@
 // global UI state
+// used for the sidebar
 export class UIStore {
     isOpen = $state(false);
 

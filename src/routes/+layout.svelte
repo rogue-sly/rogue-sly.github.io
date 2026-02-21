@@ -6,6 +6,7 @@
     import "$lib/style/_index.css";
     import { fade } from "svelte/transition";
     import { page } from "$app/state";
+    import Visualizer from "$lib/components/Visualizer.svelte";
 
     let { children } = $props();
 </script>
@@ -13,6 +14,8 @@
 <Header />
 
 <Sidebar />
+
+<Visualizer dimmed={page.url.pathname !== "/"} />
 
 {#key page.url.pathname}
     <main

@@ -1,6 +1,9 @@
 import Hls from "hls.js";
 
 // Global Audio state
+// used for:
+// - streaming music from nightride.fm
+// - audio visualizer
 export class AudioStore {
     private _element: HTMLAudioElement | undefined = $state();
 
@@ -24,6 +27,10 @@ export class AudioStore {
     private driftInterval: number | undefined;
     private visualizerInterval: number | undefined;
 
+    audioCtx: AudioContext | undefined;
+    analyser: AnalyserNode | undefined;
+    source: MediaElementAudioSourceNode | undefined;
+
     constructor() {}
 
     setElement(el: HTMLAudioElement) {
@@ -36,8 +43,17 @@ export class AudioStore {
                 this.isPlaying = true;
                 this.statusText = "RECEIVING...";
                 this.startEffects();
+
+                // Initialize AudioContext on first play (user interaction)
+                this.initAudioContext();
+
                 // Ensure HLS is loading if play was triggered externally
                 if (this.hls) this.hls.startLoad();
+
+                // Resume AudioContext if suspended (browser autoplay policy)
+                if (this.audioCtx?.state === "suspended") {
+                    this.audioCtx.resume();
+                }
             });
 
             this._element.addEventListener("playing", () => {
@@ -57,6 +73,18 @@ export class AudioStore {
             });
 
             this.initHls();
+        }
+    }
+
+    private initAudioContext() {
+        if (!this.source && this._element) {
+            const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+            this.audioCtx = new AudioContext();
+            this.analyser = this.audioCtx.createAnalyser();
+            this.analyser.fftSize = 256;
+            this.source = this.audioCtx.createMediaElementSource(this._element);
+            this.source.connect(this.analyser);
+            this.analyser.connect(this.audioCtx.destination);
         }
     }
 
