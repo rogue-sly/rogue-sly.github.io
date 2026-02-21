@@ -27,13 +27,7 @@
 
 <Footer />
 
-<audio
-    bind:this={audioState.element}
-    src="https://stream.nightride.fm/nightride.m4a"
-    crossorigin="anonymous"
-    loop
-    preload="none"
-></audio>
+<audio bind:this={audioState.element} crossorigin="anonymous"></audio>
 
 <style>
     main {

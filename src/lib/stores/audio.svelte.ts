@@ -1,6 +1,20 @@
+import Hls from "hls.js";
+
 // Global Audio state
 export class AudioStore {
-    element: HTMLAudioElement | undefined = $state();
+    private _element: HTMLAudioElement | undefined = $state();
+
+    get element() {
+        return this._element;
+    }
+
+    set element(el: HTMLAudioElement | undefined) {
+        this._element = el;
+        if (el) {
+            this.setElement(el);
+        }
+    }
+    hls: Hls | undefined;
     isPlaying = $state(false);
     isMuted = $state(false);
     volume = $state(0.5);
@@ -10,15 +24,97 @@ export class AudioStore {
     private driftInterval: number | undefined;
     private visualizerInterval: number | undefined;
 
-    constructor() {
-        // Any initialization logic if needed
-    }
+    constructor() {}
 
     setElement(el: HTMLAudioElement) {
-        this.element = el;
-        if (this.element) {
-            this.element.volume = this.volume;
-            this.element.muted = this.isMuted;
+        this._element = el;
+        if (this._element) {
+            this._element.volume = this.volume;
+            this._element.muted = this.isMuted;
+
+            this._element.addEventListener("play", () => {
+                this.isPlaying = true;
+                this.statusText = "RECEIVING...";
+                this.startEffects();
+                // Ensure HLS is loading if play was triggered externally
+                if (this.hls) this.hls.startLoad();
+            });
+
+            this._element.addEventListener("playing", () => {
+                this.statusText = "RECEIVING...";
+            });
+
+            this._element.addEventListener("pause", () => {
+                this.isPlaying = false;
+                this.statusText = "SIGNAL_LOST";
+                this.signalStrength = 0;
+                this.stopEffects();
+                if (this.hls) this.hls.stopLoad();
+            });
+
+            this._element.addEventListener("waiting", () => {
+                this.statusText = "BUFFERING...";
+            });
+
+            this.initHls();
+        }
+    }
+
+    private initHls() {
+        if (!this.element) return;
+
+        // Cleanup previous HLS instance if exists
+        if (this.hls) {
+            this.hls.destroy();
+            this.hls = undefined;
+        }
+
+        const streamUrl = "https://stream.nightride.fm:8443/nightride/nightride.m3u8";
+
+        if (Hls.isSupported()) {
+            this.hls = new Hls({
+                autoStartLoad: false,
+            });
+            this.hls.loadSource(streamUrl);
+            this.hls.attachMedia(this.element);
+
+            this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                this.statusText = "SYSTEM_ONLINE";
+                // If we are starting playback, jump to live edge
+                if (this.isPlaying && this.hls?.liveSyncPosition) {
+                    this.element!.currentTime = this.hls.liveSyncPosition;
+                }
+            });
+
+            this.hls.on(Hls.Events.ERROR, (event, data) => {
+                if (data.fatal) {
+                    switch (data.type) {
+                        case Hls.ErrorTypes.NETWORK_ERROR:
+                            this.statusText = "ERR: NETWORK";
+                            console.error("fatal network error encountered, try to recover");
+                            this.hls?.startLoad();
+                            break;
+                        case Hls.ErrorTypes.MEDIA_ERROR:
+                            this.statusText = "ERR: MEDIA";
+                            console.error("fatal media error encountered, try to recover");
+                            this.hls?.recoverMediaError();
+                            if (this.isPlaying) {
+                                this.hls?.startLoad();
+                            }
+                            break;
+                        default:
+                            this.statusText = "ERR: FATAL";
+                            this.hls?.destroy();
+                            break;
+                    }
+                }
+            });
+        } else if (this.element.canPlayType("application/vnd.apple.mpegurl")) {
+            // Safari support
+            this.element.src = streamUrl;
+            this.element.addEventListener("loadedmetadata", () => {
+                this.statusText = "SYSTEM_ONLINE";
+            });
         }
     }
 
@@ -27,22 +123,19 @@ export class AudioStore {
 
         if (this.isPlaying) {
             this.element.pause();
-            this.isPlaying = false;
-            this.statusText = "SIGNAL_LOST";
-            this.signalStrength = 0;
-            this.stopEffects();
         } else {
-            this.element
-                .play()
-                .then(() => {
-                    this.isPlaying = true;
-                    this.statusText = "RECEIVING...";
-                    this.startEffects();
-                })
-                .catch((e) => {
-                    console.error("Audio playback failed:", e);
-                    this.statusText = "ERR: INTERFERENCE";
-                });
+            if (this.hls) {
+                this.hls.startLoad();
+                // If resuming after a pause, we want to skip stale buffer and jump to live edge
+                if (this.hls.liveSyncPosition && Number.isFinite(this.hls.liveSyncPosition)) {
+                    this.element.currentTime = this.hls.liveSyncPosition;
+                }
+            }
+            this.element.play().catch((e) => {
+                console.error("Audio playback failed:", e);
+                this.statusText = "ERR: INTERFERENCE";
+                this.hls?.stopLoad();
+            });
         }
     }
 
