@@ -1,11 +1,11 @@
 <script lang="ts">
     import Activity from "./Activity.svelte";
-    import { lanyard, presenceData } from "$lib/stores/lanyard.svelte";
+    import { lanyard } from "$lib/stores/lanyard.svelte";
     import gideon from "$lib/assets/images/gideon-animated.webp";
     import SEO from "$lib/components/SEO.svelte";
 
-    let activities = $derived($presenceData.activities?.filter((a) => a.type !== 4));
-    let isLoading = $derived(Object.keys($presenceData).length === 0);
+    let activities = $derived(lanyard.presence?.activities?.filter((a) => a.type !== 4));
+    let isLoading = $derived(lanyard.presence === null);
 
     $effect(() => {
         lanyard.connect();

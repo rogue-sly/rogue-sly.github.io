@@ -1,67 +1,131 @@
-import { writable, type Writable } from "svelte/store";
-import type { DiscordPresence } from "$lib/types";
+import { browser } from "$app/environment";
+import type { Activity, DiscordUser, Spotify } from "$lib/types";
 
-export const presenceData: Writable<DiscordPresence> = writable({} as DiscordPresence);
+export interface LanyardData {
+    kv: Record<string, string>;
+    spotify: Spotify | null;
+    discord_user: DiscordUser;
+    activities: Activity[];
+    discord_status: "online" | "idle" | "dnd" | "offline";
+    active_on_discord_web: boolean;
+    active_on_discord_desktop: boolean;
+    active_on_discord_mobile: boolean;
+    listening_to_spotify: boolean;
+}
 
-type OpCode = 0 | 1 | 2 | 3;
-type EventType = "INIT_STATE" | "PRESENCE_UPDATE";
-type Data = {
-    op: OpCode;
-    seq: 1 | 2;
-    t: EventType;
-    d: DiscordPresence;
+type LanyardMessage = {
+    op: number;
+    t?: "INIT_STATE" | "PRESENCE_UPDATE";
+    d: any;
 };
 
-export class LanyardSocket extends WebSocket {
-    private readonly userId: string;
-    private hearbeat?: NodeJS.Timeout;
-    private heartbeatInterval: number;
+// Op Codes
+const OP = {
+    EVENT: 0,
+    HELLO: 1,
+    INITIALIZE: 2,
+    HEARTBEAT: 3,
+} as const;
 
-    constructor(userId: string, heartbeatInterval?: number) {
-        super("wss://api.lanyard.rest/socket");
+class LanyardConnection {
+    private socket: WebSocket | null = null;
+    private heartbeatInterval: ReturnType<typeof setInterval> | null = null;
+    private readonly userId: string;
+    private reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    public presence = $state<LanyardData | null>(null);
+
+    constructor(userId: string) {
         this.userId = userId;
-        this.heartbeatInterval = heartbeatInterval ? heartbeatInterval : 30e3;
     }
 
     public connect() {
-        this.onopen = () => {
-            this.send(JSON.stringify({ op: 2, d: { subscribe_to_id: this.userId } }));
+        if (!browser) return;
 
-            this.hearbeat = setInterval(() => {
-                if (this.readyState === WebSocket.OPEN) {
-                    this.send(JSON.stringify({ op: 3 }));
-                }
-            }, this.heartbeatInterval);
+        if (this.socket?.readyState === WebSocket.OPEN || this.socket?.readyState === WebSocket.CONNECTING) {
+            return;
+        }
+
+        this.cleanup(); // Ensure clean state
+
+        this.socket = new WebSocket("wss://api.lanyard.rest/socket");
+
+        this.socket.onopen = () => {
+            this.send({
+                op: OP.INITIALIZE,
+                d: { subscribe_to_id: this.userId },
+            });
         };
 
-        this.onmessage = (event: MessageEvent) => {
-            const data: Data = JSON.parse(event.data);
-            if (data.t === "INIT_STATE" || data.t === "PRESENCE_UPDATE") {
-                presenceData.update((v) => {
-                    v = data.d;
-                    return v;
-                });
+        this.socket.onmessage = (event) => {
+            try {
+                const data: LanyardMessage = JSON.parse(event.data);
+                this.handleMessage(data);
+            } catch (e) {
+                console.error("Failed to parse Lanyard message:", e);
             }
         };
 
-        this.onerror = (event: Event) => {
-            // if (dev) {
-            //     console.error("WebSocket error:", event);
-            // }
-            clearInterval(this.hearbeat);
+        this.socket.onclose = () => {
+            this.cleanup();
+            this.reconnectTimeout = setTimeout(() => this.connect(), 5000);
         };
 
-        this.onclose = (event: CloseEvent) => {
-            // if (dev) {
-            //     console.log(`WebSocket connection closed: ${event.code} ${event.reason}`);
-            // }
+        this.socket.onerror = (error) => {
+            console.error("Lanyard WebSocket error:", error);
+            this.socket?.close();
         };
     }
 
     public disconnect() {
-        clearInterval(this.hearbeat);
-        this.close();
+        if (this.reconnectTimeout) clearTimeout(this.reconnectTimeout);
+        this.cleanup();
+        this.presence = null;
+    }
+
+    private cleanup() {
+        if (this.heartbeatInterval) {
+            clearInterval(this.heartbeatInterval);
+            this.heartbeatInterval = null;
+        }
+        if (this.socket) {
+            // Remove listeners to prevent loops if we are manually closing
+            this.socket.onclose = null;
+            this.socket.onerror = null;
+            this.socket.onmessage = null;
+            this.socket.onopen = null;
+            this.socket.close();
+            this.socket = null;
+        }
+    }
+
+    private handleMessage(data: LanyardMessage) {
+        switch (data.op) {
+            case OP.HELLO:
+                const interval = data.d.heartbeat_interval;
+                this.startHeartbeat(interval);
+                break;
+            case OP.EVENT:
+                if (data.t === "INIT_STATE" || data.t === "PRESENCE_UPDATE") {
+                    this.presence = data.d;
+                }
+                break;
+        }
+    }
+
+    private startHeartbeat(interval: number) {
+        if (this.heartbeatInterval) clearInterval(this.heartbeatInterval);
+
+        this.heartbeatInterval = setInterval(() => {
+            this.send({ op: OP.HEARTBEAT });
+        }, interval);
+    }
+
+    private send(message: object) {
+        if (this.socket?.readyState === WebSocket.OPEN) {
+            this.socket.send(JSON.stringify(message));
+        }
     }
 }
 
-export const lanyard = new LanyardSocket("369982847496355841");
+export const lanyard = new LanyardConnection("369982847496355841");
