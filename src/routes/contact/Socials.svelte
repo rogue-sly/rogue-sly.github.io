@@ -134,25 +134,13 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        max-width: var(--global-width);
         background: var(--bg-primary-light);
         border-radius: var(--radius);
+        border: 1px solid var(--border-primary);
         padding: 16px;
         gap: 12px;
         box-sizing: border-box;
         -webkit-tap-highlight-color: transparent;
-    }
-
-    @media (max-width: 480px) and (orientation: portrait) {
-        .socials-base {
-            max-width: none;
-            width: 100%;
-            padding: 12px;
-        }
-
-        .social:hover {
-            transform: none;
-        }
     }
 
     .links-grid {
@@ -204,7 +192,7 @@
 
     span {
         font-family: "Quantico";
-        font-size: 1rem;
+        font-size: clamp(1rem, 1.5vw, 3rem);
         padding-left: 12px;
         color: var(--fg-primary);
         white-space: nowrap;
