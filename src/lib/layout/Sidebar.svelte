@@ -108,8 +108,7 @@
         gap: 2rem;
         box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
         font-family: "JetBrains Mono", "Quantico", monospace;
-        border-top-left-radius: 4px;
-        border-bottom-left-radius: 4px;
+        overflow-y: scroll;
     }
 
     .sidebar::before {
@@ -127,8 +126,6 @@
             3px 100%;
         pointer-events: none;
         z-index: -1;
-        border-top-left-radius: 4px;
-        border-bottom-left-radius: 4px;
     }
 
     .sidebar::before {
@@ -146,8 +143,6 @@
             3px 100%;
         pointer-events: none;
         z-index: -1;
-        border-top-left-radius: 16px;
-        border-bottom-left-radius: 16px;
     }
 
     .header {
@@ -301,11 +296,10 @@
         animation: glitch-anim-2 3s infinite linear alternate-reverse;
     }
 
-    .glitch::after {
-        left: -2px;
-        text-shadow: -1px 0 blue;
-        clip: rect(85px, 550px, 140px, 0);
-        animation: glitch-anim 2.5s infinite linear alternate-reverse;
+    @media (max-width: 600px) {
+        .sidebar {
+            width: 100%;
+        }
     }
 
     @keyframes glitch-anim {
