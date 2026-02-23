@@ -1,10 +1,14 @@
 <script lang="ts">
     import { ui } from "$lib/stores/ui.svelte";
+    import gideon from "$lib/assets/images/gideon-animated.webp";
 </script>
 
 <header>
     <div class="container">
         <div class="logo">
+            <div class="pfp">
+                <img src={gideon} alt="gideon" />
+            </div>
             <a href="/">Rogue87</a>
         </div>
 
@@ -33,11 +37,33 @@
         align-items: center;
     }
 
-    .logo a {
-        color: var(--fg-primary);
-        text-decoration: none;
-        font-weight: bold;
-        letter-spacing: 2px;
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        & a {
+            color: var(--fg-primary);
+            text-decoration: none;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+    }
+
+    .pfp {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        position: relative;
+    }
+
+    .pfp img {
+        width: 50px;
+        border-radius: var(--radius);
+        border: 3px solid var(--fg-accent);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        object-fit: cover;
     }
 
     .menu-btn {
