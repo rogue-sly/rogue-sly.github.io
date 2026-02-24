@@ -43,7 +43,7 @@ export type Activity = {
     };
 };
 
-export interface DiscordPresence {
+export type DiscordPresence = {
     kv: object;
     spotify: Spotify | null;
     discord_user: DiscordUser;
@@ -77,15 +77,4 @@ export type PostMetadata = {
 export type PostLink = {
     metadata: PostMetadata;
     postPath: string;
-};
-
-export type Project = {
-    title: string;
-    description: string;
-    techStack: string[];
-    links: {
-        repo?: string;
-        live?: string;
-    };
-    image?: string;
 };
