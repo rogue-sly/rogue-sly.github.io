@@ -1,7 +1,7 @@
 <script lang="ts">
-    import Footer from "$lib/layout/Footer.svelte";
-    import Header from "$lib/layout/Header.svelte";
-    import Sidebar from "$lib/layout/Sidebar.svelte";
+    import Footer from "$lib/components/layout/Footer.svelte";
+    import Header from "$lib/components/layout/Header.svelte";
+    import Sidebar from "$lib/components/layout/Sidebar.svelte";
     import Visualizer from "$lib/components/Visualizer.svelte";
     import { audioState } from "$lib/stores/audio.svelte";
     import { fade } from "svelte/transition";
