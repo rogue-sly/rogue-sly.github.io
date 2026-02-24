@@ -11,11 +11,11 @@ export const projects: Project[] = [
         },
     },
     {
-        title: "Dotsy",
-        description: "A dotfiles manager to keep your configuration files organized and synchronized.",
+        title: "Dotbee",
+        description: "Easy to use dotfiles manager",
         techStack: ["Rust"],
         links: {
-            repo: "https://gitlab.com/rogue87/dotsy",
+            repo: "https://gitlab.com/rogue87/dotbee",
         },
     },
     {
