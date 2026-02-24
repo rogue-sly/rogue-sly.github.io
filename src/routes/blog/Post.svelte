@@ -18,8 +18,6 @@
             <article><p>{post.desc}</p></article>
         </div>
 
-        <!-- <hr /> -->
-
         <div class="date">
             Posted on <time datetime={post.date}>{formatDate(post.date)}</time>
         </div>

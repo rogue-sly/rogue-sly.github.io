@@ -1,5 +1,5 @@
 <script lang="ts">
-    import BlogPost from "$lib/components/BlogPost.svelte";
+    import Post from "./Post.svelte";
     import SEO from "$lib/components/SEO.svelte";
     import { url } from "$lib/data/site";
     import { page } from "$app/state";
@@ -83,7 +83,7 @@
 
     <ul>
         {#each posts as post}
-            <BlogPost {post} />
+            <Post {post} />
         {/each}
     </ul>
 </div>
