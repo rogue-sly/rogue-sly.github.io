@@ -1,13 +1,13 @@
 <script lang="ts">
     import { ui } from "$lib/stores/ui.svelte";
-    import gideon from "$lib/assets/images/gideon-animated.webp";
 </script>
 
 <header>
     <div class="container">
         <div class="logo">
             <div class="pfp">
-                <img src={gideon} alt="gideon" />
+                <!-- svelte-ignore a11y_missing_attribute -->
+                <img src="/images/gideon-animated.webp" />
             </div>
             <a href="/">Rogue87</a>
         </div>
