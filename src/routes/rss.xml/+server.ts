@@ -1,4 +1,4 @@
-import * as config from "$lib/site-config";
+import * as config from "$lib/data/site";
 import type { ServerLoadEvent } from "@sveltejs/kit";
 import { resolve } from "$app/paths";
 import { create } from "xmlbuilder2";

@@ -1,7 +1,7 @@
 import type { ServerLoadEvent } from "@sveltejs/kit";
 import { create } from "xmlbuilder2";
 import { getAllPosts } from "$lib/utils";
-import { url } from "$lib/site-config";
+import { url } from "$lib/data/site";
 
 export const prerender = true;
 

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import { title as siteTitle, desc as siteDesc, author, url as siteUrl } from "$lib/site-config";
+    import { title as siteTitle, desc as siteDesc, author, url as siteUrl } from "$lib/data/site";
 
     let {
         title = siteTitle,

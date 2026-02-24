@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { email } from "$lib/site-config";
+    import { email } from "$lib/data/site";
     let svg = { width: "1.4rem", height: "1.4rem" };
 
     let discordHandle = "rogue.sly";

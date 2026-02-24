@@ -1,7 +1,7 @@
 <script lang="ts">
     import BlogPost from "$lib/components/BlogPost.svelte";
     import SEO from "$lib/components/SEO.svelte";
-    import { url } from "$lib/site-config.js";
+    import { url } from "$lib/data/site";
     import { page } from "$app/state";
     import { goto } from "$app/navigation";
     import { browser } from "$app/environment";
