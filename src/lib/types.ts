@@ -79,7 +79,7 @@ export type PostLink = {
     postPath: string;
 };
 
-export interface Project {
+export type Project = {
     title: string;
     description: string;
     techStack: string[];
@@ -88,4 +88,4 @@ export interface Project {
         live?: string;
     };
     image?: string;
-}
+};
