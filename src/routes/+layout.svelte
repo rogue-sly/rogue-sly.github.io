@@ -1,12 +1,12 @@
 <script lang="ts">
-    import Header from "$lib/layout/Header.svelte";
     import Footer from "$lib/layout/Footer.svelte";
+    import Header from "$lib/layout/Header.svelte";
     import Sidebar from "$lib/layout/Sidebar.svelte";
+    import Visualizer from "$lib/components/Visualizer.svelte";
     import { audioState } from "$lib/stores/audio.svelte";
-    import "$lib/style/_index.css";
     import { fade } from "svelte/transition";
     import { page } from "$app/state";
-    import Visualizer from "$lib/components/Visualizer.svelte";
+    import "./layout.css";
 
     let { children } = $props();
 </script>
