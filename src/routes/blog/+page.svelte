@@ -89,7 +89,7 @@
 </div>
 
 <div class="rss">
-    <a href={`${url}/rss.xml`} aria-label="rss">
+    <a href={`${url}/rss.xml`} aria-label="rss" target="_blank">
         <svg xmlns="http://www.w3.org/2000/svg" width="2rem" viewBox="0 0 16 16">
             <path
                 fill="currentColor"
