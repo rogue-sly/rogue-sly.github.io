@@ -69,14 +69,14 @@
         justify-content: space-between;
         align-items: center;
         padding: 1.5rem;
-        background-color: var(--bg-transparent-dark);
+        background-color: var(--bg-primary-dark);
         border: 1px solid var(--border-primary);
         border-radius: var(--radius);
         transition: all 0.2s;
     }
 
     .setting-item:hover {
-        background: var(--bg-transparent-light);
+        background: var(--bg-primary-light);
         border-color: var(--fg-primary);
     }
 
