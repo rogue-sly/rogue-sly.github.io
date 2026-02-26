@@ -78,6 +78,14 @@ export class AudioStore {
     }
 
     private initAudioContext() {
+        if (typeof window === "undefined" || typeof document === "undefined") return;
+
+        // Extra safety check for document load state
+        if (document.readyState !== "complete" && document.readyState !== "interactive") {
+            console.warn("AudioContext initialization attempted before document ready");
+            return;
+        }
+
         if (!this.source && this._element) {
             const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
             this.audioCtx = new AudioContext();
