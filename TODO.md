@@ -62,20 +62,20 @@ This track focuses on improving the user interface, settings management, and add
 
 ### Settings & Configuration
 
-- [ ] **Settings Store**
-  - [ ] Create `src/lib/stores/settings.svelte.ts`.
-  - [ ] Implement reactive store for preferences (`visualizerEnabled`, `audioDrift`, `lowQualityMode`).
-  - [ ] Persist settings to `localStorage`.
-- [ ] **Dedicated Settings Page**
-  - [ ] Create `/settings` route.
-  - [ ] Add toggles for Visualizer, Audio Drift, and Low Quality Mode.
+- [x] **Settings Store**
+  - [x] Create `src/lib/stores/settings.svelte.ts`.
+  - [x] Implement reactive store for preferences (`visualizerEnabled`, `audioDrift`, `lowQualityMode`).
+  - [x] Persist settings to `localStorage`.
+- [x] **Dedicated Settings Page**
+  - [x] Create `/settings` route.
+  - [x] Add toggles for Visualizer, Audio Drift, and Low Quality Mode.
 
 ### Player Experience
 
 - [ ] **Improved Player UI**
   - [ ] Extract player logic to `src/lib/components/Player.svelte`.
   - [ ] Add Volume Slider.
-  - [ ] Add Settings Link.
+  - [x] Add Settings Link.
   - [ ] Improve feedback (play/pause, buffering states).
 - [ ] **Integration**
   - [ ] Update `Visualizer.svelte` to respect `visualizerEnabled` setting.

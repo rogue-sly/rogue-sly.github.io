@@ -33,7 +33,9 @@
     <main
         in:fade={{ duration: 400 }}
         class:blog={page.url.pathname === "/blog/"}
-        class:centered={page.url.pathname === "/" || page.url.pathname === "/contact/"}
+        class:centered={page.url.pathname === "/" ||
+            page.url.pathname === "/contact/" ||
+            page.url.pathname === "/settings/"}
         class:padded={page.url.pathname.startsWith("/whoami") || page.url.pathname.startsWith("/blog")}
     >
         {@render children()}

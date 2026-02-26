@@ -1,4 +1,5 @@
 import Hls from "hls.js";
+import { settings } from "./settings.svelte";
 
 const STREAM_URL = "https://stream.nightride.fm:8443/nightride/nightride.m3u8";
 
@@ -223,7 +224,7 @@ export class AudioStore {
     }
 
     private drift() {
-        if (!this.isPlaying || this.isMuted || !this.element) return;
+        if (!this.isPlaying || this.isMuted || !this.element || !settings.audioDrift) return;
 
         // Randomly change volume by small amount
         const change = (Math.random() - 0.5) * 0.1;

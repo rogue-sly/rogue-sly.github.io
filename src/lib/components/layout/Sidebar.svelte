@@ -24,7 +24,27 @@
     <aside class="sidebar" transition:fly={{ x: 300, duration: 300 }}>
         <div class="header">
             <h2 class="glitch" data-text="SYSTEM_MENU">SYSTEM_MENU</h2>
-            <button onclick={close} aria-label="Close Menu" class="btn-close">[CLOSE]</button>
+            <div class="header-actions">
+                <a href="/settings" class="btn-settings" onclick={close} aria-label="Settings">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path
+                            d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+                        ></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </a>
+                <button onclick={close} aria-label="Close Menu" class="btn-close">[CLOSE]</button>
+            </div>
         </div>
 
         <nav>
@@ -42,8 +62,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/contact" class:active={page.url.pathname === "/contact/"} onclick={close}>/contact</a
-                    >
+                    <a href="/contact" class:active={page.url.pathname === "/contact/"} onclick={close}>
+                        /contact
+                    </a>
                 </li>
             </ul>
         </nav>
@@ -106,7 +127,7 @@
         width: 450px;
         background: var(--bg-primary-dark);
         border-left: 1px solid var(--border-primary);
-        padding: 2rem;
+        padding: 1.5rem;
         z-index: 999;
         display: flex;
         flex-direction: column;
@@ -155,6 +176,28 @@
         align-items: center;
         border-bottom: 1px solid var(--border-primary);
         padding-bottom: 1rem;
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-settings {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+        color: var(--fg-primary);
+        border: 1px solid var(--border-primary);
+        border-radius: calc(var(--radius) / 2);
+        transition: all 0.2s;
+    }
+
+    .btn-settings:hover {
+        background: var(--fg-primary);
+        color: var(--bg-primary);
     }
 
     h2 {
