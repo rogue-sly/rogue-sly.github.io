@@ -12,6 +12,8 @@
     let { children } = $props();
     let audioElement: HTMLAudioElement | undefined = $state();
 
+    audioState.initEffects();
+
     onMount(() => {
         lanyard.connect();
         if (audioElement) audioState.element = audioElement;

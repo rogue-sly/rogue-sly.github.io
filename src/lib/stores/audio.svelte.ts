@@ -1,11 +1,9 @@
 import Hls from "hls.js";
+import { settings } from "./settings.svelte";
 
 const STREAM_URL = "https://stream.nightride.fm:8443/nightride/nightride.m3u8";
 
 // Global Audio state
-// used for:
-// - streaming music from nightride.fm
-// - audio visualizer
 export class AudioStore {
     private _element: HTMLAudioElement | undefined = $state();
 
@@ -22,7 +20,6 @@ export class AudioStore {
     hls: Hls | undefined;
     isPlaying = $state(false);
     isMuted = $state(false);
-    volume = $state(0.5);
     statusText = $state("SYSTEM_OFFLINE");
     signalStrength = $state(0);
 
@@ -34,27 +31,35 @@ export class AudioStore {
 
     constructor() {}
 
+    /**
+     * Initializes reactive effects. Must be called within a Svelte effect scope
+     * (e.g., in a component's script tag or onMount).
+     */
+    initEffects() {
+        // Reactively update element volume when settings change
+        $effect(() => {
+            if (this._element) {
+                this._element.volume = settings.volume;
+            }
+        });
+    }
+
     setElement(el: HTMLAudioElement) {
         this._element = el;
         if (this._element) {
-            this._element.volume = this.volume;
+            this._element.volume = settings.volume;
             this._element.muted = this.isMuted;
 
             this._element.addEventListener("play", () => {
                 this.isPlaying = true;
                 this.statusText = "RECEIVING...";
                 this.startEffects();
-
-                // Ensure HLS is loading if play was triggered externally
                 if (this.hls) this.hls.startLoad();
             });
 
             this._element.addEventListener("playing", () => {
                 this.statusText = "RECEIVING...";
-                // Initialize AudioContext on actual playback to avoid CORS race conditions
                 this.initAudioContext();
-
-                // Resume AudioContext if suspended (browser autoplay policy)
                 if (this.audioCtx?.state === "suspended") {
                     this.audioCtx.resume();
                 }
@@ -79,18 +84,20 @@ export class AudioStore {
     private initAudioContext() {
         if (typeof window === "undefined" || typeof document === "undefined") return;
 
-        // Extra safety check for document load state
         if (document.readyState !== "complete" && document.readyState !== "interactive") {
-            console.warn("AudioContext initialization attempted before document ready");
             return;
         }
 
         if (!this.source && this._element) {
             const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
             this.audioCtx = new AudioContext();
+
             this.analyser = this.audioCtx.createAnalyser();
             this.analyser.fftSize = 256;
+
             this.source = this.audioCtx.createMediaElementSource(this._element);
+
+            // source -> analyzer -> destination
             this.source.connect(this.analyser);
             this.analyser.connect(this.audioCtx.destination);
         }
@@ -101,7 +108,6 @@ export class AudioStore {
     private initHls() {
         if (!this.element) return;
 
-        // Cleanup previous HLS instance if exists
         if (this.hls) {
             this.hls.destroy();
             this.hls = undefined;
@@ -110,21 +116,20 @@ export class AudioStore {
         if (Hls.isSupported()) {
             this.hls = new Hls({
                 autoStartLoad: false,
-                enableWorker: false, // Disabling worker can sometimes resolve intermittent CORS/network issues
+                enableWorker: false,
                 manifestLoadingMaxRetry: 5,
                 manifestLoadingRetryDelay: 1000,
                 fragLoadingMaxRetry: 5,
                 fragLoadingRetryDelay: 1000,
                 xhrSetup: (xhr) => {
-                    xhr.withCredentials = false; // Ensure no credentials for CORS
-                }
+                    xhr.withCredentials = false;
+                },
             });
             this.hls.loadSource(STREAM_URL);
             this.hls.attachMedia(this.element);
 
             this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
                 this.statusText = "SYSTEM_ONLINE";
-                // If we are starting playback, jump to live edge
                 if (this.isPlaying && this.hls?.liveSyncPosition) {
                     this.element!.currentTime = this.hls.liveSyncPosition;
                 }
@@ -135,9 +140,10 @@ export class AudioStore {
                     switch (data.type) {
                         case Hls.ErrorTypes.NETWORK_ERROR:
                             this.statusText = "ERR: NETWORK";
-                            console.error("fatal network error encountered, try to recover", data);
-                            if (data.details === Hls.ErrorDetails.MANIFEST_LOAD_ERROR || 
-                                data.details === Hls.ErrorDetails.MANIFEST_LOAD_TIMEOUT) {
+                            if (
+                                data.details === Hls.ErrorDetails.MANIFEST_LOAD_ERROR ||
+                                data.details === Hls.ErrorDetails.MANIFEST_LOAD_TIMEOUT
+                            ) {
                                 this.hls?.loadSource(STREAM_URL);
                             } else {
                                 this.hls?.startLoad();
@@ -145,7 +151,6 @@ export class AudioStore {
                             break;
                         case Hls.ErrorTypes.MEDIA_ERROR:
                             this.statusText = "ERR: MEDIA";
-                            console.error("fatal media error encountered, try to recover", data);
                             this.hls?.recoverMediaError();
                             if (this.isPlaying) {
                                 this.hls?.startLoad();
@@ -153,14 +158,12 @@ export class AudioStore {
                             break;
                         default:
                             this.statusText = "ERR: FATAL";
-                            console.error("fatal error, destroying HLS", data);
                             this.hls?.destroy();
                             break;
                     }
                 }
             });
         } else if (this.element.canPlayType("application/vnd.apple.mpegurl")) {
-            // Safari support
             this.element.src = STREAM_URL;
             this.element.addEventListener("loadedmetadata", () => {
                 this.statusText = "SYSTEM_ONLINE";
@@ -177,12 +180,11 @@ export class AudioStore {
             try {
                 if (this.hls) {
                     this.hls.startLoad();
-                    // If resuming after a pause, we want to skip stale buffer and jump to live edge
                     if (this.hls.liveSyncPosition && Number.isFinite(this.hls.liveSyncPosition)) {
                         this.element.currentTime = this.hls.liveSyncPosition;
                     }
                 }
-                
+
                 this.playPromise = this.element.play();
                 await this.playPromise;
             } catch (e: any) {
@@ -205,10 +207,7 @@ export class AudioStore {
     }
 
     private startEffects() {
-        // Clear any existing intervals first just in case
         this.stopEffects();
-
-        // Set interval for visualizer noise
         this.visualizerInterval = setInterval(() => this.updateVisualizer(), 100) as unknown as number;
     }
 
@@ -221,7 +220,6 @@ export class AudioStore {
             this.signalStrength = 0;
             return;
         }
-        // distinct from volume drift, just visual noise
         this.signalStrength = Math.random();
     }
 }

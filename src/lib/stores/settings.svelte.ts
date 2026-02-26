@@ -3,11 +3,13 @@ import { browser } from "$app/environment";
 interface Settings {
     visualizerEnabled: boolean;
     lowQualityMode: boolean;
+    volume: number;
 }
 
 const DEFAULT_SETTINGS: Settings = {
     visualizerEnabled: true,
     lowQualityMode: false,
+    volume: 0.5,
 };
 
 function createSettings() {
@@ -38,6 +40,13 @@ function createSettings() {
         },
         set lowQualityMode(value: boolean) {
             settings.lowQualityMode = value;
+            this.save();
+        },
+        get volume() {
+            return settings.volume;
+        },
+        set volume(value: number) {
+            settings.volume = value;
             this.save();
         },
         save() {

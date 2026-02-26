@@ -1,11 +1,17 @@
 <script lang="ts">
     import { ui } from "$lib/stores/ui.svelte";
     import { audioState } from "$lib/stores/audio.svelte";
+    import { settings } from "$lib/stores/settings.svelte";
     import { page } from "$app/state";
     import { fade, fly } from "svelte/transition";
 
     function close() {
         ui.isOpen = false;
+    }
+
+    function handleVolumeChange(e: Event) {
+        const target = e.target as HTMLInputElement;
+        settings.volume = parseFloat(target.value);
     }
 </script>
 
@@ -23,7 +29,7 @@
     <!-- Sidebar Panel -->
     <aside class="sidebar" transition:fly={{ x: 300, duration: 300 }}>
         <div class="header">
-            <h2 class="glitch" data-text="SYSTEM_MENU">SYSTEM_MENU</h2>
+            <h2>SYSTEM_MENU</h2>
             <div class="header-actions">
                 <a href="/settings" class="btn-settings" onclick={close} aria-label="Settings">
                     <svg
@@ -76,7 +82,7 @@
             </div>
 
             <div class="visualizer">
-                {#each Array(8) as _, i}
+                {#each Array(8)}
                     <div
                         class="bar"
                         style:height={audioState.isPlaying && !audioState.isMuted
@@ -85,6 +91,20 @@
                         style:opacity={audioState.isPlaying && !audioState.isMuted ? 1 : 0.3}
                     ></div>
                 {/each}
+            </div>
+
+            <div class="volume-control">
+                <span class="label">GAIN:</span>
+                <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={settings.volume}
+                    oninput={handleVolumeChange}
+                    class="range-input"
+                    aria-label="Volume"
+                />
             </div>
 
             <div class="controls">
@@ -131,7 +151,6 @@
         z-index: 999;
         display: flex;
         flex-direction: column;
-        gap: 2rem;
         box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
         overflow-y: scroll;
     }
@@ -282,6 +301,43 @@
         border-radius: calc(var(--radius) / 4);
     }
 
+    .volume-control {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .volume-control .label {
+        font-family: inherit;
+        font-size: 0.7rem;
+        color: var(--fg-primary-dark);
+        min-width: 40px;
+    }
+
+    .range-input {
+        flex: 1;
+        height: 2px;
+        background: var(--border-primary);
+        appearance: none;
+        outline: none;
+    }
+
+    .range-input::-webkit-slider-thumb {
+        appearance: none;
+        width: 10px;
+        height: 16px;
+        background: var(--fg-primary);
+        cursor: pointer;
+        border-radius: 1px;
+        border: none;
+        transition: background 0.2s;
+    }
+
+    .range-input::-webkit-slider-thumb:hover {
+        background: var(--fg-primary-light);
+    }
+
     button {
         background: transparent;
         border: 1px solid var(--border-primary);
@@ -321,73 +377,9 @@
         font-weight: bold;
     }
 
-    .glitch {
-        position: relative;
-    }
-
-    .glitch::before,
-    .glitch::after {
-        content: attr(data-text);
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: var(--bg-primary-dark);
-    }
-
-    .glitch::before {
-        left: 2px;
-        text-shadow: -1px 0 red;
-        clip: rect(24px, 550px, 90px, 0);
-        animation: glitch-anim-2 3s infinite linear alternate-reverse;
-    }
-
     @media (max-width: 600px) {
         .sidebar {
             width: 100%;
-        }
-    }
-
-    @keyframes glitch-anim {
-        0% {
-            clip: rect(11px, 9999px, 81px, 0);
-        }
-        20% {
-            clip: rect(104px, 9999px, 12px, 0);
-        }
-        40% {
-            clip: rect(33px, 9999px, 19px, 0);
-        }
-        60% {
-            clip: rect(89px, 9999px, 12px, 0);
-        }
-        80% {
-            clip: rect(56px, 9999px, 99px, 0);
-        }
-        100% {
-            clip: rect(27px, 9999px, 15px, 0);
-        }
-    }
-
-    @keyframes glitch-anim-2 {
-        0% {
-            clip: rect(65px, 9999px, 100px, 0);
-        }
-        20% {
-            clip: rect(12px, 9999px, 34px, 0);
-        }
-        40% {
-            clip: rect(87px, 9999px, 5px, 0);
-        }
-        60% {
-            clip: rect(43px, 9999px, 62px, 0);
-        }
-        80% {
-            clip: rect(9px, 9999px, 28px, 0);
-        }
-        100% {
-            clip: rect(101px, 9999px, 73px, 0);
         }
     }
 </style>

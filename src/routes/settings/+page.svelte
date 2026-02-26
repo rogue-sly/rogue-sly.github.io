@@ -11,33 +11,53 @@
     }
 </script>
 
-<SEO title="Settings" desc="System configuration and preferences." />
+<SEO title="Settings" desc="Configuration and preferences." />
 
-<div class="settings-container">
-    <section class="settings-grid">
-        <div class="setting-item">
-            <div class="info">
-                <h3>Visualizer</h3>
-                <p>Enable or disable the background frequency visualizer.</p>
+<div class="settings-sections">
+    <section class="settings-group">
+        <h2 class="group-title">Visual Interface</h2>
+        <div class="settings-grid">
+            <div class="setting-item">
+                <div class="info">
+                    <h3>Visualizer</h3>
+                    <p>Enable or disable the background frequency visualizer.</p>
+                </div>
+                <button class="toggle-btn" class:active={settings.visualizerEnabled} onclick={toggleVisualizer}>
+                    [{settings.visualizerEnabled ? "ENABLED" : "DISABLED"}]
+                </button>
             </div>
-            <button class="toggle-btn" class:active={settings.visualizerEnabled} onclick={toggleVisualizer}>
-                [{settings.visualizerEnabled ? "ENABLED" : "DISABLED"}]
-            </button>
-        </div>
 
-        <div class="setting-item">
-            <div class="info">
-                <h3>Low Quality Mode</h3>
-                <p>Disable intensive shaders and animations for better performance.</p>
+            <div class="setting-item">
+                <div class="info">
+                    <h3>Low Quality Mode</h3>
+                    <p>Disable intensive shaders and animations for better performance.</p>
+                </div>
+                <button class="toggle-btn" class:active={settings.lowQualityMode} onclick={toggleLowQuality}>
+                    [{settings.lowQualityMode ? "ENABLED" : "DISABLED"}]
+                </button>
             </div>
-            <button class="toggle-btn" class:active={settings.lowQualityMode} onclick={toggleLowQuality}>
-                [{settings.lowQualityMode ? "ENABLED" : "DISABLED"}]
-            </button>
         </div>
     </section>
 </div>
 
 <style>
+    .settings-sections {
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+    }
+
+    .group-title {
+        font-size: 0.8rem;
+        color: var(--fg-accent);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 1rem;
+        font-family: var(--font-mono);
+        border-left: 3px solid var(--fg-accent);
+        padding-left: 10px;
+    }
+
     .settings-grid {
         display: flex;
         flex-direction: column;
@@ -70,9 +90,10 @@
         margin: 0.5rem 0 0;
         font-size: 0.9rem;
         color: var(--fg-primary-dark);
-        max-width: 400px;
+        max-width: 500px;
     }
 
+    /* Toggle Button */
     .toggle-btn {
         background: transparent;
         border: 1px solid var(--border-primary);
