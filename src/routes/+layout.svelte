@@ -4,11 +4,19 @@
     import Sidebar from "$lib/components/layout/Sidebar.svelte";
     import Visualizer from "$lib/components/Visualizer.svelte";
     import { audioState } from "$lib/stores/audio.svelte";
+    import { lanyard } from "$lib/stores/lanyard.svelte";
     import { fade } from "svelte/transition";
     import { page } from "$app/state";
+    import { onMount } from "svelte";
     import "./layout.css";
 
     let { children } = $props();
+    let audioElement: HTMLAudioElement | undefined = $state();
+
+    onMount(() => {
+        lanyard.connect();
+        if (audioElement) audioState.element = audioElement;
+    });
 </script>
 
 <Header />
@@ -30,7 +38,7 @@
 
 <Footer />
 
-<audio bind:this={audioState.element} crossorigin="anonymous"></audio>
+<audio bind:this={audioElement} crossorigin="anonymous"></audio>
 
 <style>
     main {

@@ -1,18 +1,6 @@
 <script lang="ts">
     import Activity from "./Activity.svelte";
-    import { lanyard } from "$lib/stores/lanyard.svelte";
     import SEO from "$lib/components/SEO.svelte";
-
-    let activities = $derived(lanyard.presence?.activities?.filter((a) => a.type !== 4));
-    let isLoading = $derived(lanyard.presence === null);
-
-    $effect(() => {
-        lanyard.connect();
-
-        return () => {
-            lanyard.disconnect();
-        };
-    });
 </script>
 
 <SEO title="Home" type="profile" />
@@ -25,7 +13,7 @@
         here.
     </p>
 
-    <Activity {activities} {isLoading} />
+    <Activity />
 </section>
 
 <style>

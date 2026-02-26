@@ -1,8 +1,9 @@
 <script lang="ts">
     import type { Activity } from "$lib/types";
+    import { lanyard } from "$lib/stores/lanyard.svelte";
 
-    type ActivityComponent = { activities: Activity[] | undefined; isLoading: boolean };
-    let { activities, isLoading }: ActivityComponent = $props();
+    let isLoading: boolean = $derived(lanyard.presence === null);
+    let activities: Activity[] | undefined = $derived(lanyard.presence?.activities?.filter((a) => a.type !== 4));
 
     function getImageUrl(appId: string | undefined, assetId: string | undefined) {
         if (!assetId || !appId) return null;
