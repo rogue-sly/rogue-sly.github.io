@@ -16,6 +16,10 @@
     onMount(() => {
         lanyard.connect();
         if (audioElement) audioState.element = audioElement;
+
+        return () => {
+            lanyard.disconnect();
+        };
     });
 </script>
 
