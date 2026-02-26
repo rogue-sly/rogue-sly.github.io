@@ -166,7 +166,7 @@
     }
 
     .nav-btn {
-        background: var(--bg-primary-light);
+        background-color: var(--bg-transparent-light);
         border: none;
         color: var(--fg-primary);
         cursor: pointer;
@@ -208,7 +208,7 @@
 
     .activity-skeleton {
         display: flex;
-        background-color: var(--bg-primary-dark);
+        background-color: var(--bg-transparent-light);
         height: var(--activity-height);
         width: 100%;
         align-items: center;
@@ -221,7 +221,7 @@
     .skeleton-icon {
         width: 80px;
         height: 80px;
-        background-color: var(--bg-primary);
+        background-color: var(--bg-primary-dark);
         border-radius: var(--radius);
         flex-shrink: 0;
     }
@@ -235,7 +235,7 @@
 
     .skeleton-line {
         height: 12px;
-        background-color: var(--bg-primary);
+        background-color: var(--fg-primary-dark);
         border-radius: calc(var(--radius) / 2);
         width: 60%;
     }
@@ -261,7 +261,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: var(--bg-primary-dark);
+        background-color: var(--bg-transparent-light);
         color: var(--fg-primary-dark);
         font-style: italic;
         box-sizing: border-box;
@@ -273,7 +273,7 @@
 
     .activity {
         display: flex;
-        background-color: var(--bg-primary-dark);
+        background-color: var(--bg-transparent-light);
         height: var(--activity-height);
         width: 100%;
         position: relative;

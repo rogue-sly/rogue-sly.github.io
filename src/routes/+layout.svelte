@@ -87,6 +87,11 @@
             --bg-primary-light: #29292f;
             --bg-primary: #232329;
             --bg-primary-dark: #101012;
+
+            --bg-transparent-light: #29292f80;
+            --bg-transparent: #23232980;
+            --bg-transparent-dark: #10101280;
+
             --bg-accent: #4b0202;
 
             --fg-primary-light: #ffffff;

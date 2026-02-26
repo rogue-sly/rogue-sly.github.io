@@ -134,7 +134,7 @@
     .backdrop {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.7);
+        background: var(--bg-transparent-dark);
         backdrop-filter: blur(2px);
         z-index: 998;
     }
@@ -266,7 +266,7 @@
         margin-top: auto;
         padding: 1rem;
         border: 1px solid var(--border-primary);
-        background: rgba(0, 0, 0, 0.3);
+        background: var(--bg-transparent-dark);
         border-radius: var(--radius);
     }
 
