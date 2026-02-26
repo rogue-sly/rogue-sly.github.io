@@ -1,5 +1,7 @@
 import Hls from "hls.js";
 
+const STREAM_URL = "https://stream.nightride.fm:8443/nightride/nightride.m3u8";
+
 // Global Audio state
 // used for:
 // - streaming music from nightride.fm
@@ -44,20 +46,19 @@ export class AudioStore {
                 this.statusText = "RECEIVING...";
                 this.startEffects();
 
-                // Initialize AudioContext on first play (user interaction)
-                this.initAudioContext();
-
                 // Ensure HLS is loading if play was triggered externally
                 if (this.hls) this.hls.startLoad();
+            });
+
+            this._element.addEventListener("playing", () => {
+                this.statusText = "RECEIVING...";
+                // Initialize AudioContext on actual playback to avoid CORS race conditions
+                this.initAudioContext();
 
                 // Resume AudioContext if suspended (browser autoplay policy)
                 if (this.audioCtx?.state === "suspended") {
                     this.audioCtx.resume();
                 }
-            });
-
-            this._element.addEventListener("playing", () => {
-                this.statusText = "RECEIVING...";
             });
 
             this._element.addEventListener("pause", () => {
@@ -88,6 +89,8 @@ export class AudioStore {
         }
     }
 
+    private playPromise: Promise<void> | undefined;
+
     private initHls() {
         if (!this.element) return;
 
@@ -97,13 +100,19 @@ export class AudioStore {
             this.hls = undefined;
         }
 
-        const streamUrl = "https://stream.nightride.fm:8443/nightride/nightride.m3u8";
-
         if (Hls.isSupported()) {
             this.hls = new Hls({
                 autoStartLoad: false,
+                enableWorker: false, // Disabling worker can sometimes resolve intermittent CORS/network issues
+                manifestLoadingMaxRetry: 5,
+                manifestLoadingRetryDelay: 1000,
+                fragLoadingMaxRetry: 5,
+                fragLoadingRetryDelay: 1000,
+                xhrSetup: (xhr) => {
+                    xhr.withCredentials = false; // Ensure no credentials for CORS
+                }
             });
-            this.hls.loadSource(streamUrl);
+            this.hls.loadSource(STREAM_URL);
             this.hls.attachMedia(this.element);
 
             this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -119,12 +128,17 @@ export class AudioStore {
                     switch (data.type) {
                         case Hls.ErrorTypes.NETWORK_ERROR:
                             this.statusText = "ERR: NETWORK";
-                            console.error("fatal network error encountered, try to recover");
-                            this.hls?.startLoad();
+                            console.error("fatal network error encountered, try to recover", data);
+                            if (data.details === Hls.ErrorDetails.MANIFEST_LOAD_ERROR || 
+                                data.details === Hls.ErrorDetails.MANIFEST_LOAD_TIMEOUT) {
+                                this.hls?.loadSource(STREAM_URL);
+                            } else {
+                                this.hls?.startLoad();
+                            }
                             break;
                         case Hls.ErrorTypes.MEDIA_ERROR:
                             this.statusText = "ERR: MEDIA";
-                            console.error("fatal media error encountered, try to recover");
+                            console.error("fatal media error encountered, try to recover", data);
                             this.hls?.recoverMediaError();
                             if (this.isPlaying) {
                                 this.hls?.startLoad();
@@ -132,6 +146,7 @@ export class AudioStore {
                             break;
                         default:
                             this.statusText = "ERR: FATAL";
+                            console.error("fatal error, destroying HLS", data);
                             this.hls?.destroy();
                             break;
                     }
@@ -139,31 +154,40 @@ export class AudioStore {
             });
         } else if (this.element.canPlayType("application/vnd.apple.mpegurl")) {
             // Safari support
-            this.element.src = streamUrl;
+            this.element.src = STREAM_URL;
             this.element.addEventListener("loadedmetadata", () => {
                 this.statusText = "SYSTEM_ONLINE";
             });
         }
     }
 
-    togglePlay() {
+    async togglePlay() {
         if (!this.element) return;
 
         if (this.isPlaying) {
             this.element.pause();
         } else {
-            if (this.hls) {
-                this.hls.startLoad();
-                // If resuming after a pause, we want to skip stale buffer and jump to live edge
-                if (this.hls.liveSyncPosition && Number.isFinite(this.hls.liveSyncPosition)) {
-                    this.element.currentTime = this.hls.liveSyncPosition;
+            try {
+                if (this.hls) {
+                    this.hls.startLoad();
+                    // If resuming after a pause, we want to skip stale buffer and jump to live edge
+                    if (this.hls.liveSyncPosition && Number.isFinite(this.hls.liveSyncPosition)) {
+                        this.element.currentTime = this.hls.liveSyncPosition;
+                    }
                 }
+                
+                this.playPromise = this.element.play();
+                await this.playPromise;
+            } catch (e: any) {
+                // Ignore AbortError as it's common when toggling quickly
+                if (e.name !== "AbortError") {
+                    console.error("Audio playback failed:", e);
+                    this.statusText = "ERR: INTERFERENCE";
+                    this.hls?.stopLoad();
+                }
+            } finally {
+                this.playPromise = undefined;
             }
-            this.element.play().catch((e) => {
-                console.error("Audio playback failed:", e);
-                this.statusText = "ERR: INTERFERENCE";
-                this.hls?.stopLoad();
-            });
         }
     }
 
