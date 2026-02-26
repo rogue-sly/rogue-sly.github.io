@@ -72,7 +72,7 @@
         /* NOTE: Variables */
         :root {
             /* font */
-            font-family: "Quantico", sans-serif, system-ui;
+            font-family: "Quantico", sans-serif;
 
             /* variables for layout */
             --header-height: 64px;
@@ -96,7 +96,7 @@
             --highlight: #717171;
         }
 
-        /* NOTE Globals and Resets */
+        /* NOTE Resets */
         * {
             padding: 0;
             margin: 0;
@@ -166,7 +166,7 @@
         code {
             color: var(--highlight);
             font-size: 0.78em;
-            font-family: "JetBrains Mono", "Quantico", monospace;
+            font-family: "JetBrains Mono", monospace;
         }
 
         /* NOTE: Fonts */
