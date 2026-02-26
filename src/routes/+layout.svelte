@@ -33,7 +33,7 @@
     <main
         in:fade={{ duration: 400 }}
         class:blog={page.url.pathname === "/blog/"}
-        class:center={page.url.pathname === "/" || page.url.pathname === "/contact/"}
+        class:centered={page.url.pathname === "/" || page.url.pathname === "/contact/"}
         class:padded={page.url.pathname.startsWith("/whoami") || page.url.pathname.startsWith("/blog")}
     >
         {@render children()}
@@ -53,7 +53,7 @@
         margin-inline: auto;
     }
 
-    main.center {
+    main.centered {
         display: flex;
         flex-direction: column;
         justify-content: center;
