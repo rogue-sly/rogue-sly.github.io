@@ -2,13 +2,11 @@ import { browser } from "$app/environment";
 
 interface Settings {
     visualizerEnabled: boolean;
-    audioDrift: boolean;
     lowQualityMode: boolean;
 }
 
 const DEFAULT_SETTINGS: Settings = {
     visualizerEnabled: true,
-    audioDrift: true,
     lowQualityMode: false,
 };
 
@@ -33,13 +31,6 @@ function createSettings() {
         },
         set visualizerEnabled(value: boolean) {
             settings.visualizerEnabled = value;
-            this.save();
-        },
-        get audioDrift() {
-            return settings.audioDrift;
-        },
-        set audioDrift(value: boolean) {
-            settings.audioDrift = value;
             this.save();
         },
         get lowQualityMode() {

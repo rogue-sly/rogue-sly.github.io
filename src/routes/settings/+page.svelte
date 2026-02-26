@@ -6,10 +6,6 @@
         settings.visualizerEnabled = !settings.visualizerEnabled;
     }
 
-    function toggleAudioDrift() {
-        settings.audioDrift = !settings.audioDrift;
-    }
-
     function toggleLowQuality() {
         settings.lowQualityMode = !settings.lowQualityMode;
     }
@@ -26,16 +22,6 @@
             </div>
             <button class="toggle-btn" class:active={settings.visualizerEnabled} onclick={toggleVisualizer}>
                 [{settings.visualizerEnabled ? "ENABLED" : "DISABLED"}]
-            </button>
-        </div>
-
-        <div class="setting-item">
-            <div class="info">
-                <h3>Audio Drift</h3>
-                <p>Allow the audio player to simulate analog drift and fluctuations.</p>
-            </div>
-            <button class="toggle-btn" class:active={settings.audioDrift} onclick={toggleAudioDrift}>
-                [{settings.audioDrift ? "ENABLED" : "DISABLED"}]
             </button>
         </div>
 

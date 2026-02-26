@@ -1,5 +1,4 @@
 import Hls from "hls.js";
-import { settings } from "./settings.svelte";
 
 const STREAM_URL = "https://stream.nightride.fm:8443/nightride/nightride.m3u8";
 
@@ -27,7 +26,6 @@ export class AudioStore {
     statusText = $state("SYSTEM_OFFLINE");
     signalStrength = $state(0);
 
-    private driftInterval: number | undefined;
     private visualizerInterval: number | undefined;
 
     audioCtx: AudioContext | undefined;
@@ -210,32 +208,12 @@ export class AudioStore {
         // Clear any existing intervals first just in case
         this.stopEffects();
 
-        // Start drifting immediately
-        this.drift();
-
-        // Set intervals
-        this.driftInterval = setInterval(() => this.drift(), 2000) as unknown as number;
+        // Set interval for visualizer noise
         this.visualizerInterval = setInterval(() => this.updateVisualizer(), 100) as unknown as number;
     }
 
     private stopEffects() {
-        if (this.driftInterval) clearInterval(this.driftInterval);
         if (this.visualizerInterval) clearInterval(this.visualizerInterval);
-    }
-
-    private drift() {
-        if (!this.isPlaying || this.isMuted || !this.element || !settings.audioDrift) return;
-
-        // Randomly change volume by small amount
-        const change = (Math.random() - 0.5) * 0.1;
-        let newVol = this.volume + change;
-
-        // Clamp volume between 0.3 and 0.8
-        if (newVol > 0.8) newVol = 0.8;
-        if (newVol < 0.3) newVol = 0.3;
-
-        this.volume = newVol;
-        this.element.volume = this.volume;
     }
 
     private updateVisualizer() {
