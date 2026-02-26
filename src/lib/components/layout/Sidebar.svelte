@@ -112,7 +112,6 @@
         flex-direction: column;
         gap: 2rem;
         box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
-        font-family: "JetBrains Mono", "Quantico", monospace;
         overflow-y: scroll;
     }
 
