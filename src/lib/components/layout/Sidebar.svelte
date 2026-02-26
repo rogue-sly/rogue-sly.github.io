@@ -29,26 +29,72 @@
     <!-- Sidebar Panel -->
     <aside class="sidebar" transition:fly={{ x: 300, duration: 300 }}>
         <div class="header">
-            <h2>SYSTEM_MENU</h2>
             <div class="header-actions">
-                <a href="/settings" class="btn-settings" onclick={close} aria-label="Settings">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                <div>
+                    <button
+                        onclick={() => ui.toggleZenMode()}
+                        class="btn-settings"
+                        class:active={ui.isZenMode}
+                        aria-label={ui.isZenMode ? "Show Content" : "Hide Content"}
                     >
-                        <path
-                            d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
-                        ></path>
-                        <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                </a>
+                        {#if ui.isZenMode}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><path d="M9.88 9.88L4.62 4.62" /><path
+                                    d="M7.714 15.151a11.96 11.96 0 0 1-5.714-3.151 12 12 0 0 1 18.274-4.051"
+                                /><path
+                                    d="M14.122 14.122A3 3 0 0 1 12 15a3 3 0 0 1-3-3 3 3 0 0 1 .878-2.122"
+                                /><path
+                                    d="M17.808 17.808a12.13 12.13 0 0 1-5.808 1.192 12.13 12.13 0 0 1-8-3.04"
+                                /><path d="m2 2 20 20" /></svg
+                            >
+                        {:else}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                ><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle
+                                    cx="12"
+                                    cy="12"
+                                    r="3"
+                                /></svg
+                            >
+                        {/if}
+                    </button>
+                    <a href="/settings" class="btn-settings" onclick={close} aria-label="Settings">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path
+                                d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+                            ></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </a>
+                </div>
+
                 <button onclick={close} aria-label="Close Menu" class="btn-close">[CLOSE]</button>
             </div>
         </div>
@@ -200,7 +246,14 @@
     .header-actions {
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        width: 100%;
         gap: 0.5rem;
+
+        & div {
+            display: flex;
+            gap: 0.5rem;
+        }
     }
 
     .btn-settings {
@@ -219,12 +272,10 @@
         color: var(--bg-primary);
     }
 
-    h2 {
-        font-family: inherit;
-        font-size: 1.2rem;
-        color: var(--fg-primary);
-        margin: 0;
-        letter-spacing: -1px;
+    .btn-settings.active {
+        background: var(--bg-accent);
+        border-color: var(--bg-accent);
+        color: var(--fg-primary-light);
     }
 
     nav ul {

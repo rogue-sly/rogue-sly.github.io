@@ -4,6 +4,7 @@
     import Sidebar from "$lib/components/layout/Sidebar.svelte";
     import Visualizer from "$lib/components/Visualizer.svelte";
     import { audioState } from "$lib/stores/audio.svelte";
+    import { ui } from "$lib/stores/ui.svelte";
     import { lanyard } from "$lib/stores/lanyard.svelte";
     import { fade } from "svelte/transition";
     import { page } from "$app/state";
@@ -28,17 +29,18 @@
 
 <Sidebar />
 
-<Visualizer dimmed={page.url.pathname !== "/"} />
+<Visualizer dimmed={!ui.isZenMode && page.url.pathname !== "/"} />
 <audio bind:this={audioElement} crossorigin="anonymous"></audio>
 
 {#key page.url.pathname}
+    {@const pathname = page.url.pathname}
     <main
         in:fade={{ duration: 400 }}
-        class:blog={page.url.pathname === "/blog/"}
-        class:centered={page.url.pathname === "/" ||
-            page.url.pathname === "/contact/" ||
-            page.url.pathname === "/settings/"}
-        class:padded={page.url.pathname.startsWith("/whoami") || page.url.pathname.startsWith("/blog")}
+        class:blog={pathname === "/blog/"}
+        class:centered={pathname === "/" || pathname === "/contact/" || pathname === "/settings/"}
+        class:padded={pathname.startsWith("/whoami") || pathname.startsWith("/blog")}
+        style:opacity={ui.isZenMode ? 0 : 1}
+        style:pointer-events={ui.isZenMode ? "none" : "auto"}
     >
         {@render children()}
     </main>
@@ -53,6 +55,7 @@
 
         width: var(--global-width);
         margin-inline: auto;
+        transition: opacity 0.4s ease;
     }
 
     main.centered {
