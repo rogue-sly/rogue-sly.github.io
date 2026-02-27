@@ -15,6 +15,28 @@
 
     audioState.initEffects();
 
+    function handleKeydown(e: KeyboardEvent) {
+        const target = e.target as HTMLElement;
+        if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable) {
+            return;
+        }
+
+        switch (e.key.toLowerCase()) {
+            case "z":
+                ui.toggleZenMode();
+                break;
+            case "m":
+                audioState.toggleMute();
+                break;
+            case "h":
+                audioState.togglePlay();
+                break;
+            case "s":
+                ui.toggle();
+                break;
+        }
+    }
+
     onMount(() => {
         lanyard.connect();
         if (audioElement) audioState.element = audioElement;
@@ -28,6 +50,8 @@
 <Header />
 
 <Sidebar />
+
+<svelte:window onkeydown={handleKeydown} />
 
 <Visualizer dimmed={!ui.isZenMode && page.url.pathname !== "/"} />
 <audio bind:this={audioElement} crossorigin="anonymous"></audio>
