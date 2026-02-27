@@ -3,6 +3,7 @@
 export class UIStore {
     isOpen = $state(false);
     isZenMode = $state(false);
+    isScannerCollapsed = $state(false);
 
     toggle() {
         this.isOpen = !this.isOpen;
@@ -18,6 +19,10 @@ export class UIStore {
 
     toggleZenMode() {
         this.isZenMode = !this.isZenMode;
+    }
+
+    toggleScanner() {
+        this.isScannerCollapsed = !this.isScannerCollapsed;
     }
 }
 

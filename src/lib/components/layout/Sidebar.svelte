@@ -3,7 +3,7 @@
     import { audioState, STATIONS } from "$lib/stores/audio.svelte";
     import { settings } from "$lib/stores/settings.svelte";
     import { page } from "$app/state";
-    import { fade, fly } from "svelte/transition";
+    import { fade, fly, slide } from "svelte/transition";
 
     function close() {
         ui.isOpen = false;
@@ -121,74 +121,97 @@
             </ul>
         </nav>
 
-        <div class="scanner-section">
-            <div class="display">
-                <span class="label">STATION:</span>
-                <span class="value">{audioState.currentStation.name}</span>
-            </div>
-            <div class="display">
-                <span class="label">FREQ:</span>
-                <span class="value glitch" data-text={audioState.statusText}>{audioState.statusText}</span>
-            </div>
+        <div class="scanner-section" class:collapsed={ui.isScannerCollapsed}>
+            <button
+                class="scanner-header"
+                onclick={() => ui.toggleScanner()}
+                aria-expanded={!ui.isScannerCollapsed}
+                aria-controls="scanner-content"
+            >
+                <span class="label">RADIO_UNIT</span>
+                <div class="header-status">
+                    {#if audioState.isPlaying}
+                        <span class="status-active">RECEIVING</span>
+                    {/if}
+                    <span class="toggle-icon">{ui.isScannerCollapsed ? "[+]" : "[-]"}</span>
+                </div>
+            </button>
 
-            <div class="visualizer">
-                {#each Array(8)}
-                    <div
-                        class="bar"
-                        style:height={audioState.isPlaying && !audioState.isMuted
-                            ? Math.random() * 100 + "%"
-                            : "2px"}
-                        style:opacity={audioState.isPlaying && !audioState.isMuted ? 1 : 0.3}
-                    ></div>
-                {/each}
-            </div>
+            {#if !ui.isScannerCollapsed}
+                <div id="scanner-content" transition:slide={{ duration: 300 }}>
+                    <div class="scanner-inner">
+                        <div class="display">
+                            <span class="label">STATION:</span>
+                            <span class="value">{audioState.currentStation.name}</span>
+                        </div>
+                        <div class="display">
+                            <span class="label">FREQ:</span>
+                            <span class="value glitch" data-text={audioState.statusText}
+                                >{audioState.statusText}</span
+                            >
+                        </div>
 
-            <div class="station-grid">
-                {#each STATIONS as station}
-                    <button
-                        onclick={() => audioState.setStation(station)}
-                        class="btn-station"
-                        class:active={audioState.currentStation.id === station.id}
-                        aria-label="Select {station.name} station"
-                    >
-                        {station.name}
-                    </button>
-                {/each}
-            </div>
+                        <div class="visualizer">
+                            {#each Array(8)}
+                                <div
+                                    class="bar"
+                                    style:height={audioState.isPlaying && !audioState.isMuted
+                                        ? Math.random() * 100 + "%"
+                                        : "2px"}
+                                    style:opacity={audioState.isPlaying && !audioState.isMuted ? 1 : 0.3}
+                                ></div>
+                            {/each}
+                        </div>
 
-            <div class="volume-control">
-                <span class="label">GAIN:</span>
-                <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={settings.volume}
-                    oninput={handleVolumeChange}
-                    class="range-input"
-                    aria-label="Volume"
-                />
-            </div>
+                        <div class="station-grid">
+                            {#each STATIONS as station}
+                                <button
+                                    onclick={() => audioState.setStation(station)}
+                                    class="btn-station"
+                                    class:active={audioState.currentStation.id === station.id}
+                                    aria-label="Select {station.name} station"
+                                >
+                                    {station.name}
+                                </button>
+                            {/each}
+                        </div>
 
-            <div class="controls">
-                <button
-                    onclick={() => audioState.togglePlay()}
-                    class="btn-scan"
-                    aria-label={audioState.isPlaying ? "Stop Scan" : "Start Scan"}
-                >
-                    [{audioState.isPlaying ? "HALT" : "INIT_SCAN"}]
-                </button>
+                        <div class="volume-control">
+                            <span class="label">GAIN:</span>
+                            <input
+                                type="range"
+                                min="0"
+                                max="1"
+                                step="0.01"
+                                value={settings.volume}
+                                oninput={handleVolumeChange}
+                                class="range-input"
+                                aria-label="Volume"
+                            />
+                        </div>
 
-                {#if audioState.isPlaying}
-                    <button
-                        onclick={() => audioState.toggleMute()}
-                        class="btn-mute"
-                        aria-label={audioState.isMuted ? "Unmute" : "Mute"}
-                    >
-                        [{audioState.isMuted ? "UNMUTE" : "MUTE"}]
-                    </button>
-                {/if}
-            </div>
+                        <div class="controls">
+                            <button
+                                onclick={() => audioState.togglePlay()}
+                                class="btn-scan"
+                                aria-label={audioState.isPlaying ? "Stop Scan" : "Start Scan"}
+                            >
+                                [{audioState.isPlaying ? "HALT" : "INIT_SCAN"}]
+                            </button>
+
+                            {#if audioState.isPlaying}
+                                <button
+                                    onclick={() => audioState.toggleMute()}
+                                    class="btn-mute"
+                                    aria-label={audioState.isMuted ? "Unmute" : "Mute"}
+                                >
+                                    [{audioState.isMuted ? "UNMUTE" : "MUTE"}]
+                                </button>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            {/if}
         </div>
     </aside>
 {/if}
@@ -215,24 +238,7 @@
         display: flex;
         flex-direction: column;
         box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
-        overflow-y: scroll;
-    }
-
-    .sidebar::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background:
-            linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
-            linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-        background-size:
-            100% 2px,
-            3px 100%;
-        pointer-events: none;
-        z-index: -1;
+        overflow: hidden;
     }
 
     .sidebar::before {
@@ -258,6 +264,7 @@
         align-items: center;
         border-bottom: 1px solid var(--border-primary);
         padding-bottom: 1rem;
+        flex-shrink: 0;
     }
 
     .header-actions {
@@ -293,6 +300,24 @@
         background: var(--bg-accent);
         border-color: var(--bg-accent);
         color: var(--fg-primary-light);
+    }
+
+    nav {
+        flex: 1;
+        overflow-y: auto;
+        margin: 1.5rem 0;
+        min-height: 0;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border-primary) transparent;
+    }
+
+    nav::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    nav::-webkit-scrollbar-thumb {
+        background: var(--border-primary);
+        border-radius: 2px;
     }
 
     nav ul {
@@ -331,11 +356,71 @@
     }
 
     .scanner-section {
-        margin-top: auto;
-        padding: 1rem;
+        flex-shrink: 0;
+        padding: 0;
         border: 1px solid var(--border-primary);
         background: var(--bg-transparent-dark);
         border-radius: var(--radius);
+        overflow: hidden;
+    }
+
+    .scanner-header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: none;
+        border-bottom: 1px solid transparent;
+        border-radius: 0;
+        cursor: pointer;
+    }
+
+    .scanner-header:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--fg-primary-light);
+    }
+
+    .scanner-section:not(.collapsed) .scanner-header {
+        border-bottom-color: var(--border-primary);
+    }
+
+    #scanner-content {
+        /* Remove padding here to avoid slide glitches */
+        padding: 0;
+    }
+
+    .scanner-inner {
+        padding: 1rem;
+    }
+
+    .header-status {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.7rem;
+    }
+
+    .status-active {
+        color: var(--fg-accent);
+        font-weight: bold;
+        animation: pulse 2s infinite;
+    }
+
+    .toggle-icon {
+        color: var(--fg-primary-dark);
+        font-family: var(--font-mono);
+    }
+
+    @keyframes pulse {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.5;
+        }
     }
 
     .display {
