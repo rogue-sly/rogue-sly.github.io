@@ -72,11 +72,10 @@ This track focuses on improving the user interface, settings management, and add
 
 ### Player Experience
 
-- [ ] **Improved Player UI**
-  - [ ] Extract player logic to `src/lib/components/Player.svelte`.
-  - [ ] Add Volume Slider.
+- [x] **Improved Player UI**
+  - [x] Add Volume Slider.
   - [x] Add Settings Link.
-  - [ ] Improve feedback (play/pause, buffering states).
+  - [x] Improve feedback (play/pause, buffering states).
 - [ ] **Integration**
   - [ ] Update `Visualizer.svelte` to respect `visualizerEnabled` setting.
   - [ ] Update Sidebar to use new `Player` component.
