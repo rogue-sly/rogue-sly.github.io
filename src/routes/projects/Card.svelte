@@ -106,7 +106,6 @@
         background-color: var(--bg-primary-light);
         border-radius: 4px;
         color: var(--fg-primary-dark);
-        font-family: "JetBrains Mono", monospace;
         border: 1px solid transparent;
     }
 

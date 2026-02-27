@@ -345,7 +345,6 @@
         display: block;
         color: var(--fg-primary-dark);
         text-decoration: none;
-        font-family: inherit;
         font-size: 1.1rem;
         padding: 0.5rem;
         transition: all 0.2s;
@@ -422,7 +421,6 @@
 
     .toggle-icon {
         color: var(--fg-primary-dark);
-        font-family: var(--font-mono);
     }
 
     @keyframes pulse {
@@ -440,7 +438,6 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 12px;
-        font-family: inherit;
         font-size: 0.8rem;
         overflow: hidden;
     }
@@ -524,7 +521,6 @@
     }
 
     .volume-control .label {
-        font-family: inherit;
         font-size: 0.7rem;
         color: var(--fg-primary-dark);
         min-width: 40px;
@@ -557,7 +553,6 @@
         background: transparent;
         border: 1px solid var(--border-primary);
         color: var(--fg-primary);
-        font-family: inherit;
         cursor: pointer;
         transition: all 0.2s;
         text-transform: uppercase;

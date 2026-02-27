@@ -126,7 +126,6 @@
         border: 1px solid var(--border-primary);
         padding: 0.5rem;
         border-radius: var(--radius);
-        font-family: inherit;
         cursor: pointer;
         border-radius: var(--radius);
 

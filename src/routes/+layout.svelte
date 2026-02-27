@@ -208,6 +208,12 @@
             font-family: "JetBrains Mono", monospace;
         }
 
+        span,
+        button,
+        select {
+            font-family: "Quantico", sans-serif;
+        }
+
         /* NOTE: Fonts */
         /* quantico-regular - latin */
         @font-face {

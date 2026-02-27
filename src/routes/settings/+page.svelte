@@ -53,7 +53,6 @@
         text-transform: uppercase;
         letter-spacing: 2px;
         margin-bottom: 1rem;
-        font-family: var(--font-mono);
         border-left: 3px solid var(--fg-accent);
         padding-left: 10px;
     }
@@ -94,7 +93,6 @@
         border: 1px solid var(--border-primary);
         color: var(--fg-primary-dark);
         padding: 0.5rem 1rem;
-        font-family: var(--font-mono);
         font-weight: bold;
         cursor: pointer;
         transition: all 0.2s;

@@ -150,7 +150,6 @@
     }
 
     .divider {
-        font-family: "Quantico";
         font-size: 0.8rem;
         text-transform: uppercase;
         letter-spacing: 0.15em;
@@ -170,7 +169,6 @@
         overflow: hidden;
         text-decoration: none;
         padding: 0;
-        font-family: inherit;
         color: inherit;
         text-align: left;
         outline: none;
@@ -192,7 +190,6 @@
     }
 
     span {
-        font-family: "Quantico";
         font-size: clamp(1rem, 1.5vw, 3rem);
         padding-left: 12px;
         color: var(--fg-primary);
