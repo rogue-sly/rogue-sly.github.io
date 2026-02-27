@@ -116,7 +116,7 @@ This project uses Svelte 5. **Do not use legacy Svelte 4 syntax.**
 ### TypeScript
 
 - **Strict Mode:** TypeScript is configured in strict mode. Avoid `any`.
-- **Interfaces:** Define interfaces for component props and data structures.
+- **Types over Interfaces:** Prefer `type` aliases over `interface` declarations. Use interfaces only when needed for declaration merging or when explicitly required.
 - **Imports:**
     - Use `$lib` alias for imports from `src/lib`.
     - Use relative imports for files in the same directory.
