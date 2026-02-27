@@ -1,7 +1,44 @@
 import Hls from "hls.js";
 import { settings } from "./settings.svelte";
+import type { Station } from "$lib/types";
 
-const STREAM_URL = "https://stream.nightride.fm:8443/nightride/nightride.m3u8";
+export const STATIONS: Station[] = [
+    {
+        id: "nightride",
+        name: "Nightride",
+        url: "https://stream.nightride.fm:8443/nightride/nightride.m3u8",
+    },
+    {
+        id: "chillsynth",
+        name: "Chillsynth",
+        url: "https://stream.nightride.fm:8443/chillsynth/chillsynth.m3u8",
+    },
+    {
+        id: "datawave",
+        name: "Datawave",
+        url: "https://stream.nightride.fm:8443/datawave/datawave.m3u8",
+    },
+    {
+        id: "spacesynth",
+        name: "Spacesynth",
+        url: "https://stream.nightride.fm:8443/spacesynth/spacesynth.m3u8",
+    },
+    {
+        id: "darksynth",
+        name: "Darksynth",
+        url: "https://stream.nightride.fm:8443/darksynth/darksynth.m3u8",
+    },
+    {
+        id: "horrorsynth",
+        name: "Horrorsynth",
+        url: "https://stream.nightride.fm:8443/horrorsynth/horrorsynth.m3u8",
+    },
+    {
+        id: "ebsm",
+        name: "EBSM",
+        url: "https://stream.nightride.fm:8443/ebsm/ebsm.m3u8",
+    },
+] as const;
 
 // Global Audio state
 export class AudioStore {
@@ -22,6 +59,7 @@ export class AudioStore {
     isMuted = $state(false);
     statusText = $state("SYSTEM_OFFLINE");
     signalStrength = $state(0);
+    currentStation: Station = $state(STATIONS[0]);
 
     private visualizerInterval: number | undefined;
 
@@ -108,6 +146,7 @@ export class AudioStore {
     private initHls() {
         if (!this.element) return;
 
+        // Cleanup any existing instance
         if (this.hls) {
             this.hls.destroy();
             this.hls = undefined;
@@ -125,7 +164,7 @@ export class AudioStore {
                     xhr.withCredentials = false;
                 },
             });
-            this.hls.loadSource(STREAM_URL);
+            this.hls.loadSource(this.currentStation.url);
             this.hls.attachMedia(this.element);
 
             this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -144,7 +183,7 @@ export class AudioStore {
                                 data.details === Hls.ErrorDetails.MANIFEST_LOAD_ERROR ||
                                 data.details === Hls.ErrorDetails.MANIFEST_LOAD_TIMEOUT
                             ) {
-                                this.hls?.loadSource(STREAM_URL);
+                                this.hls?.loadSource(this.currentStation.url);
                             } else {
                                 this.hls?.startLoad();
                             }
@@ -164,15 +203,47 @@ export class AudioStore {
                 }
             });
         } else if (this.element.canPlayType("application/vnd.apple.mpegurl")) {
-            this.element.src = STREAM_URL;
+            this.element.src = this.currentStation.url;
             this.element.addEventListener("loadedmetadata", () => {
                 this.statusText = "SYSTEM_ONLINE";
             });
         }
     }
 
+    async setStation(station: Station) {
+        if (this.currentStation.id === station.id) return;
+
+        const wasPlaying = this.isPlaying;
+
+        // Reset state immediately to prevent UI race conditions
+        if (wasPlaying) {
+            this.element?.pause();
+            this.isPlaying = false;
+        }
+
+        this.currentStation = station;
+        this.statusText = "SWITCHING...";
+
+        // Ensure HLS is cleaned up before creating a new one
+        if (this.hls) {
+            this.hls.stopLoad();
+            this.hls.detachMedia();
+            this.hls.destroy();
+            this.hls = undefined;
+        }
+
+        this.initHls();
+
+        if (wasPlaying) {
+            // Wait a tiny bit for the new HLS instance to be ready to attach
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            await this.togglePlay();
+        }
+    }
+
     async togglePlay() {
         if (!this.element) return;
+        if (this.playPromise) return; // Prevent overlapping play attempts
 
         if (this.isPlaying) {
             this.element.pause();

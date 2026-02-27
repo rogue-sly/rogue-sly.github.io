@@ -53,7 +53,7 @@ export type DiscordPresence = {
     active_on_discord_desktop: boolean;
     active_on_discord_mobile: boolean;
     listening_to_spotify: boolean;
-}
+};
 
 export type TocItem = {
     level: number;
@@ -77,4 +77,10 @@ export type PostMetadata = {
 export type PostLink = {
     metadata: PostMetadata;
     postPath: string;
+};
+
+export type Station = {
+    id: string;
+    name: string;
+    url: string;
 };

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { ui } from "$lib/stores/ui.svelte";
-    import { audioState } from "$lib/stores/audio.svelte";
+    import { audioState, STATIONS } from "$lib/stores/audio.svelte";
     import { settings } from "$lib/stores/settings.svelte";
     import { page } from "$app/state";
     import { fade, fly } from "svelte/transition";
@@ -123,6 +123,10 @@
 
         <div class="scanner-section">
             <div class="display">
+                <span class="label">STATION:</span>
+                <span class="value">{audioState.currentStation.name}</span>
+            </div>
+            <div class="display">
                 <span class="label">FREQ:</span>
                 <span class="value glitch" data-text={audioState.statusText}>{audioState.statusText}</span>
             </div>
@@ -136,6 +140,19 @@
                             : "2px"}
                         style:opacity={audioState.isPlaying && !audioState.isMuted ? 1 : 0.3}
                     ></div>
+                {/each}
+            </div>
+
+            <div class="station-grid">
+                {#each STATIONS as station}
+                    <button
+                        onclick={() => audioState.setStation(station)}
+                        class="btn-station"
+                        class:active={audioState.currentStation.id === station.id}
+                        aria-label="Select {station.name} station"
+                    >
+                        {station.name}
+                    </button>
                 {/each}
             </div>
 
@@ -350,6 +367,37 @@
         transition: height 0.1s ease;
         min-height: 2px;
         border-radius: calc(var(--radius) / 4);
+    }
+
+    .station-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .btn-station {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.7rem;
+        text-align: left;
+        border: 1px solid var(--border-primary);
+        opacity: 0.7;
+    }
+
+    .btn-station:hover {
+        opacity: 1;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-station.active {
+        background: var(--fg-primary);
+        color: var(--bg-primary);
+        opacity: 1;
+        border-color: var(--fg-primary);
+    }
+
+    .btn-station.active::before {
+        content: "> ";
     }
 
     .volume-control {
