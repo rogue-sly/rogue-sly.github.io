@@ -117,11 +117,6 @@
         & select {
             width: 100%;
         }
-
-        &:has(select:focus),
-        &:has(select:hover) {
-            color: var(--fg-primary-light);
-        }
     }
 
     select {
@@ -164,15 +159,16 @@
 
     a {
         display: flex;
-        background-color: var(--bg-primary-dark);
         color: var(--fg-primary);
         padding: 24px;
+        background-color: var(--bg-primary-dark);
         transition: background-color 200ms ease-in-out;
         border-radius: var(--radius);
         border: 1px solid var(--fg-accent);
 
         &:hover {
             background-color: var(--bg-primary);
+            border-color: var(--fg-primary);
         }
     }
 </style>

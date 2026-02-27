@@ -12,10 +12,6 @@
 
     let headings = $derived<TocStateItem[]>(createHeadings(data.meta.toc || []));
 
-    $effect(() => {
-        headings = createHeadings(data.meta.toc || []);
-    });
-
     function createHeadings(toc: TocItem[]): TocStateItem[] {
         const stack: TocStateItem[] = [];
         const roots: TocStateItem[] = [];
@@ -224,7 +220,7 @@
         transition: opacity 0.2s;
 
         &:hover {
-            opacity: 0.8;
+            opacity: 0.7;
         }
     }
 

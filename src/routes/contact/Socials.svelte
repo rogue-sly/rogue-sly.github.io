@@ -179,6 +179,7 @@
     .social:hover {
         border-color: var(--fg-accent);
         background: var(--bg-primary-dark);
+        border-color: var(--fg-primary);
     }
 
     .social-inner {

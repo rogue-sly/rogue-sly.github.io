@@ -53,7 +53,6 @@
     .card:hover {
         border-color: var(--fg-accent);
         background-color: var(--bg-primary-light);
-        transform: translateY(-2px);
     }
 
     .card-header {

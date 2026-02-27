@@ -75,11 +75,6 @@
         transition: all 0.2s;
     }
 
-    .setting-item:hover {
-        background: var(--bg-primary-light);
-        border-color: var(--fg-primary);
-    }
-
     .info h3 {
         margin: 0;
         font-size: 1.2rem;

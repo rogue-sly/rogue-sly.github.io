@@ -50,6 +50,7 @@
         &:hover {
             color: var(--fg-primary-light);
             background-color: var(--bg-primary-light);
+            border-color: var(--fg-primary);
         }
     }
 
