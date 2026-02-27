@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 import type { Activity, DiscordUser, Spotify } from "$lib/types";
 
-export interface LanyardData {
+export type LanyardData = {
     kv: Record<string, string>;
     spotify: Spotify | null;
     discord_user: DiscordUser;
@@ -11,7 +11,7 @@ export interface LanyardData {
     active_on_discord_desktop: boolean;
     active_on_discord_mobile: boolean;
     listening_to_spotify: boolean;
-}
+};
 
 type LanyardMessage = {
     op: number;

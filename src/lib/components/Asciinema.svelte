@@ -2,10 +2,10 @@
     import "asciinema-player/dist/bundle/asciinema-player.css";
     import type { PlayerOptions } from "asciinema-player";
 
-    interface Props extends PlayerOptions {
+    type Props = PlayerOptions & {
         src: string;
         id?: string;
-    }
+    };
 
     let { src, id, ...options }: Props = $props();
 

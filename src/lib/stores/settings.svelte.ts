@@ -1,10 +1,10 @@
 import { browser } from "$app/environment";
 
-interface Settings {
+type Settings = {
     visualizerEnabled: boolean;
     lowQualityMode: boolean;
     volume: number;
-}
+};
 
 const DEFAULT_SETTINGS: Settings = {
     visualizerEnabled: true,
