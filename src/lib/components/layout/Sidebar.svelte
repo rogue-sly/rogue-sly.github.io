@@ -2,6 +2,7 @@
     import { ui } from "$lib/stores/ui.svelte";
     import { audioState, STATIONS } from "$lib/stores/audio.svelte";
     import { settings } from "$lib/stores/settings.svelte";
+    import { nightride } from "$lib/stores/nightride.svelte";
     import { page } from "$app/state";
     import { fade, fly, slide } from "svelte/transition";
 
@@ -48,14 +49,13 @@
                                 stroke-width="2"
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
-                                ><path d="M9.88 9.88L4.62 4.62" /><path
-                                    d="M7.714 15.151a11.96 11.96 0 0 1-5.714-3.151 12 12 0 0 1 18.274-4.051"
-                                /><path
-                                    d="M14.122 14.122A3 3 0 0 1 12 15a3 3 0 0 1-3-3 3 3 0 0 1 .878-2.122"
-                                /><path
-                                    d="M17.808 17.808a12.13 12.13 0 0 1-5.808 1.192 12.13 12.13 0 0 1-8-3.04"
-                                /><path d="m2 2 20 20" /></svg
                             >
+                                <path d="M9.88 9.88L4.62 4.62" />
+                                <path d="M7.714 15.151a11.96 11.96 0 0 1-5.714-3.151 12 12 0 0 1 18.274-4.051" />
+                                <path d="M14.122 14.122A3 3 0 0 1 12 15a3 3 0 0 1-3-3 3 3 0 0 1 .878-2.122" />
+                                <path d="M17.808 17.808a12.13 12.13 0 0 1-5.808 1.192 12.13 12.13 0 0 1-8-3.04" />
+                                <path d="m2 2 20 20" />
+                            </svg>
                         {:else}
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -71,8 +71,8 @@
                                     cx="12"
                                     cy="12"
                                     r="3"
-                                /></svg
-                            >
+                                />
+                            </svg>
                         {/if}
                     </button>
                     <a href="/settings" class="btn-settings" onclick={close} aria-label="Settings">
@@ -89,7 +89,8 @@
                         >
                             <path
                                 d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
-                            ></path>
+                            >
+                            </path>
                             <circle cx="12" cy="12" r="3"></circle>
                         </svg>
                     </a>
@@ -141,15 +142,26 @@
                 <div id="scanner-content" transition:slide={{ duration: 300 }}>
                     <div class="scanner-inner">
                         <div class="display">
-                            <span class="label">STATION:</span>
-                            <span class="value">{audioState.currentStation.name}</span>
-                        </div>
-                        <div class="display">
                             <span class="label">FREQ:</span>
-                            <span class="value glitch" data-text={audioState.statusText}
-                                >{audioState.statusText}</span
-                            >
+                            <span class="value" data-text={audioState.statusText}>{audioState.statusText}</span>
                         </div>
+
+                        {#if nightride.currentTrack}
+                            {@const trackLength = nightride.currentTrack.title.length}
+                            {@const artistLength = nightride.currentTrack.artist.length}
+                            <div class="display" transition:slide>
+                                <span class="label">TRACK:</span>
+                                <span class="value" class:marquee={trackLength > 20}>
+                                    {nightride.currentTrack.title}
+                                </span>
+                            </div>
+                            <div class="display" transition:slide>
+                                <span class="label">ARTIST:</span>
+                                <span class="value" class:marquee={artistLength > 20}>
+                                    {nightride.currentTrack.artist}
+                                </span>
+                            </div>
+                        {/if}
 
                         <div class="visualizer">
                             {#each Array(8)}
@@ -426,14 +438,33 @@
     .display {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         margin-bottom: 12px;
         font-family: inherit;
         font-size: 0.8rem;
+        overflow: hidden;
     }
 
     .value {
         color: var(--fg-primary-light);
         font-weight: bold;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .value.marquee {
+        display: inline-block;
+        animation: marquee 8s linear infinite;
+        padding-right: 2rem;
+    }
+
+    @keyframes marquee {
+        0% {
+            transform: translateX(100%);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
     }
 
     .visualizer {

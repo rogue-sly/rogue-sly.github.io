@@ -84,3 +84,11 @@ export type Station = {
     name: string;
     url: string;
 };
+
+export type NightrideTrack = {
+    station: string;
+    title: string;
+    artist: string;
+    album: string;
+    comment: string;
+};

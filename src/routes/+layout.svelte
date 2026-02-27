@@ -6,6 +6,7 @@
     import { audioState } from "$lib/stores/audio.svelte";
     import { ui } from "$lib/stores/ui.svelte";
     import { lanyard } from "$lib/stores/lanyard.svelte";
+    import { nightride } from "$lib/stores/nightride.svelte";
     import { fade } from "svelte/transition";
     import { page } from "$app/state";
     import { onMount } from "svelte";
@@ -39,10 +40,12 @@
 
     onMount(() => {
         lanyard.connect();
+        nightride.connect();
         if (audioElement) audioState.element = audioElement;
 
         return () => {
             lanyard.disconnect();
+            nightride.disconnect();
         };
     });
 </script>
