@@ -499,7 +499,7 @@
 
     .btn-station:hover {
         opacity: 1;
-        background: rgba(255, 255, 255, 0.1);
+        background-color: var(--fg-primary-dark);
     }
 
     .btn-station.active {
@@ -560,7 +560,7 @@
     }
 
     button:hover {
-        background: var(--fg-primary);
+        background: var(--fg-primary-dark);
         color: var(--bg-primary);
     }
 
