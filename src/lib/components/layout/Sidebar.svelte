@@ -188,6 +188,24 @@
                             {/each}
                         </div>
 
+                        <div class="stream-format-toggle">
+                            <span class="label">STREAM:</span>
+                            <div class="toggle-buttons">
+                                <button
+                                    class:active={settings.streamFormat === "mp3"}
+                                    onclick={() => (settings.streamFormat = "mp3")}
+                                >
+                                    MP3
+                                </button>
+                                <button
+                                    class:active={settings.streamFormat === "hls"}
+                                    onclick={() => (settings.streamFormat = "hls")}
+                                >
+                                    HLS
+                                </button>
+                            </div>
+                        </div>
+
                         <div class="volume-control">
                             <span class="label">GAIN:</span>
                             <input
@@ -511,6 +529,35 @@
 
     .btn-station.active::before {
         content: "> ";
+    }
+
+    .stream-format-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        font-size: 0.7rem;
+    }
+
+    .stream-format-toggle .label {
+        color: var(--fg-primary-dark);
+    }
+
+    .toggle-buttons {
+        display: flex;
+        gap: 0.25rem;
+    }
+
+    .toggle-buttons button {
+        padding: 0.15rem 0.5rem;
+        font-size: 0.65rem;
+        opacity: 0.6;
+    }
+
+    .toggle-buttons button.active {
+        opacity: 1;
+        background: var(--fg-primary);
+        color: var(--bg-primary);
     }
 
     .volume-control {

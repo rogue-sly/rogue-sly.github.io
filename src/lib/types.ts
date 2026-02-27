@@ -82,7 +82,8 @@ export type PostLink = {
 export type Station = {
     id: string;
     name: string;
-    url: string;
+    mp3: string;
+    hls: string;
 };
 
 export type NightrideTrack = {

@@ -4,12 +4,14 @@ type Settings = {
     visualizerEnabled: boolean;
     lowQualityMode: boolean;
     volume: number;
+    streamFormat: "mp3" | "hls";
 };
 
 const DEFAULT_SETTINGS: Settings = {
     visualizerEnabled: true,
     lowQualityMode: false,
     volume: 0.5,
+    streamFormat: "mp3",
 };
 
 function createSettings() {
@@ -47,6 +49,13 @@ function createSettings() {
         },
         set volume(value: number) {
             settings.volume = value;
+            this.save();
+        },
+        get streamFormat() {
+            return settings.streamFormat;
+        },
+        set streamFormat(value: "mp3" | "hls") {
+            settings.streamFormat = value;
             this.save();
         },
         save() {

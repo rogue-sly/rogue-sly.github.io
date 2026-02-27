@@ -6,37 +6,44 @@ export const STATIONS: Station[] = [
     {
         id: "nightride",
         name: "Nightride",
-        url: "https://stream.nightride.fm:8443/nightride/nightride.m3u8",
+        mp3: "https://stream.nightride.fm/nightride.mp3",
+        hls: "https://stream.nightride.fm:8443/nightride/nightride.m3u8",
     },
     {
         id: "chillsynth",
         name: "Chillsynth",
-        url: "https://stream.nightride.fm:8443/chillsynth/chillsynth.m3u8",
+        mp3: "https://stream.nightride.fm/chillsynth.mp3",
+        hls: "https://stream.nightride.fm:8443/chillsynth/chillsynth.m3u8",
     },
     {
         id: "datawave",
         name: "Datawave",
-        url: "https://stream.nightride.fm:8443/datawave/datawave.m3u8",
+        mp3: "https://stream.nightride.fm/datawave.mp3",
+        hls: "https://stream.nightride.fm:8443/datawave/datawave.m3u8",
     },
     {
         id: "spacesynth",
         name: "Spacesynth",
-        url: "https://stream.nightride.fm:8443/spacesynth/spacesynth.m3u8",
+        mp3: "https://stream.nightride.fm/spacesynth.mp3",
+        hls: "https://stream.nightride.fm:8443/spacesynth/spacesynth.m3u8",
     },
     {
         id: "darksynth",
         name: "Darksynth",
-        url: "https://stream.nightride.fm:8443/darksynth/darksynth.m3u8",
+        mp3: "https://stream.nightride.fm/darksynth.mp3",
+        hls: "https://stream.nightride.fm:8443/darksynth/darksynth.m3u8",
     },
     {
         id: "horrorsynth",
         name: "Horrorsynth",
-        url: "https://stream.nightride.fm:8443/horrorsynth/horrorsynth.m3u8",
+        mp3: "https://stream.nightride.fm/horrorsynth.mp3",
+        hls: "https://stream.nightride.fm:8443/horrorsynth/horrorsynth.m3u8",
     },
     {
         id: "ebsm",
         name: "EBSM",
-        url: "https://stream.nightride.fm:8443/ebsm/ebsm.m3u8",
+        mp3: "https://stream.nightride.fm/ebsm.mp3",
+        hls: "https://stream.nightride.fm:8443/ebsm/ebsm.m3u8",
     },
 ] as const;
 
@@ -61,6 +68,14 @@ export class AudioStore {
     signalStrength = $state(0);
     currentStation: Station = $state(STATIONS[0]);
 
+    get currentUrl() {
+        return settings.streamFormat === "hls" ? this.currentStation.hls : this.currentStation.mp3;
+    }
+
+    get useHls() {
+        return settings.streamFormat === "hls";
+    }
+
     private visualizerInterval: number | undefined;
 
     audioCtx: AudioContext | undefined;
@@ -78,6 +93,22 @@ export class AudioStore {
         $effect(() => {
             if (this._element) {
                 this._element.volume = settings.volume;
+            }
+        });
+
+        // Reactively reload stream when format changes
+        $effect(() => {
+            const _format = settings.streamFormat;
+            if (this._element) {
+                const wasPlaying = this.isPlaying;
+                if (wasPlaying) {
+                    this._element.pause();
+                }
+                this.initHls();
+                if (wasPlaying) {
+                    this.hls?.startLoad();
+                    this._element.play().catch(() => {});
+                }
             }
         });
     }
@@ -146,6 +177,18 @@ export class AudioStore {
     private initHls() {
         if (!this.element) return;
 
+        if (!this.useHls) {
+            if (this.hls) {
+                this.hls.destroy();
+                this.hls = undefined;
+            }
+            this.element.src = this.currentStation.mp3;
+            this.element.addEventListener("loadedmetadata", () => {
+                this.statusText = "SYSTEM_ONLINE";
+            });
+            return;
+        }
+
         // Cleanup any existing instance
         if (this.hls) {
             this.hls.destroy();
@@ -164,7 +207,7 @@ export class AudioStore {
                     xhr.withCredentials = false;
                 },
             });
-            this.hls.loadSource(this.currentStation.url);
+            this.hls.loadSource(this.currentUrl);
             this.hls.attachMedia(this.element);
 
             this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -183,7 +226,7 @@ export class AudioStore {
                                 data.details === Hls.ErrorDetails.MANIFEST_LOAD_ERROR ||
                                 data.details === Hls.ErrorDetails.MANIFEST_LOAD_TIMEOUT
                             ) {
-                                this.hls?.loadSource(this.currentStation.url);
+                                this.hls?.loadSource(this.currentUrl);
                             } else {
                                 this.hls?.startLoad();
                             }
@@ -203,7 +246,7 @@ export class AudioStore {
                 }
             });
         } else if (this.element.canPlayType("application/vnd.apple.mpegurl")) {
-            this.element.src = this.currentStation.url;
+            this.element.src = this.currentStation.hls;
             this.element.addEventListener("loadedmetadata", () => {
                 this.statusText = "SYSTEM_ONLINE";
             });
