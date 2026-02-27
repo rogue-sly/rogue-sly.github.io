@@ -76,9 +76,8 @@ This track focuses on improving the user interface, settings management, and add
   - [x] Add Volume Slider.
   - [x] Add Settings Link.
   - [x] Improve feedback (play/pause, buffering states).
-- [ ] **Integration**
-  - [ ] Update `Visualizer.svelte` to respect `visualizerEnabled` setting.
-  - [ ] Update Sidebar to use new `Player` component.
+- [x] **Integration**
+  - [x] Update `Visualizer.svelte` to respect `visualizerEnabled` setting.
 
 ### Future Concepts
 
