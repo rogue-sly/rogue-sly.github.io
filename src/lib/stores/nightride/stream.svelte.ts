@@ -1,5 +1,5 @@
 import Hls from "hls.js";
-import { settings } from "./settings.svelte";
+import { settings } from "../settings.svelte";
 import type { Station } from "$lib/types";
 
 export const STATIONS: Station[] = [
@@ -48,7 +48,7 @@ export const STATIONS: Station[] = [
 ] as const;
 
 // Global Audio state
-export class AudioStore {
+export class StreamStore {
     private _element: HTMLAudioElement | undefined = $state();
 
     get element() {
@@ -69,11 +69,11 @@ export class AudioStore {
     currentStation: Station = $state(STATIONS[0]);
 
     get currentUrl() {
-        return settings.streamFormat === "hls" ? this.currentStation.hls : this.currentStation.mp3;
+        return settings.stream.format === "hls" ? this.currentStation.hls : this.currentStation.mp3;
     }
 
     get useHls() {
-        return settings.streamFormat === "hls";
+        return settings.stream.format === "hls";
     }
 
     private visualizerInterval: number | undefined;
@@ -92,13 +92,13 @@ export class AudioStore {
         // Reactively update element volume when settings change
         $effect(() => {
             if (this._element) {
-                this._element.volume = settings.volume;
+                this._element.volume = settings.stream.volume;
             }
         });
 
         // Reactively reload stream when format changes
         $effect(() => {
-            const _format = settings.streamFormat;
+            const _format = settings.stream.format;
             if (this._element) {
                 const wasPlaying = this.isPlaying;
                 if (wasPlaying) {
@@ -116,7 +116,7 @@ export class AudioStore {
     setElement(el: HTMLAudioElement) {
         this._element = el;
         if (this._element) {
-            this._element.volume = settings.volume;
+            this._element.volume = settings.stream.volume;
             this._element.muted = this.isMuted;
 
             this._element.addEventListener("play", () => {
@@ -217,7 +217,7 @@ export class AudioStore {
                 }
             });
 
-            this.hls.on(Hls.Events.ERROR, (event, data) => {
+            this.hls.on(Hls.Events.ERROR, (_, data) => {
                 if (data.fatal) {
                     switch (data.type) {
                         case Hls.ErrorTypes.NETWORK_ERROR:
@@ -338,4 +338,4 @@ export class AudioStore {
     }
 }
 
-export const audioState = new AudioStore();
+export const stream = new StreamStore();

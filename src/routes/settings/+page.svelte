@@ -3,11 +3,11 @@
     import SEO from "$lib/components/SEO.svelte";
 
     function toggleVisualizer() {
-        settings.visualizerEnabled = !settings.visualizerEnabled;
+        settings.visualizer.enabled = !settings.visualizer.enabled;
     }
 
     function toggleLowQuality() {
-        settings.lowQualityMode = !settings.lowQualityMode;
+        settings.visualizer.lowQualityMode = !settings.visualizer.lowQualityMode;
     }
 </script>
 
@@ -22,8 +22,8 @@
                     <h3>Visualizer</h3>
                     <p>Enable or disable the background frequency visualizer.</p>
                 </div>
-                <button class="toggle-btn" class:active={settings.visualizerEnabled} onclick={toggleVisualizer}>
-                    [{settings.visualizerEnabled ? "ENABLED" : "DISABLED"}]
+                <button class="toggle-btn" class:active={settings.visualizer.enabled} onclick={toggleVisualizer}>
+                    [{settings.visualizer.enabled ? "ENABLED" : "DISABLED"}]
                 </button>
             </div>
 
@@ -32,8 +32,12 @@
                     <h3>Low Quality Mode</h3>
                     <p>Disable intensive shaders and animations for better performance.</p>
                 </div>
-                <button class="toggle-btn" class:active={settings.lowQualityMode} onclick={toggleLowQuality}>
-                    [{settings.lowQualityMode ? "ENABLED" : "DISABLED"}]
+                <button
+                    class="toggle-btn"
+                    class:active={settings.visualizer.lowQualityMode}
+                    onclick={toggleLowQuality}
+                >
+                    [{settings.visualizer.lowQualityMode ? "ENABLED" : "DISABLED"}]
                 </button>
             </div>
         </div>

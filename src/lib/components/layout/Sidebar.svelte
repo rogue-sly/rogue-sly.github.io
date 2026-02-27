@@ -1,8 +1,7 @@
 <script lang="ts">
     import { ui } from "$lib/stores/ui.svelte";
-    import { audioState, STATIONS } from "$lib/stores/audio.svelte";
+    import { stream, metadata, STATIONS } from "$lib/stores/nightride";
     import { settings } from "$lib/stores/settings.svelte";
-    import { nightride } from "$lib/stores/nightride.svelte";
     import { page } from "$app/state";
     import { fade, fly, slide } from "svelte/transition";
 
@@ -12,7 +11,7 @@
 
     function handleVolumeChange(e: Event) {
         const target = e.target as HTMLInputElement;
-        settings.volume = parseFloat(target.value);
+        settings.stream.volume = parseFloat(target.value);
     }
 </script>
 
@@ -131,7 +130,7 @@
             >
                 <span class="label">RADIO_UNIT</span>
                 <div class="header-status">
-                    {#if audioState.isPlaying}
+                    {#if stream.isPlaying}
                         <span class="status-active">RECEIVING</span>
                     {/if}
                     <span class="toggle-icon">{ui.isScannerCollapsed ? "[+]" : "[-]"}</span>
@@ -143,22 +142,22 @@
                     <div class="scanner-inner">
                         <div class="display">
                             <span class="label">FREQ:</span>
-                            <span class="value" data-text={audioState.statusText}>{audioState.statusText}</span>
+                            <span class="value" data-text={stream.statusText}>{stream.statusText}</span>
                         </div>
 
-                        {#if nightride.currentTrack}
-                            {@const trackLength = nightride.currentTrack.title.length}
-                            {@const artistLength = nightride.currentTrack.artist.length}
+                        {#if metadata.currentTrack}
+                            {@const trackLength = metadata.currentTrack.title.length}
+                            {@const artistLength = metadata.currentTrack.artist.length}
                             <div class="display" transition:slide>
                                 <span class="label">TRACK:</span>
                                 <span class="value" class:marquee={trackLength > 20}>
-                                    {nightride.currentTrack.title}
+                                    {metadata.currentTrack.title}
                                 </span>
                             </div>
                             <div class="display" transition:slide>
                                 <span class="label">ARTIST:</span>
                                 <span class="value" class:marquee={artistLength > 20}>
-                                    {nightride.currentTrack.artist}
+                                    {metadata.currentTrack.artist}
                                 </span>
                             </div>
                         {/if}
@@ -167,10 +166,10 @@
                             {#each Array(8)}
                                 <div
                                     class="bar"
-                                    style:height={audioState.isPlaying && !audioState.isMuted
+                                    style:height={stream.isPlaying && !stream.isMuted
                                         ? Math.random() * 100 + "%"
                                         : "2px"}
-                                    style:opacity={audioState.isPlaying && !audioState.isMuted ? 1 : 0.3}
+                                    style:opacity={stream.isPlaying && !stream.isMuted ? 1 : 0.3}
                                 ></div>
                             {/each}
                         </div>
@@ -178,9 +177,9 @@
                         <div class="station-grid">
                             {#each STATIONS as station}
                                 <button
-                                    onclick={() => audioState.setStation(station)}
+                                    onclick={() => stream.setStation(station)}
                                     class="btn-station"
-                                    class:active={audioState.currentStation.id === station.id}
+                                    class:active={stream.currentStation.id === station.id}
                                     aria-label="Select {station.name} station"
                                 >
                                     {station.name}
@@ -192,14 +191,14 @@
                             <span class="label">STREAM:</span>
                             <div class="toggle-buttons">
                                 <button
-                                    class:active={settings.streamFormat === "mp3"}
-                                    onclick={() => (settings.streamFormat = "mp3")}
+                                    class:active={settings.stream.format === "mp3"}
+                                    onclick={() => (settings.stream.format = "mp3")}
                                 >
                                     MP3
                                 </button>
                                 <button
-                                    class:active={settings.streamFormat === "hls"}
-                                    onclick={() => (settings.streamFormat = "hls")}
+                                    class:active={settings.stream.format === "hls"}
+                                    onclick={() => (settings.stream.format = "hls")}
                                 >
                                     HLS
                                 </button>
@@ -213,7 +212,7 @@
                                 min="0"
                                 max="1"
                                 step="0.01"
-                                value={settings.volume}
+                                value={settings.stream.volume}
                                 oninput={handleVolumeChange}
                                 class="range-input"
                                 aria-label="Volume"
@@ -222,20 +221,20 @@
 
                         <div class="controls">
                             <button
-                                onclick={() => audioState.togglePlay()}
+                                onclick={() => stream.togglePlay()}
                                 class="btn-scan"
-                                aria-label={audioState.isPlaying ? "Stop Scan" : "Start Scan"}
+                                aria-label={stream.isPlaying ? "Stop Scan" : "Start Scan"}
                             >
-                                [{audioState.isPlaying ? "HALT" : "INIT_SCAN"}]
+                                [{stream.isPlaying ? "HALT" : "INIT_SCAN"}]
                             </button>
 
-                            {#if audioState.isPlaying}
+                            {#if stream.isPlaying}
                                 <button
-                                    onclick={() => audioState.toggleMute()}
+                                    onclick={() => stream.toggleMute()}
                                     class="btn-mute"
-                                    aria-label={audioState.isMuted ? "Unmute" : "Mute"}
+                                    aria-label={stream.isMuted ? "Unmute" : "Mute"}
                                 >
-                                    [{audioState.isMuted ? "UNMUTE" : "MUTE"}]
+                                    [{stream.isMuted ? "UNMUTE" : "MUTE"}]
                                 </button>
                             {/if}
                         </div>

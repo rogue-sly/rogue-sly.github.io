@@ -1,69 +1,106 @@
 import { browser } from "$app/environment";
 
-type Settings = {
-    visualizerEnabled: boolean;
-    lowQualityMode: boolean;
-    volume: number;
-    streamFormat: "mp3" | "hls";
-};
+class VisualizerSettings {
+    #parent: SettingsStore;
+    #enabled = $state(true);
+    #lowQualityMode = $state(false);
 
-const DEFAULT_SETTINGS: Settings = {
-    visualizerEnabled: true,
-    lowQualityMode: false,
-    volume: 0.5,
-    streamFormat: "mp3",
-};
+    constructor(parent: SettingsStore) {
+        this.#parent = parent;
+    }
 
-function createSettings() {
-    let settings = $state<Settings>(DEFAULT_SETTINGS);
+    get enabled() {
+        return this.#enabled;
+    }
 
-    if (browser) {
-        const stored = localStorage.getItem("settings");
-        if (stored) {
-            try {
-                const parsed = JSON.parse(stored);
-                settings = { ...DEFAULT_SETTINGS, ...parsed };
-            } catch (e) {
-                console.error("Failed to parse settings", e);
+    set enabled(value: boolean) {
+        this.#enabled = value;
+        this.#parent.save();
+    }
+
+    get lowQualityMode() {
+        return this.#lowQualityMode;
+    }
+
+    set lowQualityMode(value: boolean) {
+        this.#lowQualityMode = value;
+        this.#parent.save();
+    }
+}
+
+class StreamSettings {
+    #parent: SettingsStore;
+    #volume = $state(0.5);
+    #format = $state<"mp3" | "hls">("mp3");
+
+    constructor(parent: SettingsStore) {
+        this.#parent = parent;
+    }
+
+    get volume() {
+        return this.#volume;
+    }
+
+    set volume(value: number) {
+        this.#volume = value;
+        this.#parent.save();
+    }
+
+    get format() {
+        return this.#format;
+    }
+
+    set format(value: "mp3" | "hls") {
+        this.#format = value;
+        this.#parent.save();
+    }
+}
+
+class SettingsStore {
+    visualizer: VisualizerSettings;
+    stream: StreamSettings;
+
+    constructor() {
+        this.visualizer = new VisualizerSettings(this);
+        this.stream = new StreamSettings(this);
+
+        if (browser) {
+            const stored = localStorage.getItem("settings");
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    if (parsed.visualizer) {
+                        this.visualizer.enabled = parsed.visualizer.enabled;
+                        this.visualizer.lowQualityMode = parsed.visualizer.lowQualityMode;
+                    }
+                    if (parsed.stream) {
+                        this.stream.volume = parsed.stream.volume;
+                        this.stream.format = parsed.stream.format;
+                    }
+                } catch (e) {
+                    console.error("Failed to parse settings", e);
+                }
             }
         }
     }
 
-    return {
-        get visualizerEnabled() {
-            return settings.visualizerEnabled;
-        },
-        set visualizerEnabled(value: boolean) {
-            settings.visualizerEnabled = value;
-            this.save();
-        },
-        get lowQualityMode() {
-            return settings.lowQualityMode;
-        },
-        set lowQualityMode(value: boolean) {
-            settings.lowQualityMode = value;
-            this.save();
-        },
-        get volume() {
-            return settings.volume;
-        },
-        set volume(value: number) {
-            settings.volume = value;
-            this.save();
-        },
-        get streamFormat() {
-            return settings.streamFormat;
-        },
-        set streamFormat(value: "mp3" | "hls") {
-            settings.streamFormat = value;
-            this.save();
-        },
-        save() {
-            if (browser) {
-                localStorage.setItem("settings", JSON.stringify(settings));
-            }
-        },
-    };
+    save() {
+        if (browser) {
+            localStorage.setItem(
+                "settings",
+                JSON.stringify({
+                    visualizer: {
+                        enabled: this.visualizer.enabled,
+                        lowQualityMode: this.visualizer.lowQualityMode,
+                    },
+                    stream: {
+                        volume: this.stream.volume,
+                        format: this.stream.format,
+                    },
+                }),
+            );
+        }
+    }
 }
 
-export const settings = createSettings();
+export const settings = new SettingsStore();

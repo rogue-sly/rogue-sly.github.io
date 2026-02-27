@@ -3,10 +3,9 @@
     import Header from "$lib/components/layout/Header.svelte";
     import Sidebar from "$lib/components/layout/Sidebar.svelte";
     import Visualizer from "$lib/components/Visualizer.svelte";
-    import { audioState } from "$lib/stores/audio.svelte";
+    import { stream, metadata } from "$lib/stores/nightride";
     import { ui } from "$lib/stores/ui.svelte";
     import { lanyard } from "$lib/stores/lanyard.svelte";
-    import { nightride } from "$lib/stores/nightride.svelte";
     import { fade } from "svelte/transition";
     import { page } from "$app/state";
     import { onMount } from "svelte";
@@ -14,7 +13,7 @@
     let { children } = $props();
     let audioElement: HTMLAudioElement | undefined = $state();
 
-    audioState.initEffects();
+    stream.initEffects();
 
     function handleKeydown(e: KeyboardEvent) {
         const target = e.target as HTMLElement;
@@ -27,10 +26,10 @@
                 ui.toggleZenMode();
                 break;
             case "m":
-                audioState.toggleMute();
+                stream.toggleMute();
                 break;
             case "h":
-                audioState.togglePlay();
+                stream.togglePlay();
                 break;
             case "s":
                 ui.toggle();
@@ -40,12 +39,12 @@
 
     onMount(() => {
         lanyard.connect();
-        nightride.connect();
-        if (audioElement) audioState.element = audioElement;
+        metadata.connect();
+        if (audioElement) stream.element = audioElement;
 
         return () => {
             lanyard.disconnect();
-            nightride.disconnect();
+            metadata.disconnect();
         };
     });
 </script>

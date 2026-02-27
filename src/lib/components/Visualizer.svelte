@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { audioState } from "$lib/stores/audio.svelte";
+    import { stream } from "$lib/stores/nightride";
     import { settings } from "$lib/stores/settings.svelte";
 
     let { dimmed = false } = $props();
@@ -11,12 +11,12 @@
     let height: number;
 
     // Visualizer settings
-    const BAR_COUNT = $derived(settings.lowQualityMode ? 32 : 64);
+    const BAR_COUNT = $derived(settings.visualizer.lowQualityMode ? 32 : 64);
     const GRID_SPEED = 0.5;
     let gridOffset = 0;
 
     $effect(() => {
-        if (!canvas || !settings.visualizerEnabled) {
+        if (!canvas || !settings.visualizer.enabled) {
             if (animationFrame) cancelAnimationFrame(animationFrame);
             return;
         }
@@ -45,11 +45,11 @@
         if (!ctx) return;
 
         // Safety check for analyser presence, though we handle it being missing in loop
-        const bufferLength = (audioState as any).analyser?.frequencyBinCount || 256;
+        const bufferLength = stream.analyser?.frequencyBinCount || 256;
         const dataArray = new Uint8Array(bufferLength);
 
         function draw() {
-            if (!settings.visualizerEnabled) return;
+            if (!settings.visualizer.enabled) return;
             animationFrame = requestAnimationFrame(draw);
 
             if (!ctx) return;
@@ -63,8 +63,8 @@
             ctx.fillRect(0, 0, width, height);
 
             // Get audio data if playing
-            if (audioState.isPlaying && (audioState as any).analyser) {
-                (audioState as any).analyser.getByteFrequencyData(dataArray);
+            if (stream.isPlaying && stream.analyser) {
+                stream.analyser.getByteFrequencyData(dataArray);
             } else {
                 // Gentle idle animation data
                 for (let i = 0; i < bufferLength; i++) {
@@ -75,7 +75,7 @@
             const horizonY = height * 0.6;
             const centerX = width / 2;
 
-            if (!settings.lowQualityMode) {
+            if (!settings.visualizer.lowQualityMode) {
                 // Draw Retro Grid (Floor)
                 ctx.save();
                 ctx.beginPath();
@@ -138,7 +138,7 @@
             ctx.arc(centerX, horizonY - sunRadius * 0.8, sunRadius, 0, Math.PI * 2);
             ctx.fill();
 
-            if (!settings.lowQualityMode) {
+            if (!settings.visualizer.lowQualityMode) {
                 // Sun slats (retro style cuts)
                 ctx.fillStyle = getComputedStyle(document.documentElement)
                     .getPropertyValue("--bg-primary-dark")
@@ -171,7 +171,7 @@
                 // Left side (mirrored)
                 ctx.fillRect(centerX - (i + 1) * barWidth, horizonY - barHeight, barWidth - 2, barHeight);
 
-                if (!settings.lowQualityMode) {
+                if (!settings.visualizer.lowQualityMode) {
                     // Reflection (lower opacity)
                     ctx.fillStyle = `rgba(205, 205, 205, 0.1)`;
                     ctx.fillRect(centerX + i * barWidth + 2, horizonY, barWidth - 2, barHeight * 0.5);
@@ -187,7 +187,7 @@
     }
 </script>
 
-{#if settings.visualizerEnabled}
+{#if settings.visualizer.enabled}
     <div class="visualizer-container" class:dimmed>
         <canvas bind:this={canvas}></canvas>
     </div>

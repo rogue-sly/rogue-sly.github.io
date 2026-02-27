@@ -1,12 +1,12 @@
 import { browser } from "$app/environment";
-import { audioState } from "./audio.svelte";
+import { stream } from "./stream.svelte";
 import type { NightrideTrack } from "$lib/types";
 
-class NightrideStore {
+class MetadataStore {
     private eventSource: EventSource | null = null;
     public tracks = $state<Record<string, NightrideTrack>>({});
     public error = $state<string | null>(null);
-    public currentTrack = $derived(this.tracks[audioState.currentStation.id] || null);
+    public currentTrack = $derived(this.tracks[stream.currentStation.id] || null);
 
     public connect() {
         if (!browser) return;
@@ -54,4 +54,4 @@ class NightrideStore {
     }
 }
 
-export const nightride = new NightrideStore();
+export const metadata = new MetadataStore();
