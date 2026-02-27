@@ -31,6 +31,11 @@
         margin-bottom: 0.95rem;
     }
 
+    :global(.player-wrapper *) {
+        font-family:
+            "Cascadia Code", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace, "Symbols Nerd Font" !important;
+    }
+
     @media print {
         .player-wrapper {
             display: none !important;
