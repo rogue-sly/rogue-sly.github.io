@@ -15,7 +15,7 @@
 
 <div class="settings-sections">
     <section class="settings-group">
-        <h2 class="group-title">Visual Interface</h2>
+        <h2 class="group-title">Settings</h2>
         <div class="settings-grid">
             <div class="setting-item">
                 <div class="info">
