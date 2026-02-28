@@ -157,6 +157,7 @@
 
             const accentColor = getComputedStyle(document.documentElement).getPropertyValue("--fg-primary").trim();
             ctx.fillStyle = accentColor;
+            ctx.globalAlpha = 0.5;
 
             for (let i = 0; i < BAR_COUNT; i++) {
                 // Focus on bass frequencies (lower half of data) mostly
@@ -173,7 +174,7 @@
 
                 if (!settings.visualizer.lowQualityMode) {
                     // Reflection (lower opacity)
-                    ctx.fillStyle = `rgba(205, 205, 205, 0.1)`;
+                    ctx.fillStyle = `rgba(205, 205, 205, 0.20)`;
                     ctx.fillRect(centerX + i * barWidth + 2, horizonY, barWidth - 2, barHeight * 0.5);
                     ctx.fillRect(centerX - (i + 1) * barWidth, horizonY, barWidth - 2, barHeight * 0.5);
                 }
@@ -181,6 +182,7 @@
                 // Reset fill
                 ctx.fillStyle = accentColor;
             }
+            ctx.globalAlpha = 1;
         }
 
         draw();
