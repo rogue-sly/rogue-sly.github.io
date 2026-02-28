@@ -3,12 +3,12 @@
     import Header from "$lib/components/layout/Header.svelte";
     import Sidebar from "$lib/components/layout/Sidebar.svelte";
     import Visualizer from "$lib/components/Visualizer.svelte";
-    import { stream, metadata } from "$lib/stores/nightride";
-    import { ui } from "$lib/stores/ui.svelte";
-    import { lanyard } from "$lib/stores/lanyard.svelte";
+    import * as ui from "$lib/stores/ui";
     import { fade } from "svelte/transition";
-    import { page } from "$app/state";
+    import { lanyard } from "$lib/stores/lanyard.svelte";
     import { onMount } from "svelte";
+    import { page } from "$app/state";
+    import { stream, metadata } from "$lib/stores/nightride";
 
     let { children } = $props();
     let audioElement: HTMLAudioElement | undefined = $state();
@@ -23,7 +23,7 @@
 
         switch (e.key.toLowerCase()) {
             case "z":
-                ui.toggleZenMode();
+                ui.misc.toggleZenMode();
                 break;
             case "m":
                 stream.toggleMute();
@@ -32,7 +32,7 @@
                 stream.togglePlay();
                 break;
             case "s":
-                ui.toggle();
+                ui.sidebar.toggle();
                 break;
         }
     }
@@ -55,7 +55,7 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<Visualizer dimmed={!ui.isZenMode && page.url.pathname !== "/"} />
+<Visualizer dimmed={!ui.misc.isZenMode && page.url.pathname !== "/"} />
 <audio bind:this={audioElement} crossorigin="anonymous"></audio>
 
 {#key page.url.pathname}
@@ -65,8 +65,8 @@
         class:blog={pathname === "/blog/"}
         class:centered={pathname === "/" || pathname === "/contact/" || pathname === "/settings/"}
         class:padded={pathname.startsWith("/whoami") || pathname.startsWith("/blog")}
-        style:opacity={ui.isZenMode ? 0 : 1}
-        style:pointer-events={ui.isZenMode ? "none" : "auto"}
+        style:opacity={ui.misc.isZenMode ? 0 : 1}
+        style:pointer-events={ui.misc.isZenMode ? "none" : "auto"}
     >
         {@render children()}
     </main>

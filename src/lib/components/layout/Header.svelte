@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { ui } from "$lib/stores/ui.svelte";
+    import * as ui from "$lib/stores/ui";
 </script>
 
 <header>
@@ -12,7 +12,7 @@
             <a href="/">Rogue87</a>
         </div>
 
-        <button class="menu-btn" onclick={() => ui.toggle()} aria-label="Toggle Menu"> [MENU] </button>
+        <button class="menu-btn" onclick={() => ui.sidebar.toggle()} aria-label="Toggle Menu"> [MENU] </button>
     </div>
 </header>
 

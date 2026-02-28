@@ -1,36 +1,39 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { UIStore } from "$lib/stores/ui.svelte";
+import { SidebarStore } from "$lib/stores/ui/sidebar.svelte";
+import { MiscStore } from "$lib/stores/ui/misc.svelte";
 
 describe("UIStore", () => {
-    let ui: UIStore;
+    let sidebar: SidebarStore;
+    let misc: MiscStore;
 
     beforeEach(() => {
-        ui = new UIStore();
+        sidebar = new SidebarStore();
+        misc = new MiscStore();
     });
 
     it("starts with default closed state", () => {
-        expect(ui.isOpen).toBe(false);
-        expect(ui.isZenMode).toBe(false);
+        expect(sidebar.isOpen).toBe(false);
+        expect(misc.isZenMode).toBe(false);
     });
 
     it("toggles sidebar state", () => {
-        ui.toggle();
-        expect(ui.isOpen).toBe(true);
-        ui.toggle();
-        expect(ui.isOpen).toBe(false);
+        sidebar.toggle();
+        expect(sidebar.isOpen).toBe(true);
+        sidebar.toggle();
+        expect(sidebar.isOpen).toBe(false);
     });
 
     it("explicitly opens and closes sidebar", () => {
-        ui.open();
-        expect(ui.isOpen).toBe(true);
-        ui.close();
-        expect(ui.isOpen).toBe(false);
+        sidebar.open();
+        expect(sidebar.isOpen).toBe(true);
+        sidebar.close();
+        expect(sidebar.isOpen).toBe(false);
     });
 
     it("toggles zen mode", () => {
-        ui.toggleZenMode();
-        expect(ui.isZenMode).toBe(true);
-        ui.toggleZenMode();
-        expect(ui.isZenMode).toBe(false);
+        misc.toggleZenMode();
+        expect(misc.isZenMode).toBe(true);
+        misc.toggleZenMode();
+        expect(misc.isZenMode).toBe(false);
     });
 });

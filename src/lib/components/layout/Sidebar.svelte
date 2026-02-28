@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { ui } from "$lib/stores/ui.svelte";
-    import { stream, metadata, STATIONS } from "$lib/stores/nightride";
-    import { settings } from "$lib/stores/settings.svelte";
-    import { page } from "$app/state";
+    import * as ui from "$lib/stores/ui";
     import { fade, fly, slide } from "svelte/transition";
+    import { page } from "$app/state";
+    import { settings } from "$lib/stores/settings.svelte";
+    import { stream, metadata, STATIONS } from "$lib/stores/nightride";
 
     function close() {
-        ui.isOpen = false;
+        ui.sidebar.isOpen = false;
     }
 
     function handleVolumeChange(e: Event) {
@@ -15,7 +15,7 @@
     }
 </script>
 
-{#if ui.isOpen}
+{#if ui.sidebar.isOpen}
     <!-- Backdrop -->
     <div
         class="backdrop"
@@ -32,12 +32,12 @@
             <div class="header-actions">
                 <div>
                     <button
-                        onclick={() => ui.toggleZenMode()}
+                        onclick={() => ui.misc.toggleZenMode()}
                         class="btn-settings"
-                        class:active={ui.isZenMode}
-                        aria-label={ui.isZenMode ? "Show Content" : "Hide Content"}
+                        class:active={ui.misc.isZenMode}
+                        aria-label={ui.misc.isZenMode ? "Show Content" : "Hide Content"}
                     >
-                        {#if ui.isZenMode}
+                        {#if ui.misc.isZenMode}
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="18"
@@ -121,11 +121,11 @@
             </ul>
         </nav>
 
-        <div class="scanner-section" class:collapsed={ui.isScannerCollapsed}>
+        <div class="scanner-section" class:collapsed={ui.misc.isScannerCollapsed}>
             <button
                 class="scanner-header"
-                onclick={() => ui.toggleScanner()}
-                aria-expanded={!ui.isScannerCollapsed}
+                onclick={() => ui.misc.toggleScanner()}
+                aria-expanded={!ui.misc.isScannerCollapsed}
                 aria-controls="scanner-content"
             >
                 <span class="label">RADIO_UNIT</span>
@@ -133,11 +133,11 @@
                     {#if stream.isPlaying}
                         <span class="status-active">RECEIVING</span>
                     {/if}
-                    <span class="toggle-icon">{ui.isScannerCollapsed ? "[+]" : "[-]"}</span>
+                    <span class="toggle-icon">{ui.misc.isScannerCollapsed ? "[+]" : "[-]"}</span>
                 </div>
             </button>
 
-            {#if !ui.isScannerCollapsed}
+            {#if !ui.misc.isScannerCollapsed}
                 <div id="scanner-content" transition:slide={{ duration: 300 }}>
                     <div class="scanner-inner">
                         <div class="display">
