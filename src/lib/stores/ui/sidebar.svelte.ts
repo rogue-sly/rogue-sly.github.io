@@ -12,7 +12,6 @@ export class SidebarStore {
     open() {
         this.isOpen = true;
     }
-
 }
 
 export const sidebar = new SidebarStore();
