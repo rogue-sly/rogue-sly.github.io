@@ -2,7 +2,6 @@
     import Footer from "$lib/components/layout/Footer.svelte";
     import Header from "$lib/components/layout/Header.svelte";
     import Sidebar from "$lib/components/layout/Sidebar.svelte";
-    import Visualizer from "$lib/components/Visualizer.svelte";
     import * as ui from "$lib/stores/ui";
     import { fade } from "svelte/transition";
     import { lanyard } from "$lib/stores/lanyard.svelte";
@@ -55,7 +54,9 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<Visualizer dimmed={!ui.misc.isZenMode && page.url.pathname !== "/"} />
+{#await import("$lib/components/Visualizer.svelte") then { default: Visualizer }}
+    <Visualizer dimmed={!ui.misc.isZenMode && page.url.pathname !== "/"} />
+{/await}
 <audio bind:this={audioElement} crossorigin="anonymous"></audio>
 
 {#key page.url.pathname}
