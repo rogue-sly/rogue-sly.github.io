@@ -421,6 +421,11 @@
 
     .scanner-inner {
         padding: 1rem;
+
+        & .label {
+            background-color: var(--bg-primary-dark);
+            z-index: 2;
+        }
     }
 
     .header-status {
