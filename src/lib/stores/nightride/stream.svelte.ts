@@ -66,7 +66,9 @@ export class StreamStore {
     isMuted = $state(false);
     statusText = $state("SYSTEM_OFFLINE");
     signalStrength = $state(0);
-    currentStation: Station = $state(STATIONS[0]);
+    currentStation: Station = $state(
+        STATIONS.find((s) => s.id === settings.stream.lastStationId) ?? STATIONS[0],
+    );
 
     get currentUrl() {
         return settings.stream.format === "hls" ? this.currentStation.hls : this.currentStation.mp3;
@@ -265,6 +267,7 @@ export class StreamStore {
         }
 
         this.currentStation = station;
+        settings.stream.lastStationId = station.id;
         this.statusText = "SWITCHING...";
 
         // Ensure HLS is cleaned up before creating a new one

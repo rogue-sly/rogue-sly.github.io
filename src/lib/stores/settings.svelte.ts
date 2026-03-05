@@ -32,6 +32,7 @@ class StreamSettings {
     #parent: SettingsStore;
     #volume = $state(0.5);
     #format = $state<"mp3" | "hls">("mp3");
+    #lastStationId = $state("nightride");
 
     constructor(parent: SettingsStore) {
         this.#parent = parent;
@@ -52,6 +53,15 @@ class StreamSettings {
 
     set format(value: "mp3" | "hls") {
         this.#format = value;
+        this.#parent.save();
+    }
+
+    get lastStationId() {
+        return this.#lastStationId;
+    }
+
+    set lastStationId(value: string) {
+        this.#lastStationId = value;
         this.#parent.save();
     }
 }
@@ -76,6 +86,9 @@ class SettingsStore {
                     if (parsed.stream) {
                         this.stream.volume = parsed.stream.volume;
                         this.stream.format = parsed.stream.format;
+                        if (parsed.stream.lastStationId) {
+                            this.stream.lastStationId = parsed.stream.lastStationId;
+                        }
                     }
                 } catch (e) {
                     console.error("Failed to parse settings", e);
@@ -96,6 +109,7 @@ class SettingsStore {
                     stream: {
                         volume: this.stream.volume,
                         format: this.stream.format,
+                        lastStationId: this.stream.lastStationId,
                     },
                 }),
             );
