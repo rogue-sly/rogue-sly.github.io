@@ -1,8 +1,9 @@
 <script lang="ts">
     import Footer from "$lib/components/layout/Footer.svelte";
     import Header from "$lib/components/layout/Header.svelte";
-    import Sidebar from "$lib/components/layout/Sidebar.svelte";
     import KeybindingsHelp from "$lib/components/KeybindingsHelp.svelte";
+    import Sidebar from "$lib/components/layout/Sidebar.svelte";
+    import Visualizer from "$lib/components/Visualizer/index.svelte";
     import * as ui from "$lib/stores/ui";
     import { settings } from "$lib/stores/settings.svelte";
     import { fade } from "svelte/transition";
@@ -93,17 +94,14 @@
     });
 </script>
 
+<svelte:window onkeydown={handleKeydown} />
+
 <Header />
 
 <Sidebar />
-
 <KeybindingsHelp />
 
-<svelte:window onkeydown={handleKeydown} />
-
-{#await import("$lib/components/Visualizer.svelte") then { default: Visualizer }}
-    <Visualizer dimmed={!ui.misc.isZenMode && page.url.pathname !== "/"} />
-{/await}
+<Visualizer />
 <audio bind:this={audioElement} crossorigin="anonymous"></audio>
 
 {#key page.url.pathname}
