@@ -1,5 +1,6 @@
 <script lang="ts">
     import Activity from "./Activity.svelte";
+    import NowPlaying from "./NowPlaying.svelte";
     import SEO from "$lib/components/SEO.svelte";
 </script>
 
@@ -14,6 +15,10 @@
     </p>
 
     <Activity />
+
+    <div class="now-playing-anchor">
+        <NowPlaying />
+    </div>
 </section>
 
 <style>
@@ -43,5 +48,12 @@
         max-width: 50ch;
         margin: 0;
         opacity: 0.9;
+    }
+
+    .now-playing-anchor {
+        position: absolute;
+        bottom: 1.5rem;
+        left: 1.5rem;
+        z-index: 50;
     }
 </style>
