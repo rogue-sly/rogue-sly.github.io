@@ -7,7 +7,7 @@
     import { lanyard } from "$lib/stores/lanyard.svelte";
     import { onMount } from "svelte";
     import { page } from "$app/state";
-    import { stream, metadata } from "$lib/stores/nightride";
+    import { stream, metadata, STATIONS } from "$lib/stores/nightride";
     import "../app.css";
 
     let { children } = $props();
@@ -34,6 +34,16 @@
             case "s":
                 ui.sidebar.toggle();
                 break;
+            case "n": {
+                const idx = STATIONS.findIndex((s) => s.id === stream.currentStation.id);
+                stream.setStation(STATIONS[(idx + 1) % STATIONS.length]);
+                break;
+            }
+            case "p": {
+                const idx = STATIONS.findIndex((s) => s.id === stream.currentStation.id);
+                stream.setStation(STATIONS[(idx - 1 + STATIONS.length) % STATIONS.length]);
+                break;
+            }
         }
     }
 
