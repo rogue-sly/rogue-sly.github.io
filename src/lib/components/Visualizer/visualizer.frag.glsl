@@ -3,7 +3,11 @@ precision highp float;
 uniform vec2 uResolution;
 uniform float uTime;
 uniform int uBarCount;
-uniform bool uLowQuality;
+uniform bool uShowGrid;
+uniform bool uShowReflections;
+uniform bool uShowSun;
+uniform float uBarHeightScale;
+uniform float uGridSpeed;
 
 // Colors sourced from CSS variables each frame
 uniform vec3 uBgColor; // --bg-primary-dark
@@ -44,9 +48,9 @@ void main() {
     float alpha = 1.0;
 
     // ------------------------------------------------------------------------
-    // 1. Retro perspective grid  (skip in low quality mode)
+    // 1. Retro perspective grid
     // ------------------------------------------------------------------------
-    if (!uLowQuality) {
+    if (uShowGrid) {
         // -- Vertical fan lines --
         // Lines fan out from (centerX, horizonY) to the bottom edge.
         // A pixel is "on a line" if its x position, projected back to
@@ -76,10 +80,10 @@ void main() {
             }
 
             // -- Horizontal moving lines --
-            // Exponential spacing, animated by uTime
+            // Exponential spacing, animated by uTime (speed controlled by uGridSpeed)
             float bestOpacity = 0.0;
             for (int i = 0; i < 20; i++) {
-                float z = (float(i) + mod(uTime, 1.0)) * 50.0;
+                float z = (float(i) + mod(uTime * uGridSpeed, 1.0)) * 50.0;
                 float yH = horizonY + (1000.0 / (1000.0 - z)) * 0.1;
 
                 if (yH > 1.0 || yH < horizonY) continue;
@@ -100,35 +104,35 @@ void main() {
     // ------------------------------------------------------------------------
     // 2. Retro gradient sun
     // ------------------------------------------------------------------------
-    // Pixel radius matches original: min(width, height) * 0.15
-    float sunRadiusPx = min(uResolution.x, uResolution.y) * 0.15;
-    // UV radius (Y spans 0→1 over height px)
-    float sunRadiusY = sunRadiusPx / uResolution.y;
+    if (uShowSun) {
+        // Pixel radius matches original: min(width, height) * 0.15
+        float sunRadiusPx = min(uResolution.x, uResolution.y) * 0.15;
+        // UV radius (Y spans 0→1 over height px)
+        float sunRadiusY = sunRadiusPx / uResolution.y;
 
-    // Sun centre in UV space (Y-down)
-    vec2 sunCenterUV = vec2(centerX, horizonY - sunRadiusY * 0.8);
+        // Sun centre in UV space (Y-down)
+        vec2 sunCenterUV = vec2(centerX, horizonY - sunRadiusY * 0.8);
 
-    // Circle test in pixel space to avoid aspect-ratio distortion.
-    // gl_FragCoord is Y-up (origin bottom-left), so flip sunCenterUV.y.
-    vec2 sunCenterPx = vec2(sunCenterUV.x * uResolution.x, (1.0 - sunCenterUV.y) * uResolution.y);
-    float distSunPx = length(gl_FragCoord.xy - sunCenterPx);
+        // Circle test in pixel space to avoid aspect-ratio distortion.
+        // gl_FragCoord is Y-up (origin bottom-left), so flip sunCenterUV.y.
+        vec2 sunCenterPx = vec2(sunCenterUV.x * uResolution.x, (1.0 - sunCenterUV.y) * uResolution.y);
+        float distSunPx = length(gl_FragCoord.xy - sunCenterPx);
 
-    // Soft 1.5px feather on the circle edge
-    float sunAlpha = 1.0 - smoothstep(sunRadiusPx - 1.5, sunRadiusPx + 1.5, distSunPx);
+        // Soft 1.5px feather on the circle edge
+        float sunAlpha = 1.0 - smoothstep(sunRadiusPx - 1.5, sunRadiusPx + 1.5, distSunPx);
 
-    if (sunAlpha > 0.0) {
-        // Gradient top→bottom: uAccentBg (dark red) → uFgPrimary (light glow)
-        // Range spans the full circle diameter in UV Y
-        float gradT = (uv.y - (sunCenterUV.y - sunRadiusY)) / (sunRadiusY * 2.0);
-        gradT = clamp(gradT, 0.0, 1.0);
-        vec3 sunColor = mix(uAccentBg, uFgPrimary, gradT);
+        if (sunAlpha > 0.0) {
+            // Gradient top→bottom: uAccentBg (dark red) → uFgPrimary (light glow)
+            // Range spans the full circle diameter in UV Y
+            float gradT = (uv.y - (sunCenterUV.y - sunRadiusY)) / (sunRadiusY * 2.0);
+            gradT = clamp(gradT, 0.0, 1.0);
+            vec3 sunColor = mix(uAccentBg, uFgPrimary, gradT);
 
-        // Sun slats (skipped in low quality mode)
-        // Exact transcription of original canvas logic (all values in UV Y, Y-down):
-        //   slatY = horizonY - sunRadius*0.8 + sunRadius*0.2 + i*sunRadius*0.15
-        //         = horizonY - sunRadius*0.6 + i*sunRadius*0.15
-        //   slatH = sunRadius * 0.05 * (i + 1)
-        if (!uLowQuality) {
+            // Sun slats
+            // Exact transcription of original canvas logic (all values in UV Y, Y-down):
+            //   slatY = horizonY - sunRadius*0.8 + sunRadius*0.2 + i*sunRadius*0.15
+            //         = horizonY - sunRadius*0.6 + i*sunRadius*0.15
+            //   slatH = sunRadius * 0.05 * (i + 1)
             float slatAlpha = 0.0;
             for (int i = 0; i < 5; i++) {
                 float fi = float(i);
@@ -141,9 +145,9 @@ void main() {
                 slatAlpha = max(slatAlpha, inside);
             }
             sunColor = mix(sunColor, uBgColor, slatAlpha);
-        }
 
-        color = mix(color, sunColor, sunAlpha);
+            color = mix(color, sunColor, sunAlpha);
+        }
     }
 
     // ------------------------------------------------------------------------
@@ -159,7 +163,7 @@ void main() {
 
     if (barIdx < uBarCount) {
         float amp = freqBar(barIdx);
-        float barHeight = amp * 0.3; // max 30% of screen height
+        float barHeight = amp * uBarHeightScale;
 
         // Bar inner width (2px gap subtracted)
         float barLeft = centerX + float(barIdx) * barWidth;
@@ -176,8 +180,8 @@ void main() {
                 color = mix(color, uFgPrimary, 0.5);
             }
 
-            // Reflection (below horizon, half height, lower opacity) — skipped in low quality
-            if (!uLowQuality) {
+            // Reflection (below horizon, half height, lower opacity)
+            if (uShowReflections) {
                 float reflHeight = barHeight * 0.5;
                 if (uv.y >= horizonY && uv.y < horizonY + reflHeight) {
                     // rgba(205,205,205, 0.20)

@@ -14,8 +14,8 @@
     let width: number;
     let height: number;
 
-    // Visualizer settings
-    const BAR_COUNT = $derived(settings.visualizer.lowQualityMode ? 32 : 64);
+    // Visualizer settings (reactive — read in the render loop each frame)
+    const BAR_COUNT = $derived(settings.visualizer.barCount);
 
     // -------------------------------------------------------------------------
     // WebGL helpers
@@ -114,7 +114,11 @@
         const uResolution = gl.getUniformLocation(program, "uResolution");
         const uTime = gl.getUniformLocation(program, "uTime");
         const uBarCount = gl.getUniformLocation(program, "uBarCount");
-        const uLowQuality = gl.getUniformLocation(program, "uLowQuality");
+        const uShowGrid = gl.getUniformLocation(program, "uShowGrid");
+        const uShowReflections = gl.getUniformLocation(program, "uShowReflections");
+        const uShowSun = gl.getUniformLocation(program, "uShowSun");
+        const uBarHeightScale = gl.getUniformLocation(program, "uBarHeightScale");
+        const uGridSpeed = gl.getUniformLocation(program, "uGridSpeed");
         const uBgColor = gl.getUniformLocation(program, "uBgColor");
         const uAccentBg = gl.getUniformLocation(program, "uAccentBg");
         const uAccentFg = gl.getUniformLocation(program, "uAccentFg");
@@ -188,6 +192,11 @@
             gl.uniform2f(uResolution, width, height);
             gl.uniform1f(uTime, performance.now() / 1000);
             gl.uniform1i(uBarCount, BAR_COUNT);
+            gl.uniform1i(uShowGrid, settings.visualizer.showGrid ? 1 : 0);
+            gl.uniform1i(uShowReflections, settings.visualizer.showReflections ? 1 : 0);
+            gl.uniform1i(uShowSun, settings.visualizer.showSun ? 1 : 0);
+            gl.uniform1f(uBarHeightScale, settings.visualizer.barHeightScale);
+            gl.uniform1f(uGridSpeed, settings.visualizer.gridSpeed);
             gl.uniform3fv(uBgColor, bgColor);
             gl.uniform3fv(uAccentBg, accentBg);
             gl.uniform3fv(uAccentFg, accentFg);
@@ -217,7 +226,7 @@
 </script>
 
 {#if settings.visualizer.enabled}
-    <div class="visualizer-container" class:dimmed>
+    <div class="visualizer-container" class:dimmed style="--visualizer-opacity: {settings.visualizer.opacity}">
         <canvas bind:this={canvas}></canvas>
     </div>
 {/if}
@@ -231,13 +240,13 @@
         height: 100vh;
         z-index: -1;
         pointer-events: none;
-        opacity: 0.6; /* Default opacity */
+        opacity: var(--visualizer-opacity, 0.6);
         overflow: hidden;
         transition: opacity 0.5s ease-in-out;
     }
 
     .visualizer-container.dimmed {
-        opacity: 0.15;
+        opacity: calc(var(--visualizer-opacity, 0.6) * 0.25);
     }
 
     canvas {

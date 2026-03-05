@@ -3,7 +3,13 @@ import { browser } from "$app/environment";
 class VisualizerSettings {
     #parent: SettingsStore;
     #enabled = $state(true);
-    #lowQualityMode = $state(false);
+    #barCount = $state<16 | 32 | 64 | 128>(64);
+    #barHeightScale = $state(0.3);
+    #showGrid = $state(true);
+    #showReflections = $state(true);
+    #showSun = $state(true);
+    #opacity = $state(0.6);
+    #gridSpeed = $state(1.0);
 
     constructor(parent: SettingsStore) {
         this.#parent = parent;
@@ -18,12 +24,66 @@ class VisualizerSettings {
         this.#parent.save();
     }
 
-    get lowQualityMode() {
-        return this.#lowQualityMode;
+    get barCount() {
+        return this.#barCount;
     }
 
-    set lowQualityMode(value: boolean) {
-        this.#lowQualityMode = value;
+    set barCount(value: 16 | 32 | 64 | 128) {
+        this.#barCount = value;
+        this.#parent.save();
+    }
+
+    get barHeightScale() {
+        return this.#barHeightScale;
+    }
+
+    set barHeightScale(value: number) {
+        this.#barHeightScale = value;
+        this.#parent.save();
+    }
+
+    get showGrid() {
+        return this.#showGrid;
+    }
+
+    set showGrid(value: boolean) {
+        this.#showGrid = value;
+        this.#parent.save();
+    }
+
+    get showReflections() {
+        return this.#showReflections;
+    }
+
+    set showReflections(value: boolean) {
+        this.#showReflections = value;
+        this.#parent.save();
+    }
+
+    get showSun() {
+        return this.#showSun;
+    }
+
+    set showSun(value: boolean) {
+        this.#showSun = value;
+        this.#parent.save();
+    }
+
+    get opacity() {
+        return this.#opacity;
+    }
+
+    set opacity(value: number) {
+        this.#opacity = value;
+        this.#parent.save();
+    }
+
+    get gridSpeed() {
+        return this.#gridSpeed;
+    }
+
+    set gridSpeed(value: number) {
+        this.#gridSpeed = value;
         this.#parent.save();
     }
 }
@@ -80,8 +140,22 @@ class SettingsStore {
                 try {
                     const parsed = JSON.parse(stored);
                     if (parsed.visualizer) {
-                        this.visualizer.enabled = parsed.visualizer.enabled;
-                        this.visualizer.lowQualityMode = parsed.visualizer.lowQualityMode;
+                        if (parsed.visualizer.enabled !== undefined)
+                            this.visualizer.enabled = parsed.visualizer.enabled;
+                        if (parsed.visualizer.barCount !== undefined)
+                            this.visualizer.barCount = parsed.visualizer.barCount;
+                        if (parsed.visualizer.barHeightScale !== undefined)
+                            this.visualizer.barHeightScale = parsed.visualizer.barHeightScale;
+                        if (parsed.visualizer.showGrid !== undefined)
+                            this.visualizer.showGrid = parsed.visualizer.showGrid;
+                        if (parsed.visualizer.showReflections !== undefined)
+                            this.visualizer.showReflections = parsed.visualizer.showReflections;
+                        if (parsed.visualizer.showSun !== undefined)
+                            this.visualizer.showSun = parsed.visualizer.showSun;
+                        if (parsed.visualizer.opacity !== undefined)
+                            this.visualizer.opacity = parsed.visualizer.opacity;
+                        if (parsed.visualizer.gridSpeed !== undefined)
+                            this.visualizer.gridSpeed = parsed.visualizer.gridSpeed;
                     }
                     if (parsed.stream) {
                         this.stream.volume = parsed.stream.volume;
@@ -104,7 +178,13 @@ class SettingsStore {
                 JSON.stringify({
                     visualizer: {
                         enabled: this.visualizer.enabled,
-                        lowQualityMode: this.visualizer.lowQualityMode,
+                        barCount: this.visualizer.barCount,
+                        barHeightScale: this.visualizer.barHeightScale,
+                        showGrid: this.visualizer.showGrid,
+                        showReflections: this.visualizer.showReflections,
+                        showSun: this.visualizer.showSun,
+                        opacity: this.visualizer.opacity,
+                        gridSpeed: this.visualizer.gridSpeed,
                     },
                     stream: {
                         volume: this.stream.volume,
