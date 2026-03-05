@@ -29,11 +29,8 @@
 
         switch (e.key) {
             case "Escape":
-                if (ui.misc.isHelpOpen) {
-                    ui.misc.toggleHelp();
-                } else {
-                    ui.sidebar.close();
-                }
+                if (ui.misc.isHelpOpen) ui.misc.toggleHelp();
+                if (ui.sidebar.isOpen) ui.sidebar.close();
                 break;
             case "?":
                 ui.misc.toggleHelp();
