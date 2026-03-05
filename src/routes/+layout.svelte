@@ -2,11 +2,14 @@
     import Footer from "$lib/components/layout/Footer.svelte";
     import Header from "$lib/components/layout/Header.svelte";
     import Sidebar from "$lib/components/layout/Sidebar.svelte";
+    import KeybindingsHelp from "$lib/components/KeybindingsHelp.svelte";
     import * as ui from "$lib/stores/ui";
+    import { settings } from "$lib/stores/settings.svelte";
     import { fade } from "svelte/transition";
     import { lanyard } from "$lib/stores/lanyard.svelte";
     import { onMount } from "svelte";
     import { page } from "$app/state";
+    import { goto } from "$app/navigation";
     import { stream, metadata, STATIONS } from "$lib/stores/nightride";
     import "../app.css";
 
@@ -15,24 +18,44 @@
 
     stream.initEffects();
 
+    const VOLUME_STEP = 0.05;
+
     function handleKeydown(e: KeyboardEvent) {
         const target = e.target as HTMLElement;
         if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable) {
             return;
         }
 
-        switch (e.key.toLowerCase()) {
+        switch (e.key) {
+            case "Escape":
+                if (ui.misc.isHelpOpen) {
+                    ui.misc.toggleHelp();
+                } else {
+                    ui.sidebar.close();
+                }
+                break;
+            case "?":
+                ui.misc.toggleHelp();
+                break;
+            case " ":
+                e.preventDefault();
+                stream.togglePlay();
+                break;
             case "z":
                 ui.misc.toggleZenMode();
                 break;
             case "m":
                 stream.toggleMute();
                 break;
-            case "h":
-                stream.togglePlay();
-                break;
             case "s":
                 ui.sidebar.toggle();
+                break;
+            case "+":
+            case "=":
+                settings.stream.volume = Math.min(1, settings.stream.volume + VOLUME_STEP);
+                break;
+            case "-":
+                settings.stream.volume = Math.max(0, settings.stream.volume - VOLUME_STEP);
                 break;
             case "n": {
                 const idx = STATIONS.findIndex((s) => s.id === stream.currentStation.id);
@@ -44,6 +67,17 @@
                 stream.setStation(STATIONS[(idx - 1 + STATIONS.length) % STATIONS.length]);
                 break;
             }
+            case "g":
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                break;
+            case "G":
+                window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+                break;
+            case "b":
+                if (page.url.pathname.startsWith("/blog/") && page.url.pathname !== "/blog/") {
+                    goto("/blog/");
+                }
+                break;
         }
     }
 
@@ -62,6 +96,8 @@
 <Header />
 
 <Sidebar />
+
+<KeybindingsHelp />
 
 <svelte:window onkeydown={handleKeydown} />
 
