@@ -11,6 +11,33 @@ class VisualizerSettings {
     #opacity = $state(0.6);
     #gridSpeed = $state(1.0);
 
+    toJSON() {
+        return {
+            enabled: this.#enabled,
+            barCount: this.#barCount,
+            barHeightScale: this.#barHeightScale,
+            showGrid: this.#showGrid,
+            showReflections: this.#showReflections,
+            showSun: this.#showSun,
+            opacity: this.#opacity,
+            gridSpeed: this.#gridSpeed,
+        };
+    }
+
+    fromJSON(data: Record<string, unknown>) {
+        if (typeof data.enabled === "boolean") this.#enabled = data.enabled;
+
+        if (data.barCount === 16 || data.barCount === 32 || data.barCount === 64 || data.barCount === 128)
+            this.#barCount = data.barCount;
+
+        if (typeof data.barHeightScale === "number") this.#barHeightScale = data.barHeightScale;
+        if (typeof data.showGrid === "boolean") this.#showGrid = data.showGrid;
+        if (typeof data.showReflections === "boolean") this.#showReflections = data.showReflections;
+        if (typeof data.showSun === "boolean") this.#showSun = data.showSun;
+        if (typeof data.opacity === "number") this.#opacity = data.opacity;
+        if (typeof data.gridSpeed === "number") this.#gridSpeed = data.gridSpeed;
+    }
+
     constructor(parent: SettingsStore) {
         this.#parent = parent;
     }
@@ -94,6 +121,20 @@ class StreamSettings {
     #format = $state<"mp3" | "hls">("mp3");
     #lastStationId = $state("nightride");
 
+    toJSON() {
+        return {
+            volume: this.#volume,
+            format: this.#format,
+            lastStationId: this.#lastStationId,
+        };
+    }
+
+    fromJSON(data: Record<string, unknown>) {
+        if (typeof data.volume === "number") this.#volume = data.volume;
+        if (data.format === "mp3" || data.format === "hls") this.#format = data.format;
+        if (typeof data.lastStationId === "string") this.#lastStationId = data.lastStationId;
+    }
+
     constructor(parent: SettingsStore) {
         this.#parent = parent;
     }
@@ -139,31 +180,8 @@ export class SettingsStore {
             if (stored) {
                 try {
                     const parsed = JSON.parse(stored);
-                    if (parsed.visualizer) {
-                        if (parsed.visualizer.enabled !== undefined)
-                            this.visualizer.enabled = parsed.visualizer.enabled;
-                        if (parsed.visualizer.barCount !== undefined)
-                            this.visualizer.barCount = parsed.visualizer.barCount;
-                        if (parsed.visualizer.barHeightScale !== undefined)
-                            this.visualizer.barHeightScale = parsed.visualizer.barHeightScale;
-                        if (parsed.visualizer.showGrid !== undefined)
-                            this.visualizer.showGrid = parsed.visualizer.showGrid;
-                        if (parsed.visualizer.showReflections !== undefined)
-                            this.visualizer.showReflections = parsed.visualizer.showReflections;
-                        if (parsed.visualizer.showSun !== undefined)
-                            this.visualizer.showSun = parsed.visualizer.showSun;
-                        if (parsed.visualizer.opacity !== undefined)
-                            this.visualizer.opacity = parsed.visualizer.opacity;
-                        if (parsed.visualizer.gridSpeed !== undefined)
-                            this.visualizer.gridSpeed = parsed.visualizer.gridSpeed;
-                    }
-                    if (parsed.stream) {
-                        this.stream.volume = parsed.stream.volume;
-                        this.stream.format = parsed.stream.format;
-                        if (parsed.stream.lastStationId) {
-                            this.stream.lastStationId = parsed.stream.lastStationId;
-                        }
-                    }
+                    if (parsed.visualizer) this.visualizer.fromJSON(parsed.visualizer);
+                    if (parsed.stream) this.stream.fromJSON(parsed.stream);
                 } catch (e) {
                     console.error("Failed to parse settings", e);
                 }
@@ -176,21 +194,8 @@ export class SettingsStore {
             localStorage.setItem(
                 "settings",
                 JSON.stringify({
-                    visualizer: {
-                        enabled: this.visualizer.enabled,
-                        barCount: this.visualizer.barCount,
-                        barHeightScale: this.visualizer.barHeightScale,
-                        showGrid: this.visualizer.showGrid,
-                        showReflections: this.visualizer.showReflections,
-                        showSun: this.visualizer.showSun,
-                        opacity: this.visualizer.opacity,
-                        gridSpeed: this.visualizer.gridSpeed,
-                    },
-                    stream: {
-                        volume: this.stream.volume,
-                        format: this.stream.format,
-                        lastStationId: this.stream.lastStationId,
-                    },
+                    visualizer: this.visualizer.toJSON(),
+                    stream: this.stream.toJSON(),
                 }),
             );
         }
