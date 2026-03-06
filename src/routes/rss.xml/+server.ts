@@ -2,7 +2,10 @@ import * as config from "$lib/data/site";
 import type { ServerLoadEvent } from "@sveltejs/kit";
 import { resolve } from "$app/paths";
 import { create } from "xmlbuilder2";
-import { getAllPosts } from "$lib/utils";
+import { getAllPosts } from "$lib/utils/post";
+import { ResultAsync } from "neverthrow";
+import type { AppError } from "$lib/errors";
+import { appErrorMessage } from "$lib/errors";
 
 import rehypeStringify from "rehype-stringify";
 import remarkGfm from "remark-gfm";
@@ -20,48 +23,62 @@ export async function GET({}: ServerLoadEvent) {
         "Content-Type": "application/xml",
     };
 
-    return new Response(await generateXml(), { headers });
+    const result = await generateXml();
+
+    if (result.isErr()) {
+        console.error("RSS feed generation failed:", appErrorMessage(result.error), result.error);
+        return new Response("Failed to generate RSS feed", { status: 500 });
+    }
+
+    return new Response(result.value, { headers });
 }
 
-async function getHtmlForPost(
+function getHtmlForPost(
     postPath: string,
     leadImageFilename?: string,
     leadImageCaption?: string,
-): Promise<string> {
-    const postMarkdownWithFrontmatter = await readFile(`src/lib/data/posts/${postPath}.md`, "utf-8");
-    const postMarkdown = postMarkdownWithFrontmatter.split("---").slice(2).join("---").trim();
+): ResultAsync<string, AppError> {
+    return ResultAsync.fromPromise(
+        readFile(`src/lib/data/posts/${postPath}.md`, "utf-8").then(async (postMarkdownWithFrontmatter) => {
+            const postMarkdown = postMarkdownWithFrontmatter.split("---").slice(2).join("---").trim();
 
-    const processedMarkdown = await unified()
-        .use(remarkParse)
-        .use(remarkRehype)
-        .use(rehypeStringify)
-        .use(remarkGfm)
-        .process(postMarkdown);
+            const processedMarkdown = await unified()
+                .use(remarkParse)
+                .use(remarkRehype)
+                .use(rehypeStringify)
+                .use(remarkGfm)
+                .process(postMarkdown);
 
-    const postHtml = processedMarkdown.toString().replaceAll("&#x3C;", "&amp;lt;");
+            const postHtml = processedMarkdown.toString().replaceAll("&#x3C;", "&amp;lt;");
 
-    const postDom = new JSDOM();
-    postDom.window.document.body.innerHTML = postHtml;
+            const postDom = new JSDOM();
+            postDom.window.document.body.innerHTML = postHtml;
 
-    inlineFootnotes(postDom);
+            inlineFootnotes(postDom);
 
-    if (leadImageFilename) {
-        const leadImage = postDom.window.document.createElement("img");
-        // @ts-ignore - resolve is typed for routes but works for assets too
-        leadImage.src = resolve(leadImageFilename);
-        if (leadImageCaption) {
-            const caption = postDom.window.document.createElement("caption");
-            caption.textContent = leadImageCaption;
-            postDom.window.document.body.prepend(caption);
-        }
-    }
+            if (leadImageFilename) {
+                const leadImage = postDom.window.document.createElement("img");
+                // @ts-ignore - resolve is typed for routes but works for assets too
+                leadImage.src = resolve(leadImageFilename);
+                if (leadImageCaption) {
+                    const caption = postDom.window.document.createElement("caption");
+                    caption.textContent = leadImageCaption;
+                    postDom.window.document.body.prepend(caption);
+                }
+            }
 
-    return postDom.window.document.body.innerHTML;
+            return postDom.window.document.body.innerHTML;
+        }),
+        (cause): AppError => ({ type: "POST_LOAD_ERROR", path: postPath, cause }),
+    );
 }
 
 // prettier-ignore
-async function generateXml(): Promise<string> {
-    const posts = await getAllPosts();
+async function generateXml() {
+    const postsResult = await getAllPosts();
+    if (postsResult.isErr()) return postsResult;
+
+    const posts = postsResult.value;
     const rssUrl = `${config.url}/rss.xml`;
     const root = create({ version: "1.0", encoding: "utf-8" })
         .ele("feed", { xmlns: "http://www.w3.org/2005/Atom" })
@@ -76,11 +93,15 @@ async function generateXml(): Promise<string> {
             .up()
             .ele("subtitle").txt(config.desc).up();
 
-    for await (const post of posts) {
+    for (const post of posts) {
         if (!post.metadata.published) continue;
+
+        const htmlResult = await getHtmlForPost(post.postPath, post.metadata.image, post.metadata.caption);
+        if (htmlResult.isErr()) return htmlResult;
+
         const pubDate = post.metadata.date;
         const postUrl = `${config.url}/blog/${post.postPath}`;
-        const postHtml = await getHtmlForPost(post.postPath, post.metadata.image, post.metadata.caption);
+        const postHtml = htmlResult.value;
         const summary = post.metadata.desc;
 
         root.ele("entry")
@@ -93,7 +114,7 @@ async function generateXml(): Promise<string> {
             .up();
     }
 
-    return root.end();
+    return postsResult.map(() => root.end());
 }
 
 function inlineFootnotes(dom: JSDOM): void {

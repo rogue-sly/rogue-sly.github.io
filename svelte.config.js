@@ -3,7 +3,7 @@ import { createHighlighter } from "shiki";
 import adapter from "@sveltejs/adapter-static";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import rehypeSlug from "rehype-slug";
-import rehypeTocExtract from "./src/lib/rehype-toc-extract.js";
+import rehypeTocExtract from "./src/lib/utils/rehype/toc-extract.js";
 
 /** @type {import('shiki').BundledTheme} */
 const theme = "kanagawa-dragon";

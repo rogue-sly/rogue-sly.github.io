@@ -1,5 +1,6 @@
+import { formatDate } from "$lib/utils/date";
+import { createHeadings } from "$lib/utils/post/toc";
 import { describe, it, expect } from "vitest";
-import { formatDate, createHeadings } from "$lib/utils";
 
 describe("formatDate", () => {
     it("formats a standard ISO date string", () => {

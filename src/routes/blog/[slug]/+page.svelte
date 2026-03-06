@@ -1,6 +1,7 @@
 <script lang="ts">
-    import { formatDate, createHeadings, type TocStateItem } from "$lib/utils";
     import SEO from "$lib/components/SEO.svelte";
+    import { formatDate } from "$lib/utils/date";
+    import { createHeadings, type TocStateItem } from "$lib/utils/post/toc";
     import type { PageData } from "./$types";
 
     let { data }: { data: PageData } = $props();

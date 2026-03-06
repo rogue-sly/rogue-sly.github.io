@@ -1,5 +1,7 @@
 import { browser } from "$app/environment";
+import { Result } from "neverthrow";
 import type { Activity, DiscordUser, Spotify } from "$lib/types";
+import type { AppError } from "$lib/errors";
 
 export type LanyardData = {
     kv: Record<string, string>;
@@ -18,6 +20,12 @@ type LanyardMessage = {
     t?: "INIT_STATE" | "PRESENCE_UPDATE";
     d: any;
 };
+
+/** Parse a raw WebSocket message string into a LanyardMessage. */
+const parseLanyardMessage = Result.fromThrowable(
+    (raw: string): LanyardMessage => JSON.parse(raw),
+    (cause): AppError => ({ type: "PARSE_ERROR", context: "Lanyard WebSocket", cause }),
+);
 
 // Op Codes
 const OP = {
@@ -58,12 +66,14 @@ class LanyardConnection {
         };
 
         this.socket.onmessage = (event) => {
-            try {
-                const data: LanyardMessage = JSON.parse(event.data);
-                this.handleMessage(data);
-            } catch (e) {
-                console.error("Failed to parse Lanyard message:", e);
+            const result = parseLanyardMessage(event.data);
+
+            if (result.isErr()) {
+                console.error("Failed to parse Lanyard message:", result.error);
+                return;
             }
+
+            this.handleMessage(result.value);
         };
 
         this.socket.onclose = () => {

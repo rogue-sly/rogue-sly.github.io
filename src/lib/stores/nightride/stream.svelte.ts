@@ -1,6 +1,8 @@
 import Hls from "hls.js";
+import { ResultAsync } from "neverthrow";
 import { settings } from "../settings.svelte";
 import type { Station } from "$lib/types";
+import type { AppError } from "$lib/errors";
 
 export const STATIONS: Station[] = [
     {
@@ -292,25 +294,32 @@ export class StreamStore {
         if (this.isPlaying) {
             this.element.pause();
         } else {
-            try {
-                if (this.hls) {
-                    this.hls.startLoad();
-                    if (this.hls.liveSyncPosition && Number.isFinite(this.hls.liveSyncPosition)) {
-                        this.element.currentTime = this.hls.liveSyncPosition;
-                    }
+            if (this.hls) {
+                this.hls.startLoad();
+                if (this.hls.liveSyncPosition && Number.isFinite(this.hls.liveSyncPosition)) {
+                    this.element.currentTime = this.hls.liveSyncPosition;
                 }
+            }
 
-                this.playPromise = this.element.play();
-                await this.playPromise;
-            } catch (e: any) {
+            this.playPromise = this.element.play();
+
+            const result = await ResultAsync.fromPromise(
+                this.playPromise,
+                (cause): AppError => ({
+                    type: "STREAM_ERROR",
+                    message: cause instanceof DOMException ? cause.name : String(cause),
+                }),
+            );
+
+            this.playPromise = undefined;
+
+            if (result.isErr()) {
                 // Ignore AbortError as it's common when toggling quickly
-                if (e.name !== "AbortError") {
-                    console.error("Audio playback failed:", e);
+                if (result.error.type === "STREAM_ERROR" && result.error.message !== "AbortError") {
+                    console.error("Audio playback failed:", result.error);
                     this.statusText = "ERR: INTERFERENCE";
                     this.hls?.stopLoad();
                 }
-            } finally {
-                this.playPromise = undefined;
             }
         }
     }
