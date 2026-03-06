@@ -126,7 +126,7 @@ class StreamSettings {
     }
 }
 
-class SettingsStore {
+export class SettingsStore {
     visualizer: VisualizerSettings;
     stream: StreamSettings;
 

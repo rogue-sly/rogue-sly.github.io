@@ -1,6 +1,6 @@
 import Hls from "hls.js";
 import { ResultAsync } from "neverthrow";
-import { settings } from "../settings.svelte";
+import { SettingsStore } from "../settings.svelte";
 import type { Station } from "$lib/types";
 import type { AppError } from "$lib/errors";
 
@@ -52,6 +52,7 @@ export const STATIONS: Station[] = [
 // Global Audio state
 export class StreamStore {
     private _element: HTMLAudioElement | undefined = $state();
+    private settings: SettingsStore;
 
     get element() {
         return this._element;
@@ -68,14 +69,16 @@ export class StreamStore {
     isMuted = $state(false);
     statusText = $state("SYSTEM_OFFLINE");
     signalStrength = $state(0);
-    currentStation: Station = $state(STATIONS.find((s) => s.id === settings.stream.lastStationId) ?? STATIONS[0]);
+    currentStation: Station = $state(
+        STATIONS.find((s) => s.id === this.settings.stream.lastStationId) ?? STATIONS[0],
+    );
 
     get currentUrl() {
-        return settings.stream.format === "hls" ? this.currentStation.hls : this.currentStation.mp3;
+        return this.settings.stream.format === "hls" ? this.currentStation.hls : this.currentStation.mp3;
     }
 
     get useHls() {
-        return settings.stream.format === "hls";
+        return this.settings.stream.format === "hls";
     }
 
     private visualizerInterval: number | undefined;
@@ -84,7 +87,9 @@ export class StreamStore {
     analyser: AnalyserNode | undefined;
     source: MediaElementAudioSourceNode | undefined;
 
-    constructor() {}
+    constructor(settings: SettingsStore) {
+        this.settings = settings;
+    }
 
     /**
      * Initializes reactive effects. Must be called within a Svelte effect scope
@@ -94,13 +99,13 @@ export class StreamStore {
         // Reactively update element volume when settings change
         $effect(() => {
             if (this._element) {
-                this._element.volume = settings.stream.volume;
+                this._element.volume = this.settings.stream.volume;
             }
         });
 
         // Reactively reload stream when format changes
         $effect(() => {
-            const _format = settings.stream.format;
+            const _format = this.settings.stream.format;
             if (this._element) {
                 const wasPlaying = this.isPlaying;
                 if (wasPlaying) {
@@ -118,7 +123,7 @@ export class StreamStore {
     setElement(el: HTMLAudioElement) {
         this._element = el;
         if (this._element) {
-            this._element.volume = settings.stream.volume;
+            this._element.volume = this.settings.stream.volume;
             this._element.muted = this.isMuted;
 
             this._element.addEventListener("play", () => {
@@ -267,7 +272,7 @@ export class StreamStore {
         }
 
         this.currentStation = station;
-        settings.stream.lastStationId = station.id;
+        this.settings.stream.lastStationId = station.id;
         this.statusText = "SWITCHING...";
 
         // Ensure HLS is cleaned up before creating a new one
@@ -347,5 +352,3 @@ export class StreamStore {
         this.signalStrength = Math.random();
     }
 }
-
-export const stream = new StreamStore();
