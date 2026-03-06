@@ -63,9 +63,8 @@ export class StreamStore {
     isMuted = $state(false);
     statusText = $state("SYSTEM_OFFLINE");
     signalStrength = $state(0);
-    currentStation: Station = $state(
-        STATIONS.find((s) => s.id === this.settings.stream.lastStationId) ?? STATIONS[0],
-    );
+    // Safe default; overridden in constructor after this.settings is assigned.
+    currentStation: Station = $state(STATIONS[0]);
 
     get element() {
         return this._element;
@@ -82,9 +81,7 @@ export class StreamStore {
     }
 
     private get currentUrl() {
-        return this.settings.stream.format === "hls"
-            ? this.currentStation.hls
-            : this.currentStation.mp3;
+        return this.settings.stream.format === "hls" ? this.currentStation.hls : this.currentStation.mp3;
     }
 
     private get useHls() {
@@ -95,6 +92,8 @@ export class StreamStore {
         this.settings = settings;
         this.hlsManager = new HlsManager((text) => (this.statusText = text));
         this.audioCtxManager = new AudioContextManager();
+        // Resolve last-used station now that this.settings is available.
+        this.currentStation = STATIONS.find((s) => s.id === settings.stream.lastStationId) ?? STATIONS[0];
     }
 
     /**
@@ -226,10 +225,7 @@ export class StreamStore {
 
     private startSignalAnimation() {
         this.stopSignalAnimation();
-        this.visualizerInterval = setInterval(
-            () => this.updateSignalStrength(),
-            100,
-        ) as unknown as number;
+        this.visualizerInterval = setInterval(() => this.updateSignalStrength(), 100) as unknown as number;
     }
 
     private stopSignalAnimation() {

@@ -17,7 +17,8 @@ export class AudioContextManager {
         if (this.source) return; // already initialised
 
         const AudioContextCtor =
-            window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+            window.AudioContext ??
+            (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
 
         this.audioCtx = new AudioContextCtor();
         this.analyser = this.audioCtx.createAnalyser();

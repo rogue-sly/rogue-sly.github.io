@@ -175,7 +175,7 @@
     .content :global(h4),
     .content :global(h5),
     .content :global(h6) {
-        scroll-margin-top: calc(var(--header-height) + 1.0rem);
+        scroll-margin-top: calc(var(--header-height) + 1rem);
     }
 
     .post-date {
