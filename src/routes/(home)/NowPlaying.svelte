@@ -9,14 +9,14 @@
             return "playing";
         }
 
-        if (metadata.currentTrack === null) {
+        if (metadata.tracks[stream.currentStation.id] === null) {
             return "loading";
         }
 
         return "empty";
     });
 
-    let track = $derived(metadata.currentTrack);
+    let track = $derived(metadata.tracks[stream.currentStation.id]);
 </script>
 
 <div class="wrapper">

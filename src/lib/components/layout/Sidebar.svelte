@@ -145,19 +145,20 @@
                             <span class="value" data-text={stream.statusText}>{stream.statusText}</span>
                         </div>
 
-                        {#if metadata.currentTrack}
-                            {@const trackLength = metadata.currentTrack.title.length}
-                            {@const artistLength = metadata.currentTrack.artist.length}
+                        {#if metadata.tracks[stream.currentStation.id]}
+                            {@const currentTrack = metadata.tracks[stream.currentStation.id]}
+                            {@const trackLength = currentTrack.title.length}
+                            {@const artistLength = currentTrack.artist.length}
                             <div class="display" transition:slide>
                                 <span class="label">TRACK:</span>
                                 <span class="value" class:marquee={trackLength > 20}>
-                                    {metadata.currentTrack.title}
+                                    {currentTrack.title}
                                 </span>
                             </div>
                             <div class="display" transition:slide>
                                 <span class="label">ARTIST:</span>
                                 <span class="value" class:marquee={artistLength > 20}>
-                                    {metadata.currentTrack.artist}
+                                    {currentTrack.artist}
                                 </span>
                             </div>
                         {/if}

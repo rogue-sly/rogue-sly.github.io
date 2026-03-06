@@ -1,5 +1,4 @@
 import { browser } from "$app/environment";
-import { stream } from "./stream.svelte";
 import { Result } from "neverthrow";
 import type { NightrideTrack } from "$lib/types";
 import type { AppError } from "$lib/errors";
@@ -15,7 +14,6 @@ class MetadataStore {
     public tracks = $state<Record<string, NightrideTrack>>({});
     /** Typed error state — null when no error is present. */
     public error = $state<AppError | null>(null);
-    public currentTrack = $derived(this.tracks[stream.currentStation.id] || null);
 
     public connect() {
         if (!browser) return;
