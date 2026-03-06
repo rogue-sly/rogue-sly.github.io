@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { misc } from "$lib/stores/ui";
+    import { help } from "$lib/stores/ui/help.svelte";
     import { keybindings } from "$lib/stores/ui/keybindings.svelte";
     import { fade, scale } from "svelte/transition";
 
@@ -22,21 +22,21 @@
     });
 </script>
 
-{#if misc.isHelpOpen}
+{#if help.isOpen}
     <div
         class="backdrop"
         transition:fade={{ duration: 200 }}
-        onclick={() => misc.toggleHelp()}
+        onclick={() => help.toggle()}
         role="button"
         tabindex="-1"
         aria-label="Close help"
-        onkeydown={(e) => e.key === "Escape" && misc.toggleHelp()}
+        onkeydown={(e) => e.key === "Escape" && help.toggle()}
     ></div>
 
     <div class="overlay" transition:scale={{ duration: 200, start: 0.96 }}>
         <div class="overlay-header">
             <span class="title">KEYBINDINGS</span>
-            <button class="close-btn" onclick={() => misc.toggleHelp()} aria-label="Close">
+            <button class="close-btn" onclick={() => help.toggle()} aria-label="Close">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"

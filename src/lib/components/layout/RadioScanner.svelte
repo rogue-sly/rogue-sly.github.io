@@ -10,11 +10,11 @@
     }
 </script>
 
-<div class="scanner-section" class:collapsed={ui.misc.isScannerCollapsed}>
+<div class="scanner-section" class:collapsed={ui.scanner.isCollapsed}>
     <button
         class="scanner-header"
-        onclick={() => ui.misc.toggleScanner()}
-        aria-expanded={!ui.misc.isScannerCollapsed}
+        onclick={() => ui.scanner.toggle()}
+        aria-expanded={!ui.scanner.isCollapsed}
         aria-controls="scanner-content"
     >
         <span class="label">RADIO_UNIT</span>
@@ -22,11 +22,11 @@
             {#if stream.isPlaying}
                 <span class="status-active">RECEIVING</span>
             {/if}
-            <span class="toggle-icon">{ui.misc.isScannerCollapsed ? "[+]" : "[-]"}</span>
+            <span class="toggle-icon">{ui.scanner.isCollapsed ? "[+]" : "[-]"}</span>
         </div>
     </button>
 
-    {#if !ui.misc.isScannerCollapsed}
+    {#if !ui.scanner.isCollapsed}
         <div id="scanner-content" transition:slide={{ duration: 300 }}>
             <div class="scanner-inner">
                 <div class="display">
@@ -56,9 +56,7 @@
                     {#each Array(8)}
                         <div
                             class="bar"
-                            style:height={stream.isPlaying && !stream.isMuted
-                                ? Math.random() * 100 + "%"
-                                : "2px"}
+                            style:height={stream.isPlaying && !stream.isMuted ? Math.random() * 100 + "%" : "2px"}
                             style:opacity={stream.isPlaying && !stream.isMuted ? 1 : 0.3}
                         ></div>
                     {/each}

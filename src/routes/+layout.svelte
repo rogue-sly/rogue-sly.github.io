@@ -60,8 +60,8 @@
         class:blog={pathname === "/blog/"}
         class:centered={pathname === "/" || pathname === "/contact/"}
         class:padded={pathname.startsWith("/whoami") || pathname.startsWith("/blog") || pathname === "/settings/"}
-        style:opacity={ui.misc.isZenMode ? 0 : 1}
-        style:pointer-events={ui.misc.isZenMode ? "none" : "auto"}
+        style:opacity={ui.zenMode.isZenMode ? 0 : 1}
+        style:pointer-events={ui.zenMode.isZenMode ? "none" : "auto"}
     >
         {@render children()}
     </main>

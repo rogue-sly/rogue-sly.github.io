@@ -1,4 +1,6 @@
 import { sidebar } from "./sidebar.svelte";
-import { misc } from "./misc.svelte";
+import { zenMode } from "./zen-mode.svelte";
+import { scanner } from "./scanner.svelte";
+import { help } from "./help.svelte";
 
-export { sidebar, misc };
+export { sidebar, zenMode, scanner, help };

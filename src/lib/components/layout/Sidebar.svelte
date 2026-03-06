@@ -26,12 +26,12 @@
             <div class="header-actions">
                 <div>
                     <button
-                        onclick={() => ui.misc.toggleZenMode()}
+                        onclick={() => ui.zenMode.toggle()}
                         class="btn-settings"
-                        class:active={ui.misc.isZenMode}
-                        aria-label={ui.misc.isZenMode ? "Show Content" : "Hide Content"}
+                        class:active={ui.zenMode.isZenMode}
+                        aria-label={ui.zenMode.isZenMode ? "Show Content" : "Hide Content"}
                     >
-                        {#if ui.misc.isZenMode}
+                        {#if ui.zenMode.isZenMode}
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="18"

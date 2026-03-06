@@ -5,12 +5,9 @@
     import FRAG_SRC from "./visualizer.frag.glsl?raw";
     import VERT_SRC from "./visualizer.vert.glsl?raw";
 
-    let {
-        analyser,
-        isPlaying,
-    }: { analyser: AnalyserNode | undefined; isPlaying: boolean } = $props();
+    let { analyser, isPlaying }: { analyser: AnalyserNode | undefined; isPlaying: boolean } = $props();
 
-    let dimmed = $derived(!ui.misc.isZenMode && page.url.pathname !== "/");
+    let dimmed = $derived(!ui.zenMode.isZenMode && page.url.pathname !== "/");
 
     let canvas = $state<HTMLCanvasElement>();
     let gl: WebGLRenderingContext | null = null;

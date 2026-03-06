@@ -3,7 +3,8 @@ import { page } from "$app/state";
 import { settings } from "$lib/stores/settings.svelte";
 import { stream, STATIONS } from "$lib/stores/nightride";
 import { sidebar } from "./sidebar.svelte";
-import { misc } from "./misc.svelte";
+import { zenMode } from "./zen-mode.svelte";
+import { help } from "./help.svelte";
 
 export type Keybinding = {
     /** The exact `e.key` value to match. */
@@ -116,7 +117,7 @@ export const keybindings: Keybinding[] = [
         keys: ["Z"],
         description: "Toggle zen mode",
         group: "UI",
-        action: () => misc.toggleZenMode(),
+        action: () => zenMode.toggle(),
     },
     {
         key: "Escape",
@@ -124,7 +125,7 @@ export const keybindings: Keybinding[] = [
         description: "Close sidebar / help",
         group: "UI",
         action: () => {
-            if (misc.isHelpOpen) misc.toggleHelp();
+            if (help.isOpen) help.toggle();
             if (sidebar.isOpen) sidebar.close();
         },
     },
@@ -133,6 +134,6 @@ export const keybindings: Keybinding[] = [
         keys: ["?"],
         description: "Show this help",
         group: "UI",
-        action: () => misc.toggleHelp(),
+        action: () => help.toggle(),
     },
 ];
