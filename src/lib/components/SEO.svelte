@@ -6,7 +6,7 @@
         title = siteTitle,
         desc = siteDesc,
         type = "website",
-        image = "/images/gideon-graves.png",
+        image = "/images/gideon.webp",
         imageAlt = "Rogue87 Avatar",
         publishedTime,
         articleBody,

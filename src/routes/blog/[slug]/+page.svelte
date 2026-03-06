@@ -13,7 +13,7 @@
     title={data.meta.title}
     desc={data.meta.desc}
     type="article"
-    image={data.meta.image || "/images/gideon-graves.png"}
+    image={data.meta.image || "/images/gideon.webp"}
     imageAlt={data.meta.title}
     publishedTime={data.meta.date}
 />
