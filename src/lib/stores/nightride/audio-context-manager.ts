@@ -3,7 +3,7 @@
  * Pure class — no Svelte runes.
  */
 export class AudioContextManager {
-    audioCtx: AudioContext | undefined;
+    private audioCtx: AudioContext | undefined;
     analyser: AnalyserNode | undefined;
     private source: MediaElementAudioSourceNode | undefined;
 

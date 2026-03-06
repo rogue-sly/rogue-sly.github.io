@@ -1,15 +1,19 @@
 <script lang="ts">
-    import * as ui from "$lib/stores/ui";
+    import { sidebar, zenMode } from "$lib/stores/ui";
     import RadioScanner from "./RadioScanner.svelte";
     import { fade, fly } from "svelte/transition";
     import { page } from "$app/state";
 
+    // HACK: For some reason, it calls window.close() instead of sidebar.close()
+    // `close` is a reserved name on `window`, so calling sidebar.close() inline
+    // as onclick={sidebar.close} would invoke window.close() instead. This wrapper
+    // avoids that name collision.
     function close() {
-        ui.sidebar.isOpen = false;
+        sidebar.close();
     }
 </script>
 
-{#if ui.sidebar.isOpen}
+{#if sidebar.isOpen}
     <!-- Backdrop -->
     <div
         class="backdrop"
@@ -26,12 +30,12 @@
             <div class="header-actions">
                 <div>
                     <button
-                        onclick={() => ui.zenMode.toggle()}
+                        onclick={() => zenMode.toggle()}
                         class="btn-settings"
-                        class:active={ui.zenMode.isZenMode}
-                        aria-label={ui.zenMode.isZenMode ? "Show Content" : "Hide Content"}
+                        class:active={zenMode.isZenMode}
+                        aria-label={zenMode.isZenMode ? "Show Content" : "Hide Content"}
                     >
-                        {#if ui.zenMode.isZenMode}
+                        {#if zenMode.isZenMode}
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="18"

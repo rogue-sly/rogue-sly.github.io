@@ -1,5 +1,4 @@
 import * as config from "$lib/data/site";
-import type { ServerLoadEvent } from "@sveltejs/kit";
 import { resolve } from "$app/paths";
 import { create } from "xmlbuilder2";
 import { getAllPosts } from "$lib/utils/post";
@@ -17,7 +16,7 @@ import { unified } from "unified";
 
 export const prerender = true;
 
-export async function GET({}: ServerLoadEvent) {
+export async function GET() {
     const headers = {
         "Cache-Control": "max-age=0, s-maxage=3600",
         "Content-Type": "application/xml",
@@ -44,9 +43,9 @@ function getHtmlForPost(
 
             const processedMarkdown = await unified()
                 .use(remarkParse)
+                .use(remarkGfm)
                 .use(remarkRehype)
                 .use(rehypeStringify)
-                .use(remarkGfm)
                 .process(postMarkdown);
 
             const postHtml = processedMarkdown.toString().replaceAll("&#x3C;", "&amp;lt;");

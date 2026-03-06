@@ -127,7 +127,6 @@
         padding: 0.5rem;
         border-radius: var(--radius);
         cursor: pointer;
-        border-radius: var(--radius);
 
         &::picker(select) {
             background-color: var(--bg-primary-dark);

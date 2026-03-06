@@ -1,13 +1,5 @@
 <script lang="ts">
-    type Project = {
-        title: string;
-        description: string;
-        techStack: string[];
-        links: {
-            repo?: string;
-            live?: string;
-        };
-    };
+    import type { Project } from "$lib/types";
 
     let { title, description, techStack, links }: Project = $props();
 </script>

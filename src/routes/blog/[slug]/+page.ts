@@ -1,13 +1,13 @@
 import { error } from "@sveltejs/kit";
 import { ResultAsync } from "neverthrow";
 
-import type { ServerLoadEvent } from "@sveltejs/kit";
+import type { PageLoadEvent } from "./$types";
 import type { PostMetadata } from "$lib/types";
 import type { AppError } from "$lib/errors";
 
 type Post = { default: () => any; metadata: PostMetadata };
 
-export async function load({ params }: ServerLoadEvent) {
+export async function load({ params }: PageLoadEvent) {
     const slug = params.slug ?? "";
     const result = await ResultAsync.fromPromise(
         import(`../../../lib/data/posts/${slug}.md`) as Promise<Post>,

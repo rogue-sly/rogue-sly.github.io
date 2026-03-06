@@ -15,10 +15,6 @@ export class HlsManager {
         this.onStatus = onStatus;
     }
 
-    get instance() {
-        return this.hls;
-    }
-
     /**
      * Attach an audio element and initialise HLS for the given URL.
      * If `useHls` is false the element src is set directly (MP3 mode).

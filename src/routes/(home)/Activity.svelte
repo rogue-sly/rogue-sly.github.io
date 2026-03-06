@@ -8,14 +8,9 @@
     function getImageUrl(appId: string | undefined, assetId: string | undefined) {
         if (!assetId || !appId) return null;
 
-        switch (true) {
-            case assetId.startsWith("mp:"):
-                return `https://media.discordapp.net/${assetId.replace("mp:", "")}`;
-            case assetId.startsWith("spotify:"):
-                return `https://i.scdn.co/image/${assetId.replace("spotify:", "")}`;
-            default:
-                return `https://cdn.discordapp.com/app-assets/${appId}/${assetId}.png`;
-        }
+        if (assetId.startsWith("mp:")) return `https://media.discordapp.net/${assetId.replace("mp:", "")}`;
+        if (assetId.startsWith("spotify:")) return `https://i.scdn.co/image/${assetId.replace("spotify:", "")}`;
+        return `https://cdn.discordapp.com/app-assets/${appId}/${assetId}.png`;
     }
 
     let carouselContainer: HTMLElement | undefined = $state();
@@ -130,7 +125,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 115px;
+        height: var(--activity-height);
         width: 100%;
         gap: 0.5rem;
     }

@@ -93,3 +93,13 @@ export type NightrideTrack = {
     album: string;
     comment: string;
 };
+
+export type Project = {
+    title: string;
+    description: string;
+    techStack: string[];
+    links: {
+        repo?: string;
+        live?: string;
+    };
+};

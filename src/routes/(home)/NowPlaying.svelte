@@ -9,7 +9,7 @@
             return "playing";
         }
 
-        if (metadata.tracks[stream.currentStation.id] === null) {
+        if (metadata.tracks[stream.currentStation.id] === undefined) {
             return "loading";
         }
 

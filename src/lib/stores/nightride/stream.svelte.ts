@@ -1,7 +1,7 @@
 import { ResultAsync } from "neverthrow";
 import { HlsManager } from "./hls-manager";
 import { AudioContextManager } from "./audio-context-manager";
-import { SettingsStore } from "../settings.svelte";
+import { SettingsStore } from "$lib/stores/settings.svelte";
 import type { Station } from "$lib/types";
 import type { AppError } from "$lib/errors";
 
@@ -55,7 +55,7 @@ export class StreamStore {
     private settings: SettingsStore;
     private hlsManager: HlsManager;
     private audioCtxManager: AudioContextManager;
-    private visualizerInterval: number | undefined;
+    private visualizerInterval: ReturnType<typeof setInterval> | undefined;
     private playPromise: Promise<void> | undefined;
 
     // --- Public reactive state ---
@@ -110,6 +110,7 @@ export class StreamStore {
 
         // Reload stream when format changes
         $effect(() => {
+            // Explicitly read format to register it as a reactive dependency for this effect.
             const _format = this.settings.stream.format;
             if (this._element) {
                 const wasPlaying = this.isPlaying;
@@ -225,7 +226,7 @@ export class StreamStore {
 
     private startSignalAnimation() {
         this.stopSignalAnimation();
-        this.visualizerInterval = setInterval(() => this.updateSignalStrength(), 100) as unknown as number;
+        this.visualizerInterval = setInterval(() => this.updateSignalStrength(), 100);
     }
 
     private stopSignalAnimation() {
