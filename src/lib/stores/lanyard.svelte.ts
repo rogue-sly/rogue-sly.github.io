@@ -1,19 +1,7 @@
 import { browser } from "$app/environment";
 import { Result } from "neverthrow";
-import type { Activity, DiscordUser, Spotify } from "$lib/types";
+import type { DiscordPresence } from "$lib/types";
 import type { AppError } from "$lib/errors";
-
-export type LanyardData = {
-    kv: Record<string, string>;
-    spotify: Spotify | null;
-    discord_user: DiscordUser;
-    activities: Activity[];
-    discord_status: "online" | "idle" | "dnd" | "offline";
-    active_on_discord_web: boolean;
-    active_on_discord_desktop: boolean;
-    active_on_discord_mobile: boolean;
-    listening_to_spotify: boolean;
-};
 
 type LanyardMessage = {
     op: number;
@@ -41,7 +29,7 @@ class LanyardConnection {
     private readonly userId: string;
     private reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
 
-    public presence = $state<LanyardData | null>(null);
+    public presence = $state<DiscordPresence | null>(null);
 
     constructor(userId: string) {
         this.userId = userId;
