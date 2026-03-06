@@ -98,7 +98,7 @@
 <Sidebar />
 <KeybindingsHelp />
 
-<Visualizer />
+<Visualizer analyser={stream.analyser} isPlaying={stream.isPlaying} />
 <audio bind:this={audioElement} crossorigin="anonymous"></audio>
 
 {#key page.url.pathname}

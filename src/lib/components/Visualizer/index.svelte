@@ -2,9 +2,15 @@
     import * as ui from "$lib/stores/ui";
     import { page } from "$app/state";
     import { settings } from "$lib/stores/settings.svelte";
-    import { stream } from "$lib/stores/nightride";
     import FRAG_SRC from "./visualizer.frag.glsl?raw";
     import VERT_SRC from "./visualizer.vert.glsl?raw";
+
+    type ComponentProps = {
+        analyser: AnalyserNode | undefined;
+        isPlaying: boolean;
+    };
+
+    let { analyser, isPlaying }: ComponentProps = $props();
 
     let dimmed = $derived(!ui.misc.isZenMode && page.url.pathname !== "/");
 
@@ -134,7 +140,7 @@
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-        const bufferLength = stream.analyser?.frequencyBinCount ?? 256;
+        const bufferLength = analyser?.frequencyBinCount ?? 256;
         const dataArray = new Uint8Array(bufferLength);
 
         // Resize observer
@@ -159,8 +165,8 @@
             if (!gl || !width || !height) return;
 
             // Audio data
-            if (stream.isPlaying && stream.analyser) {
-                stream.analyser.getByteFrequencyData(dataArray);
+            if (isPlaying && analyser) {
+                analyser.getByteFrequencyData(dataArray);
             } else {
                 for (let i = 0; i < bufferLength; i++) {
                     dataArray[i] = Math.max(0, dataArray[i] - 2);
