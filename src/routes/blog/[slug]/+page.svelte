@@ -169,6 +169,15 @@
         margin-top: 16px;
     }
 
+    .content :global(h1),
+    .content :global(h2),
+    .content :global(h3),
+    .content :global(h4),
+    .content :global(h5),
+    .content :global(h6) {
+        scroll-margin-top: calc(var(--header-height) + 1.0rem);
+    }
+
     .post-date {
         text-align: end;
         color: var(--fg-primary-dark);
