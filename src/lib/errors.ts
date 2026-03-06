@@ -9,6 +9,7 @@ export type AppError =
     | { type: "NETWORK_ERROR"; url: string; status?: number }
     | { type: "PARSE_ERROR"; context: string; cause: unknown }
     | { type: "STREAM_ERROR"; message: string }
+    | { type: "WEBGL_ERROR"; message: string }
     | { type: "CONNECTION_FAILED"; cause?: unknown }
     | { type: "SIGNAL_LOST" };
 
@@ -32,6 +33,8 @@ export function appErrorMessage(err: AppError): string {
             return `Parse error in ${err.context}`;
         case "STREAM_ERROR":
             return `Stream error: ${err.message}`;
+        case "WEBGL_ERROR":
+            return `WebGL error: ${err.message}`;
         case "CONNECTION_FAILED":
             return `Connection failed`;
         case "SIGNAL_LOST":
