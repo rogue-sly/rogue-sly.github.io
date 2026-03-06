@@ -5,12 +5,10 @@
     import FRAG_SRC from "./visualizer.frag.glsl?raw";
     import VERT_SRC from "./visualizer.vert.glsl?raw";
 
-    type ComponentProps = {
-        analyser: AnalyserNode | undefined;
-        isPlaying: boolean;
-    };
-
-    let { analyser, isPlaying }: ComponentProps = $props();
+    let {
+        analyser,
+        isPlaying,
+    }: { analyser: AnalyserNode | undefined; isPlaying: boolean } = $props();
 
     let dimmed = $derived(!ui.misc.isZenMode && page.url.pathname !== "/");
 

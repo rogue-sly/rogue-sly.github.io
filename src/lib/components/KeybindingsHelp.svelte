@@ -1,47 +1,25 @@
 <script lang="ts">
     import { misc } from "$lib/stores/ui";
+    import { keybindings } from "$lib/stores/ui/keybindings.svelte";
     import { fade, scale } from "svelte/transition";
 
-    type Keybinding = {
-        keys: string[];
-        description: string;
-    };
+    type Group = { label: string; keys: string[][]; descriptions: string[] };
 
-    type Group = {
-        label: string;
-        bindings: Keybinding[];
-    };
-
-    const groups: Group[] = [
-        {
-            label: "Playback",
-            bindings: [
-                { keys: ["Space"], description: "Play / Pause" },
-                { keys: ["M"], description: "Mute / Unmute" },
-                { keys: ["+"], description: "Volume up" },
-                { keys: ["-"], description: "Volume down" },
-                { keys: ["N"], description: "Next station" },
-                { keys: ["P"], description: "Previous station" },
-            ],
-        },
-        {
-            label: "Navigation",
-            bindings: [
-                { keys: ["G"], description: "Scroll to top" },
-                { keys: ["Shift", "G"], description: "Scroll to bottom" },
-                { keys: ["B"], description: "Back to blog" },
-            ],
-        },
-        {
-            label: "UI",
-            bindings: [
-                { keys: ["S"], description: "Toggle sidebar" },
-                { keys: ["Z"], description: "Toggle zen mode" },
-                { keys: ["Esc"], description: "Close sidebar" },
-                { keys: ["?"], description: "Show this help" },
-            ],
-        },
-    ];
+    // Derive display groups from the registry, deduplicating by description
+    // (e.g. "+" and "=" both map to "Volume up" — show only once).
+    const groups = $derived.by(() => {
+        const map = new Map<string, Group>();
+        for (const kb of keybindings) {
+            const group = map.get(kb.group) ?? { label: kb.group, keys: [], descriptions: [] };
+            // Skip duplicate descriptions within the same group (e.g. "=" alias)
+            if (!group.descriptions.includes(kb.description)) {
+                group.keys.push(kb.keys);
+                group.descriptions.push(kb.description);
+                map.set(kb.group, group);
+            }
+        }
+        return [...map.values()];
+    });
 </script>
 
 {#if misc.isHelpOpen}
@@ -80,17 +58,17 @@
                 <div class="group">
                     <span class="group-label">{group.label}</span>
                     <div class="bindings">
-                        {#each group.bindings as binding}
+                        {#each group.keys as keys, i}
                             <div class="binding">
                                 <div class="keys">
-                                    {#each binding.keys as key, i}
+                                    {#each keys as key, j}
                                         <kbd>{key}</kbd>
-                                        {#if i < binding.keys.length - 1}
+                                        {#if j < keys.length - 1}
                                             <span class="plus">+</span>
                                         {/if}
                                     {/each}
                                 </div>
-                                <span class="desc">{binding.description}</span>
+                                <span class="desc">{group.descriptions[i]}</span>
                             </div>
                         {/each}
                     </div>
