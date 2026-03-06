@@ -1,5 +1,6 @@
-import Hls from "hls.js";
 import { ResultAsync } from "neverthrow";
+import { HlsManager } from "./hls-manager";
+import { AudioContextManager } from "./audio-context-manager";
 import { SettingsStore } from "../settings.svelte";
 import type { Station } from "$lib/types";
 import type { AppError } from "$lib/errors";
@@ -49,22 +50,15 @@ export const STATIONS: Station[] = [
     },
 ] as const;
 
-// Global Audio state
 export class StreamStore {
     private _element: HTMLAudioElement | undefined = $state();
     private settings: SettingsStore;
+    private hlsManager: HlsManager;
+    private audioCtxManager: AudioContextManager;
+    private visualizerInterval: number | undefined;
+    private playPromise: Promise<void> | undefined;
 
-    get element() {
-        return this._element;
-    }
-
-    set element(el: HTMLAudioElement | undefined) {
-        this._element = el;
-        if (el) {
-            this.setElement(el);
-        }
-    }
-    hls: Hls | undefined;
+    // --- Public reactive state ---
     isPlaying = $state(false);
     isMuted = $state(false);
     statusText = $state("SYSTEM_OFFLINE");
@@ -73,191 +67,93 @@ export class StreamStore {
         STATIONS.find((s) => s.id === this.settings.stream.lastStationId) ?? STATIONS[0],
     );
 
-    get currentUrl() {
-        return this.settings.stream.format === "hls" ? this.currentStation.hls : this.currentStation.mp3;
+    get element() {
+        return this._element;
     }
 
-    get useHls() {
+    set element(el: HTMLAudioElement | undefined) {
+        this._element = el;
+        if (el) this.attachElement(el);
+    }
+
+    /** Exposes the analyser node for the Visualizer component. */
+    get analyser() {
+        return this.audioCtxManager.analyser;
+    }
+
+    private get currentUrl() {
+        return this.settings.stream.format === "hls"
+            ? this.currentStation.hls
+            : this.currentStation.mp3;
+    }
+
+    private get useHls() {
         return this.settings.stream.format === "hls";
     }
 
-    private visualizerInterval: number | undefined;
-
-    audioCtx: AudioContext | undefined;
-    analyser: AnalyserNode | undefined;
-    source: MediaElementAudioSourceNode | undefined;
-
     constructor(settings: SettingsStore) {
         this.settings = settings;
+        this.hlsManager = new HlsManager((text) => (this.statusText = text));
+        this.audioCtxManager = new AudioContextManager();
     }
 
     /**
-     * Initializes reactive effects. Must be called within a Svelte effect scope
-     * (e.g., in a component's script tag or onMount).
+     * Initialises reactive effects. Must be called inside a Svelte component
+     * script (e.g. +layout.svelte) so the effects are tracked properly.
      */
     initEffects() {
-        // Reactively update element volume when settings change
+        // Sync volume to settings reactively
         $effect(() => {
             if (this._element) {
                 this._element.volume = this.settings.stream.volume;
             }
         });
 
-        // Reactively reload stream when format changes
+        // Reload stream when format changes
         $effect(() => {
             const _format = this.settings.stream.format;
             if (this._element) {
                 const wasPlaying = this.isPlaying;
+                if (wasPlaying) this._element.pause();
+                this.hlsManager.init(this._element, this.currentUrl, this.useHls);
                 if (wasPlaying) {
-                    this._element.pause();
-                }
-                this.initHls();
-                if (wasPlaying) {
-                    this.hls?.startLoad();
+                    this.hlsManager.startLoad();
                     this._element.play().catch(() => {});
                 }
             }
         });
     }
 
-    setElement(el: HTMLAudioElement) {
-        this._element = el;
-        if (this._element) {
-            this._element.volume = this.settings.stream.volume;
-            this._element.muted = this.isMuted;
+    private attachElement(el: HTMLAudioElement) {
+        el.volume = this.settings.stream.volume;
+        el.muted = this.isMuted;
 
-            this._element.addEventListener("play", () => {
-                this.isPlaying = true;
-                this.statusText = "RECEIVING...";
-                this.startEffects();
-                if (this.hls) this.hls.startLoad();
-            });
+        el.addEventListener("play", () => {
+            this.isPlaying = true;
+            this.statusText = "RECEIVING...";
+            this.startSignalAnimation();
+            this.hlsManager.startLoad();
+        });
 
-            this._element.addEventListener("playing", () => {
-                this.statusText = "RECEIVING...";
-                this.initAudioContext();
-                if (this.audioCtx?.state === "suspended") {
-                    this.audioCtx.resume();
-                }
-            });
+        el.addEventListener("playing", () => {
+            this.statusText = "RECEIVING...";
+            this.audioCtxManager.init(el);
+            this.audioCtxManager.resume();
+        });
 
-            this._element.addEventListener("pause", () => {
-                this.isPlaying = false;
-                this.statusText = "SIGNAL_LOST";
-                this.signalStrength = 0;
-                this.stopEffects();
-                if (this.hls) this.hls.stopLoad();
-            });
+        el.addEventListener("pause", () => {
+            this.isPlaying = false;
+            this.statusText = "SIGNAL_LOST";
+            this.signalStrength = 0;
+            this.stopSignalAnimation();
+            this.hlsManager.stopLoad();
+        });
 
-            this._element.addEventListener("waiting", () => {
-                this.statusText = "BUFFERING...";
-            });
+        el.addEventListener("waiting", () => {
+            this.statusText = "BUFFERING...";
+        });
 
-            this.initHls();
-        }
-    }
-
-    private initAudioContext() {
-        if (typeof window === "undefined" || typeof document === "undefined") return;
-
-        if (document.readyState !== "complete" && document.readyState !== "interactive") {
-            return;
-        }
-
-        if (!this.source && this._element) {
-            const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-            this.audioCtx = new AudioContext();
-
-            this.analyser = this.audioCtx.createAnalyser();
-            this.analyser.fftSize = 256;
-
-            this.source = this.audioCtx.createMediaElementSource(this._element);
-
-            // source -> analyzer -> destination
-            this.source.connect(this.analyser);
-            this.analyser.connect(this.audioCtx.destination);
-        }
-    }
-
-    private playPromise: Promise<void> | undefined;
-
-    private initHls() {
-        if (!this.element) return;
-
-        if (!this.useHls) {
-            if (this.hls) {
-                this.hls.destroy();
-                this.hls = undefined;
-            }
-            this.element.src = this.currentStation.mp3;
-            this.element.addEventListener("loadedmetadata", () => {
-                this.statusText = "SYSTEM_ONLINE";
-            });
-            return;
-        }
-
-        // Cleanup any existing instance
-        if (this.hls) {
-            this.hls.destroy();
-            this.hls = undefined;
-        }
-
-        if (Hls.isSupported()) {
-            this.hls = new Hls({
-                autoStartLoad: false,
-                enableWorker: false,
-                manifestLoadingMaxRetry: 5,
-                manifestLoadingRetryDelay: 1000,
-                fragLoadingMaxRetry: 5,
-                fragLoadingRetryDelay: 1000,
-                xhrSetup: (xhr) => {
-                    xhr.withCredentials = false;
-                },
-            });
-            this.hls.loadSource(this.currentUrl);
-            this.hls.attachMedia(this.element);
-
-            this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                this.statusText = "SYSTEM_ONLINE";
-                if (this.isPlaying && this.hls?.liveSyncPosition) {
-                    this.element!.currentTime = this.hls.liveSyncPosition;
-                }
-            });
-
-            this.hls.on(Hls.Events.ERROR, (_, data) => {
-                if (data.fatal) {
-                    switch (data.type) {
-                        case Hls.ErrorTypes.NETWORK_ERROR:
-                            this.statusText = "ERR: NETWORK";
-                            if (
-                                data.details === Hls.ErrorDetails.MANIFEST_LOAD_ERROR ||
-                                data.details === Hls.ErrorDetails.MANIFEST_LOAD_TIMEOUT
-                            ) {
-                                this.hls?.loadSource(this.currentUrl);
-                            } else {
-                                this.hls?.startLoad();
-                            }
-                            break;
-                        case Hls.ErrorTypes.MEDIA_ERROR:
-                            this.statusText = "ERR: MEDIA";
-                            this.hls?.recoverMediaError();
-                            if (this.isPlaying) {
-                                this.hls?.startLoad();
-                            }
-                            break;
-                        default:
-                            this.statusText = "ERR: FATAL";
-                            this.hls?.destroy();
-                            break;
-                    }
-                }
-            });
-        } else if (this.element.canPlayType("application/vnd.apple.mpegurl")) {
-            this.element.src = this.currentStation.hls;
-            this.element.addEventListener("loadedmetadata", () => {
-                this.statusText = "SYSTEM_ONLINE";
-            });
-        }
+        this.hlsManager.init(el, this.currentUrl, this.useHls);
     }
 
     async setStation(station: Station) {
@@ -265,9 +161,8 @@ export class StreamStore {
 
         const wasPlaying = this.isPlaying;
 
-        // Reset state immediately to prevent UI race conditions
         if (wasPlaying) {
-            this.element?.pause();
+            this._element?.pause();
             this.isPlaying = false;
         }
 
@@ -275,38 +170,33 @@ export class StreamStore {
         this.settings.stream.lastStationId = station.id;
         this.statusText = "SWITCHING...";
 
-        // Ensure HLS is cleaned up before creating a new one
-        if (this.hls) {
-            this.hls.stopLoad();
-            this.hls.detachMedia();
-            this.hls.destroy();
-            this.hls = undefined;
+        this.hlsManager.destroy();
+
+        if (this._element) {
+            this.hlsManager.init(this._element, this.currentUrl, this.useHls);
         }
 
-        this.initHls();
-
         if (wasPlaying) {
-            // Wait a tiny bit for the new HLS instance to be ready to attach
             await new Promise((resolve) => setTimeout(resolve, 50));
             await this.togglePlay();
         }
     }
 
     async togglePlay() {
-        if (!this.element) return;
-        if (this.playPromise) return; // Prevent overlapping play attempts
+        if (!this._element) return;
+        if (this.playPromise) return;
 
         if (this.isPlaying) {
-            this.element.pause();
+            this._element.pause();
         } else {
-            if (this.hls) {
-                this.hls.startLoad();
-                if (this.hls.liveSyncPosition && Number.isFinite(this.hls.liveSyncPosition)) {
-                    this.element.currentTime = this.hls.liveSyncPosition;
-                }
+            this.hlsManager.startLoad();
+
+            const livePos = this.hlsManager.liveSyncPosition;
+            if (livePos && Number.isFinite(livePos)) {
+                this._element.currentTime = livePos;
             }
 
-            this.playPromise = this.element.play();
+            this.playPromise = this._element.play();
 
             const result = await ResultAsync.fromPromise(
                 this.playPromise,
@@ -319,32 +209,34 @@ export class StreamStore {
             this.playPromise = undefined;
 
             if (result.isErr()) {
-                // Ignore AbortError as it's common when toggling quickly
                 if (result.error.type === "STREAM_ERROR" && result.error.message !== "AbortError") {
                     console.error("Audio playback failed:", result.error);
                     this.statusText = "ERR: INTERFERENCE";
-                    this.hls?.stopLoad();
+                    this.hlsManager.stopLoad();
                 }
             }
         }
     }
 
     toggleMute() {
-        if (!this.element) return;
+        if (!this._element) return;
         this.isMuted = !this.isMuted;
-        this.element.muted = this.isMuted;
+        this._element.muted = this.isMuted;
     }
 
-    private startEffects() {
-        this.stopEffects();
-        this.visualizerInterval = setInterval(() => this.updateVisualizer(), 100) as unknown as number;
+    private startSignalAnimation() {
+        this.stopSignalAnimation();
+        this.visualizerInterval = setInterval(
+            () => this.updateSignalStrength(),
+            100,
+        ) as unknown as number;
     }
 
-    private stopEffects() {
+    private stopSignalAnimation() {
         if (this.visualizerInterval) clearInterval(this.visualizerInterval);
     }
 
-    private updateVisualizer() {
+    private updateSignalStrength() {
         if (!this.isPlaying || this.isMuted) {
             this.signalStrength = 0;
             return;
