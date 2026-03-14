@@ -120,20 +120,17 @@ class VisualizerSettings {
 class StreamSettings {
     #parent: SettingsStore;
     #volume = $state(0.5);
-    #format = $state<"mp3" | "hls">("mp3");
     #lastStationId = $state("nightride");
 
     toJSON() {
         return {
             volume: this.#volume,
-            format: this.#format,
             lastStationId: this.#lastStationId,
         };
     }
 
     fromJSON(data: Record<string, unknown>) {
         if (typeof data.volume === "number") this.#volume = data.volume;
-        if (data.format === "mp3" || data.format === "hls") this.#format = data.format;
         if (typeof data.lastStationId === "string") this.#lastStationId = data.lastStationId;
     }
 
@@ -147,15 +144,6 @@ class StreamSettings {
 
     set volume(value: number) {
         this.#volume = value;
-        this.#parent.save();
-    }
-
-    get format() {
-        return this.#format;
-    }
-
-    set format(value: "mp3" | "hls") {
-        this.#format = value;
         this.#parent.save();
     }
 

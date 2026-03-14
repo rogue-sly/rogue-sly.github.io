@@ -83,7 +83,6 @@ export type Station = {
     id: string;
     name: string;
     mp3: string;
-    hls: string;
 };
 
 export type NightrideTrack = {

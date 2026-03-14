@@ -1,5 +1,4 @@
 import { ResultAsync } from "neverthrow";
-import { HlsManager } from "./hls-manager";
 import { AudioContextManager } from "./audio-context-manager";
 import { SettingsStore } from "$lib/stores/settings.svelte";
 import type { Station } from "$lib/types";
@@ -10,50 +9,42 @@ export const STATIONS: Station[] = [
         id: "nightride",
         name: "Nightride",
         mp3: "https://stream.nightride.fm/nightride.mp3",
-        hls: "https://stream.nightride.fm:8443/nightride/nightride.m3u8",
     },
     {
         id: "chillsynth",
         name: "Chillsynth",
         mp3: "https://stream.nightride.fm/chillsynth.mp3",
-        hls: "https://stream.nightride.fm:8443/chillsynth/chillsynth.m3u8",
     },
     {
         id: "datawave",
         name: "Datawave",
         mp3: "https://stream.nightride.fm/datawave.mp3",
-        hls: "https://stream.nightride.fm:8443/datawave/datawave.m3u8",
     },
     {
         id: "spacesynth",
         name: "Spacesynth",
         mp3: "https://stream.nightride.fm/spacesynth.mp3",
-        hls: "https://stream.nightride.fm:8443/spacesynth/spacesynth.m3u8",
     },
     {
         id: "darksynth",
         name: "Darksynth",
         mp3: "https://stream.nightride.fm/darksynth.mp3",
-        hls: "https://stream.nightride.fm:8443/darksynth/darksynth.m3u8",
     },
     {
         id: "horrorsynth",
         name: "Horrorsynth",
         mp3: "https://stream.nightride.fm/horrorsynth.mp3",
-        hls: "https://stream.nightride.fm:8443/horrorsynth/horrorsynth.m3u8",
     },
     {
         id: "ebsm",
         name: "EBSM",
         mp3: "https://stream.nightride.fm/ebsm.mp3",
-        hls: "https://stream.nightride.fm:8443/ebsm/ebsm.m3u8",
     },
 ] as const;
 
 export class StreamStore {
     private _element: HTMLAudioElement | undefined = $state();
     private settings: SettingsStore;
-    private hlsManager: HlsManager;
     private audioCtxManager: AudioContextManager;
     private visualizerInterval: ReturnType<typeof setInterval> | undefined;
     private playPromise: Promise<void> | undefined;
@@ -80,17 +71,8 @@ export class StreamStore {
         return this.audioCtxManager.analyser;
     }
 
-    private get currentUrl() {
-        return this.settings.stream.format === "hls" ? this.currentStation.hls : this.currentStation.mp3;
-    }
-
-    private get useHls() {
-        return this.settings.stream.format === "hls";
-    }
-
     constructor(settings: SettingsStore) {
         this.settings = settings;
-        this.hlsManager = new HlsManager((text) => (this.statusText = text));
         this.audioCtxManager = new AudioContextManager();
         // Resolve last-used station now that this.settings is available.
         this.currentStation = STATIONS.find((s) => s.id === settings.stream.lastStationId) ?? STATIONS[0];
@@ -107,21 +89,6 @@ export class StreamStore {
                 this._element.volume = this.settings.stream.volume;
             }
         });
-
-        // Reload stream when format changes
-        $effect(() => {
-            // Explicitly read format to register it as a reactive dependency for this effect.
-            const _format = this.settings.stream.format;
-            if (this._element) {
-                const wasPlaying = this.isPlaying;
-                if (wasPlaying) this._element.pause();
-                this.hlsManager.init(this._element, this.currentUrl, this.useHls);
-                if (wasPlaying) {
-                    this.hlsManager.startLoad();
-                    this._element.play().catch(() => {});
-                }
-            }
-        });
     }
 
     private attachElement(el: HTMLAudioElement) {
@@ -132,7 +99,6 @@ export class StreamStore {
             this.isPlaying = true;
             this.statusText = "RECEIVING...";
             this.startSignalAnimation();
-            this.hlsManager.startLoad();
         });
 
         el.addEventListener("playing", () => {
@@ -146,14 +112,17 @@ export class StreamStore {
             this.statusText = "SIGNAL_LOST";
             this.signalStrength = 0;
             this.stopSignalAnimation();
-            this.hlsManager.stopLoad();
         });
 
         el.addEventListener("waiting", () => {
             this.statusText = "BUFFERING...";
         });
 
-        this.hlsManager.init(el, this.currentUrl, this.useHls);
+        el.addEventListener("loadedmetadata", () => {
+            this.statusText = "SYSTEM_ONLINE";
+        });
+
+        el.src = this.currentStation.mp3;
     }
 
     async setStation(station: Station) {
@@ -170,10 +139,8 @@ export class StreamStore {
         this.settings.stream.lastStationId = station.id;
         this.statusText = "SWITCHING...";
 
-        this.hlsManager.destroy();
-
         if (this._element) {
-            this.hlsManager.init(this._element, this.currentUrl, this.useHls);
+            this._element.src = this.currentStation.mp3;
         }
 
         if (wasPlaying) {
@@ -189,13 +156,6 @@ export class StreamStore {
         if (this.isPlaying) {
             this._element.pause();
         } else {
-            this.hlsManager.startLoad();
-
-            const livePos = this.hlsManager.liveSyncPosition;
-            if (livePos && Number.isFinite(livePos)) {
-                this._element.currentTime = livePos;
-            }
-
             this.playPromise = this._element.play();
 
             const result = await ResultAsync.fromPromise(
@@ -212,7 +172,6 @@ export class StreamStore {
                 if (result.error.type === "STREAM_ERROR" && result.error.message !== "AbortError") {
                     console.error("Audio playback failed:", result.error);
                     this.statusText = "ERR: INTERFERENCE";
-                    this.hlsManager.stopLoad();
                 }
             }
         }
