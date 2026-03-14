@@ -9,7 +9,7 @@
     <a href={`/blog/${post.slug}`}>
         <div class="banner">
             {#if post.image}
-                <img src={post.image} alt="blog banner" />
+                <img src={post.image} alt="blog banner" width="800" height="450" />
             {/if}
         </div>
 

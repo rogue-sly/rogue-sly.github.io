@@ -37,7 +37,7 @@
             Here's some cool biker art!
         </p>
 
-        <img src="/images/biker.png" alt="biker pixel" />
+        <img src="/images/biker.png" alt="biker pixel" width="300" height="200" />
 
         <p>
             I made it using aseprite! even tho I like aseprite, I've been transitioning to pixelorama. why leave

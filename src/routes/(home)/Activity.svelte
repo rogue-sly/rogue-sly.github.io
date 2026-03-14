@@ -65,14 +65,14 @@
                     <div class="activity">
                         <div class="icon-wrapper">
                             {#if largeImage}
-                                <img src={largeImage} alt={activity.name} class="large-icon" />
+                                <img src={largeImage} alt={activity.name} class="large-icon" width="80" height="80" />
                             {:else}
                                 <div class="fallback-icon">
                                     {activity.name.substring(0, 2)}
                                 </div>
                             {/if}
                             {#if smallImage}
-                                <img src={smallImage} alt="status" class="small-icon" />
+                                <img src={smallImage} alt="status" class="small-icon" width="28" height="28" />
                             {/if}
                         </div>
                         <div class="info">

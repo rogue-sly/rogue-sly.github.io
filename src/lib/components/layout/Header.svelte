@@ -61,12 +61,12 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 1.5rem;
         position: relative;
     }
 
     .pfp img {
         width: 50px;
+        height: 50px;
         border-radius: var(--radius);
         border: 2px solid var(--fg-accent);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
