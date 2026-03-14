@@ -103,6 +103,10 @@ code {
     font-family: "JetBrains Mono", monospace;
 }
 
+code span {
+    font-family: inherit;
+}
+
 span,
 button,
 select {
