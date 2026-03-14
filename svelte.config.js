@@ -53,7 +53,7 @@ const config = {
             pages: "public",
             assets: "public",
             fallback: "404.html",
-            precompress: false,
+            precompress: true,
             strict: true,
         }),
     },
