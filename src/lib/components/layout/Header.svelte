@@ -1,13 +1,20 @@
 <script lang="ts">
     import * as ui from "$lib/stores/ui";
+
+    let imgSrc = $state("/images/gideon.webp");
 </script>
 
 <header>
     <div class="container">
         <div class="logo">
-            <div class="pfp">
-                <!-- svelte-ignore a11y_missing_attribute -->
-                <img src="/images/gideon-animated.webp" />
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <div
+                class="pfp"
+                role="presentation"
+                onmouseenter={() => (imgSrc = "/images/gideon-animated.webp")}
+                onmouseleave={() => (imgSrc = "/images/gideon.webp")}
+            >
+                <img src={imgSrc} alt="Rogue87 avatar" width="50" height="50" fetchpriority="high" />
             </div>
             <a href="/">Rogue87</a>
         </div>
