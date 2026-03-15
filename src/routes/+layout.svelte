@@ -6,7 +6,6 @@
     import * as ui from "$lib/stores/ui";
     import { keybindings } from "$lib/stores/ui/keybindings.svelte";
     import { fade } from "svelte/transition";
-    import { lanyard } from "$lib/stores/lanyard.svelte";
     import { onMount } from "svelte";
     import { page } from "$app/state";
     import { stream, metadata } from "$lib/stores/nightride";
