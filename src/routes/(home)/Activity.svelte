@@ -1,6 +1,12 @@
 <script lang="ts">
     import type { Activity } from "$lib/types";
     import { lanyard } from "$lib/stores/lanyard.svelte";
+    import { onMount } from "svelte";
+
+    onMount(() => {
+        lanyard.connect();
+        return () => lanyard.disconnect();
+    });
 
     let isLoading: boolean = $derived(lanyard.presence === null);
     let activities: Activity[] | undefined = $derived(lanyard.presence?.activities?.filter((a) => a.type !== 4));
@@ -65,7 +71,13 @@
                     <div class="activity">
                         <div class="icon-wrapper">
                             {#if largeImage}
-                                <img src={largeImage} alt={activity.name} class="large-icon" width="80" height="80" />
+                                <img
+                                    src={largeImage}
+                                    alt={activity.name}
+                                    class="large-icon"
+                                    width="80"
+                                    height="80"
+                                />
                             {:else}
                                 <div class="fallback-icon">
                                     {activity.name.substring(0, 2)}

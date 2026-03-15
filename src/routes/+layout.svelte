@@ -3,7 +3,6 @@
     import Header from "$lib/components/layout/Header.svelte";
     import KeybindingsHelp from "$lib/components/KeybindingsHelp.svelte";
     import Sidebar from "$lib/components/layout/Sidebar.svelte";
-    import Visualizer from "$lib/components/Visualizer/index.svelte";
     import * as ui from "$lib/stores/ui";
     import { keybindings } from "$lib/stores/ui/keybindings.svelte";
     import { fade } from "svelte/transition";
@@ -32,12 +31,10 @@
     }
 
     onMount(() => {
-        lanyard.connect();
         metadata.connect();
         if (audioElement) stream.element = audioElement;
 
         return () => {
-            lanyard.disconnect();
             metadata.disconnect();
         };
     });
@@ -50,7 +47,9 @@
 <Sidebar />
 <KeybindingsHelp />
 
-<Visualizer analyser={stream.analyser} isPlaying={stream.isPlaying} />
+{#await import("$lib/components/Visualizer/index.svelte") then { default: Visualizer }}
+    <Visualizer analyser={stream.analyser} isPlaying={stream.isPlaying} />
+{/await}
 <audio bind:this={audioElement} crossorigin="anonymous"></audio>
 
 {#key page.url.pathname}
