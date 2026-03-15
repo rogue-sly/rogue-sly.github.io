@@ -17,6 +17,22 @@
     let width: number;
     let height: number;
 
+    const cachedColors = $state({
+        bgColor: [0.063, 0.063, 0.071] as [number, number, number],
+        accentBg: [0.063, 0.063, 0.071] as [number, number, number],
+        accentFg: [0.063, 0.063, 0.071] as [number, number, number],
+        fgPrim: [0.063, 0.063, 0.071] as [number, number, number],
+    });
+
+    function updateCachedColors() {
+        if (!document) return;
+        const style = getComputedStyle(document.documentElement);
+        cachedColors.bgColor = parseCSSColor(style.getPropertyValue("--bg-primary-dark").trim() || "#101012");
+        cachedColors.accentBg = parseCSSColor(style.getPropertyValue("--bg-accent").trim() || "#4b0202");
+        cachedColors.accentFg = parseCSSColor(style.getPropertyValue("--fg-accent").trim() || "#675757");
+        cachedColors.fgPrim = parseCSSColor(style.getPropertyValue("--fg-primary").trim() || "#cdcdcd");
+    }
+
     // Visualizer settings (reactive — read in the render loop each frame)
     const BAR_COUNT = $derived(settings.visualizer.barCount);
 
@@ -158,9 +174,13 @@
                 canvas.width = width;
                 canvas.height = height;
                 gl.viewport(0, 0, width, height);
+                updateCachedColors();
             }
         });
         resizeObserver.observe(canvas.parentElement!);
+
+        // Initialize cached colors
+        updateCachedColors();
 
         gl.useProgram(program);
 
@@ -193,12 +213,8 @@
                 dataArray,
             );
 
-            // CSS variable colours (read every frame to react to theme changes)
-            const style = getComputedStyle(document.documentElement);
-            const bgColor = parseCSSColor(style.getPropertyValue("--bg-primary-dark").trim() || "#101012");
-            const accentBg = parseCSSColor(style.getPropertyValue("--bg-accent").trim() || "#4b0202");
-            const accentFg = parseCSSColor(style.getPropertyValue("--fg-accent").trim() || "#675757");
-            const fgPrim = parseCSSColor(style.getPropertyValue("--fg-primary").trim() || "#cdcdcd");
+            // Use cached theme colors
+            const { bgColor, accentBg, accentFg, fgPrim } = cachedColors;
 
             // Set uniforms
             gl.uniform2f(uResolution, width, height);
