@@ -10,24 +10,7 @@ const theme = "kanagawa-dragon";
 const highlighter = await createHighlighter({
     themes: [theme],
     /** @type {import('shiki').BundledLanguage[]} */
-    langs: [
-        "bash",
-        "c",
-        "c++",
-        "fish",
-        "html",
-        "java",
-        "javascript",
-        "json",
-        "lua",
-        "nix",
-        "rust",
-        "sh",
-        "svelte",
-        "toml",
-        "typescript",
-        "zsh",
-    ],
+    langs: ["bash", "json", "lua", "nix", "rust", "sh", "svelte", "toml", "typescript", "yaml"],
 });
 
 /** @type {import('mdsvex').MdsvexOptions} */
