@@ -11,13 +11,22 @@ const parseTrackData = Result.fromThrowable(
 
 class MetadataStore {
     private eventSource: EventSource | null = null;
+    private connectTimer: ReturnType<typeof setTimeout> | null = null;
     public tracks = $state<Record<string, NightrideTrack>>({});
-    /** Typed error state — null when no error is present. */
     public error = $state<AppError | null>(null);
 
-    public connect() {
+    public connect(delay: number = 0) {
         if (!browser) return;
         if (this.eventSource) return;
+
+        if (delay > 0) {
+            this.clearTimer();
+            this.connectTimer = setTimeout(() => {
+                this.connectTimer = null;
+                this.connect(0);
+            }, delay);
+            return;
+        }
 
         const connectResult = Result.fromThrowable(
             () => new EventSource("https://nightride.fm/meta"),
@@ -54,12 +63,20 @@ class MetadataStore {
 
             // EventSource usually auto-reconnects, but if it's a fatal error
             // we'll try again manually after a delay.
-            setTimeout(() => this.connect(), 5000);
+            this.connect(5000);
         };
     }
 
     public disconnect() {
+        this.clearTimer();
         this.cleanup();
+    }
+
+    private clearTimer() {
+        if (this.connectTimer) {
+            clearTimeout(this.connectTimer);
+            this.connectTimer = null;
+        }
     }
 
     private cleanup() {
