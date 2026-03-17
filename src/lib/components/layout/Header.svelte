@@ -1,26 +1,29 @@
 <script lang="ts">
     import * as ui from "$lib/stores/ui";
-
-    let imgSrc = $state("/images/gideon.webp");
 </script>
 
 <header>
     <div class="container">
         <div class="logo">
             <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <div
-                class="pfp"
-                role="presentation"
-                onmouseenter={() => (imgSrc = "/images/gideon-animated.webp")}
-                onmouseleave={() => (imgSrc = "/images/gideon.webp")}
-            >
-                <img src={imgSrc} alt="Rogue87 avatar" width="50" height="50" fetchpriority="high" />
+            <div class="pfp" role="presentation">
+                <img src="/images/gideon.webp" alt="Rogue87 Avatar" width="50" height="50" />
             </div>
             <a href="/">Rogue87</a>
         </div>
 
         <button class="menu-btn" onclick={() => ui.sidebar.toggle()} aria-label="Toggle Menu">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
                 <line x1="4" x2="20" y1="12" y2="12" />
                 <line x1="4" x2="20" y1="6" y2="6" />
                 <line x1="4" x2="20" y1="18" y2="18" />
