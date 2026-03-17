@@ -30,7 +30,7 @@
     }
 
     onMount(() => {
-        metadata.connect(3500);
+        metadata.connect();
         if (audioElement) stream.element = audioElement;
 
         return () => {
