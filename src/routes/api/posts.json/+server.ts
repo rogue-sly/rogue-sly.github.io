@@ -3,6 +3,7 @@ import { Result } from "neverthrow";
 import type { PostMetadata } from "$lib/types";
 import type { AppError } from "$lib/errors";
 import { appErrorMessage } from "$lib/errors";
+import { dev } from "$app/environment";
 
 export async function GET() {
     const result = getPosts();
@@ -29,7 +30,7 @@ function getPosts(): Result<PostMetadata[], AppError> {
                 if (file && typeof file === "object" && "metadata" in file && slug) {
                     const metadata = file.metadata as Omit<PostMetadata, "slug">;
                     const post = { ...metadata, slug } satisfies PostMetadata;
-                    if (post.published) posts.push(post);
+                    if (post.published || dev) posts.push(post);
                 }
             }
 
