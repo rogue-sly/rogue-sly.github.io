@@ -32,8 +32,6 @@
 
 /* NOTE Resets */
 * {
-    padding: 0;
-    margin: 0;
     box-sizing: border-box;
 }
 
@@ -47,6 +45,8 @@ html {
 body {
     color: var(--fg-primary);
     background-color: var(--bg-primary);
+    padding: 0;
+    margin: 0;
 }
 
 img {
@@ -80,12 +80,6 @@ a {
     &:hover {
         color: var(--fg-primary-light);
     }
-}
-
-li,
-ol {
-    list-style-position: inside;
-    margin-bottom: 0.5rem;
 }
 
 pre {
