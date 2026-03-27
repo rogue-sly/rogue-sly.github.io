@@ -10,7 +10,7 @@ published: true
   import Asciinema from "$lib/components/Asciinema.svelte"
 </script>
 
-# Why?
+## Why?
 
 First, I should say that mason.nvim really simplifies installing and managing tools; it covers a huge amount of packages. However, I've always been a fan of the Unix philosophy, "do one thing well," and I find that an editor plugin handling system-level package management is outside of its ideal scope.
 
