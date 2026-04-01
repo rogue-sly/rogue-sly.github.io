@@ -1,7 +1,9 @@
 <script lang="ts">
     import type { Activity } from "$lib/types";
-    import { lanyard } from "$lib/stores/lanyard.svelte";
+    import { LanyardConnection } from "$lib/stores/lanyard.svelte";
     import { onMount } from "svelte";
+
+    const lanyard = new LanyardConnection("369982847496355841");
 
     onMount(() => {
         lanyard.connect();

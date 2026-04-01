@@ -1,4 +1,3 @@
-import { browser } from "$app/environment";
 import { Result } from "neverthrow";
 import type { DiscordPresence } from "$lib/types";
 import type { AppError } from "$lib/errors";
@@ -23,7 +22,7 @@ const OP = {
     HEARTBEAT: 3,
 } as const;
 
-class LanyardConnection {
+export class LanyardConnection {
     private socket: WebSocket | null = null;
     private heartbeatInterval: ReturnType<typeof setInterval> | null = null;
     private readonly userId: string;
@@ -36,8 +35,6 @@ class LanyardConnection {
     }
 
     public connect() {
-        if (!browser) return;
-
         if (this.socket?.readyState === WebSocket.OPEN || this.socket?.readyState === WebSocket.CONNECTING) {
             return;
         }
@@ -125,5 +122,3 @@ class LanyardConnection {
         }
     }
 }
-
-export const lanyard = new LanyardConnection("369982847496355841");
