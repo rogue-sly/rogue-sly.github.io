@@ -46,5 +46,238 @@
     },
     "files": [
         "package"
-    ]
+    ],
+    "exports": {
+        "./package.json": "./package.json",
+        "./components/Asciinema.svelte": {
+            "types": "./package/components/Asciinema.svelte.d.ts",
+            "svelte": "./package/components/Asciinema.svelte",
+            "default": "./package/components/Asciinema.svelte"
+        },
+        "./components/KeybindingsHelp.svelte": {
+            "types": "./package/components/KeybindingsHelp.svelte.d.ts",
+            "svelte": "./package/components/KeybindingsHelp.svelte",
+            "default": "./package/components/KeybindingsHelp.svelte"
+        },
+        "./components/SEO.svelte": {
+            "types": "./package/components/SEO.svelte.d.ts",
+            "svelte": "./package/components/SEO.svelte",
+            "default": "./package/components/SEO.svelte"
+        },
+        "./components/Visualizer/index.svelte": {
+            "types": "./package/components/Visualizer/index.svelte.d.ts",
+            "svelte": "./package/components/Visualizer/index.svelte",
+            "default": "./package/components/Visualizer/index.svelte"
+        },
+        "./components/Visualizer/visualizer.frag.glsl": "./package/components/Visualizer/visualizer.frag.glsl",
+        "./components/Visualizer/visualizer.vert.glsl": "./package/components/Visualizer/visualizer.vert.glsl",
+        "./components/layout/Footer.svelte": {
+            "types": "./package/components/layout/Footer.svelte.d.ts",
+            "svelte": "./package/components/layout/Footer.svelte",
+            "default": "./package/components/layout/Footer.svelte"
+        },
+        "./components/layout/Header.svelte": {
+            "types": "./package/components/layout/Header.svelte.d.ts",
+            "svelte": "./package/components/layout/Header.svelte",
+            "default": "./package/components/layout/Header.svelte"
+        },
+        "./components/layout/RadioScanner.svelte": {
+            "types": "./package/components/layout/RadioScanner.svelte.d.ts",
+            "svelte": "./package/components/layout/RadioScanner.svelte",
+            "default": "./package/components/layout/RadioScanner.svelte"
+        },
+        "./components/layout/Sidebar.svelte": {
+            "types": "./package/components/layout/Sidebar.svelte.d.ts",
+            "svelte": "./package/components/layout/Sidebar.svelte",
+            "default": "./package/components/layout/Sidebar.svelte"
+        },
+        "./data/posts/alternatives-to-mason-nvim.svelte": {
+            "types": "./package/data/posts/alternatives-to-mason-nvim.svelte.d.ts",
+            "svelte": "./package/data/posts/alternatives-to-mason-nvim.svelte",
+            "default": "./package/data/posts/alternatives-to-mason-nvim.svelte"
+        },
+        "./data/posts/hello-cruel-world.svelte": {
+            "types": "./package/data/posts/hello-cruel-world.svelte.d.ts",
+            "svelte": "./package/data/posts/hello-cruel-world.svelte",
+            "default": "./package/data/posts/hello-cruel-world.svelte"
+        },
+        "./data/posts/post-modern-guide-on-piracy.svelte": {
+            "types": "./package/data/posts/post-modern-guide-on-piracy.svelte.d.ts",
+            "svelte": "./package/data/posts/post-modern-guide-on-piracy.svelte",
+            "default": "./package/data/posts/post-modern-guide-on-piracy.svelte"
+        },
+        "./data/site": {
+            "types": "./package/data/site.d.ts",
+            "default": "./package/data/site.js"
+        },
+        "./errors": {
+            "types": "./package/errors.d.ts",
+            "default": "./package/errors.js"
+        },
+        "./stores/lanyard.svelte": {
+            "types": "./package/stores/lanyard.svelte.d.ts",
+            "default": "./package/stores/lanyard.svelte.js"
+        },
+        "./stores/nightride/audio-context-manager": {
+            "types": "./package/stores/nightride/audio-context-manager.d.ts",
+            "default": "./package/stores/nightride/audio-context-manager.js"
+        },
+        "./stores/nightride": {
+            "types": "./package/stores/nightride/index.d.ts",
+            "svelte": "./package/stores/nightride/index.js",
+            "default": "./package/stores/nightride/index.js"
+        },
+        "./stores/nightride/metadata.svelte": {
+            "types": "./package/stores/nightride/metadata.svelte.d.ts",
+            "default": "./package/stores/nightride/metadata.svelte.js"
+        },
+        "./stores/nightride/stream.svelte": {
+            "types": "./package/stores/nightride/stream.svelte.d.ts",
+            "default": "./package/stores/nightride/stream.svelte.js"
+        },
+        "./stores/settings.svelte": {
+            "types": "./package/stores/settings.svelte.d.ts",
+            "default": "./package/stores/settings.svelte.js"
+        },
+        "./stores/ui/help.svelte": {
+            "types": "./package/stores/ui/help.svelte.d.ts",
+            "default": "./package/stores/ui/help.svelte.js"
+        },
+        "./stores/ui": {
+            "types": "./package/stores/ui/index.d.ts",
+            "svelte": "./package/stores/ui/index.js",
+            "default": "./package/stores/ui/index.js"
+        },
+        "./stores/ui/keybindings.svelte": {
+            "types": "./package/stores/ui/keybindings.svelte.d.ts",
+            "default": "./package/stores/ui/keybindings.svelte.js"
+        },
+        "./stores/ui/scanner.svelte": {
+            "types": "./package/stores/ui/scanner.svelte.d.ts",
+            "default": "./package/stores/ui/scanner.svelte.js"
+        },
+        "./stores/ui/sidebar.svelte": {
+            "types": "./package/stores/ui/sidebar.svelte.d.ts",
+            "default": "./package/stores/ui/sidebar.svelte.js"
+        },
+        "./stores/ui/zen-mode.svelte": {
+            "types": "./package/stores/ui/zen-mode.svelte.d.ts",
+            "default": "./package/stores/ui/zen-mode.svelte.js"
+        },
+        "./types": {
+            "types": "./package/types.d.ts",
+            "default": "./package/types.js"
+        },
+        "./utils/date": {
+            "types": "./package/utils/date.d.ts",
+            "default": "./package/utils/date.js"
+        },
+        "./utils/post": {
+            "types": "./package/utils/post/index.d.ts",
+            "svelte": "./package/utils/post/index.js",
+            "default": "./package/utils/post/index.js"
+        },
+        "./utils/post/toc": {
+            "types": "./package/utils/post/toc.d.ts",
+            "default": "./package/utils/post/toc.js"
+        },
+        "./utils/rehype/toc-extract": {
+            "types": "./package/utils/rehype/toc-extract.d.ts",
+            "default": "./package/utils/rehype/toc-extract.js"
+        }
+    },
+    "typesVersions": {
+        ">4.0": {
+            "components/Asciinema.svelte": [
+                "./package/components/Asciinema.svelte.d.ts"
+            ],
+            "components/KeybindingsHelp.svelte": [
+                "./package/components/KeybindingsHelp.svelte.d.ts"
+            ],
+            "components/SEO.svelte": [
+                "./package/components/SEO.svelte.d.ts"
+            ],
+            "components/Visualizer/index.svelte": [
+                "./package/components/Visualizer/index.svelte.d.ts"
+            ],
+            "components/layout/Footer.svelte": [
+                "./package/components/layout/Footer.svelte.d.ts"
+            ],
+            "components/layout/Header.svelte": [
+                "./package/components/layout/Header.svelte.d.ts"
+            ],
+            "components/layout/RadioScanner.svelte": [
+                "./package/components/layout/RadioScanner.svelte.d.ts"
+            ],
+            "components/layout/Sidebar.svelte": [
+                "./package/components/layout/Sidebar.svelte.d.ts"
+            ],
+            "data/posts/alternatives-to-mason-nvim.svelte": [
+                "./package/data/posts/alternatives-to-mason-nvim.svelte.d.ts"
+            ],
+            "data/posts/hello-cruel-world.svelte": [
+                "./package/data/posts/hello-cruel-world.svelte.d.ts"
+            ],
+            "data/posts/post-modern-guide-on-piracy.svelte": [
+                "./package/data/posts/post-modern-guide-on-piracy.svelte.d.ts"
+            ],
+            "data/site": [
+                "./package/data/site.d.ts"
+            ],
+            "errors": [
+                "./package/errors.d.ts"
+            ],
+            "stores/lanyard.svelte": [
+                "./package/stores/lanyard.svelte.d.ts"
+            ],
+            "stores/nightride/audio-context-manager": [
+                "./package/stores/nightride/audio-context-manager.d.ts"
+            ],
+            "stores/nightride": [
+                "./package/stores/nightride/index.d.ts"
+            ],
+            "stores/nightride/metadata.svelte": [
+                "./package/stores/nightride/metadata.svelte.d.ts"
+            ],
+            "stores/nightride/stream.svelte": [
+                "./package/stores/nightride/stream.svelte.d.ts"
+            ],
+            "stores/settings.svelte": [
+                "./package/stores/settings.svelte.d.ts"
+            ],
+            "stores/ui/help.svelte": [
+                "./package/stores/ui/help.svelte.d.ts"
+            ],
+            "stores/ui": [
+                "./package/stores/ui/index.d.ts"
+            ],
+            "stores/ui/keybindings.svelte": [
+                "./package/stores/ui/keybindings.svelte.d.ts"
+            ],
+            "stores/ui/scanner.svelte": [
+                "./package/stores/ui/scanner.svelte.d.ts"
+            ],
+            "stores/ui/sidebar.svelte": [
+                "./package/stores/ui/sidebar.svelte.d.ts"
+            ],
+            "stores/ui/zen-mode.svelte": [
+                "./package/stores/ui/zen-mode.svelte.d.ts"
+            ],
+            "types": [
+                "./package/types.d.ts"
+            ],
+            "utils/date": [
+                "./package/utils/date.d.ts"
+            ],
+            "utils/post": [
+                "./package/utils/post/index.d.ts"
+            ],
+            "utils/post/toc": [
+                "./package/utils/post/toc.d.ts"
+            ],
+            "utils/rehype/toc-extract": [
+                "./package/utils/rehype/toc-extract.d.ts"
+            ]
+        }
+    }
 }
