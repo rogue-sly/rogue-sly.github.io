@@ -13,8 +13,8 @@ export class NightrideRadio {
         this.metadata = new MetadataStore();
     }
 
-    connect(element: HTMLAudioElement | undefined) {
-        if (element) this.stream.element = element;
+    connect() {
+        this.stream.connect();
         this.metadata.connect();
     }
 

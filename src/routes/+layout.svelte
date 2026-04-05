@@ -12,11 +12,10 @@
     import { settings } from "$lib/stores/settings.svelte";
 
     let { children } = $props();
-    let audioElement: HTMLAudioElement | undefined = $state();
 
     const nightride = new NightrideRadio(settings);
     onMount(() => {
-        nightride.connect(audioElement);
+        nightride.connect();
         return () => nightride.disconnect();
     });
 </script>
@@ -24,7 +23,6 @@
 <Header />
 
 <Sidebar />
-<audio bind:this={audioElement} crossorigin="anonymous"></audio>
 
 {#await import("$lib/components/Visualizer/index.svelte") then { default: Visualizer }}
     <Visualizer analyser={nightride.stream.analyser} isPlaying={nightride.stream.isPlaying} />

@@ -43,7 +43,7 @@ export const STATIONS: Station[] = [
 ] as const;
 
 export class StreamStore {
-    private _element: HTMLAudioElement | undefined = $state();
+    private element: HTMLAudioElement | undefined;
     private settings: SettingsStore;
     private audioContextManager: AudioContextManager;
     private visualizerInterval: ReturnType<typeof setInterval> | undefined;
@@ -55,15 +55,6 @@ export class StreamStore {
     signalStrength = $state(0);
     currentStation: Station = $state(STATIONS[0]);
 
-    get element() {
-        return this._element;
-    }
-
-    set element(element: HTMLAudioElement | undefined) {
-        this._element = element;
-        if (element) this.attachElement(element);
-    }
-
     /** Exposes the analyser node for the Visualizer component. */
     get analyser() {
         return this.audioContextManager.analyser;
@@ -73,66 +64,65 @@ export class StreamStore {
         this.settings = settings;
         this.audioContextManager = new AudioContextManager();
         this.currentStation = STATIONS.find((s) => s.id === settings.stream.lastStationId) ?? STATIONS[0];
-
-        // Sync volume to settings reactively
-        $effect(() => {
-            if (this._element) {
-                this._element.volume = this.settings.stream.volume;
-            }
-        });
     }
 
-    private attachElement(element: HTMLAudioElement) {
-        element.volume = this.settings.stream.volume;
-        element.muted = this.isMuted;
+    /** Call from onMount to create and wire up the audio element. */
+    connect() {
+        this.element = new Audio();
+        this.element.crossOrigin = "anonymous";
+        this.element.src = this.currentStation.mp3;
+        this.element.volume = this.settings.stream.volume;
 
-        element.addEventListener("play", () => {
+        this.element.addEventListener("play", () => {
             this.isPlaying = true;
             this.statusText = "RECEIVING...";
             this.startSignalAnimation();
         });
 
-        element.addEventListener("playing", () => {
+        this.element.addEventListener("playing", () => {
             this.statusText = "RECEIVING...";
-            this.audioContextManager.connect(element);
+            this.audioContextManager.connect(this.element!);
             this.audioContextManager.resume();
         });
 
-        element.addEventListener("pause", () => {
+        this.element.addEventListener("pause", () => {
             this.isPlaying = false;
             this.statusText = "SIGNAL_LOST";
             this.signalStrength = 0;
             this.stopSignalAnimation();
         });
 
-        element.addEventListener("waiting", () => {
+        this.element.addEventListener("waiting", () => {
             this.statusText = "BUFFERING...";
         });
 
-        element.addEventListener("loadedmetadata", () => {
+        this.element.addEventListener("loadedmetadata", () => {
             this.statusText = "SYSTEM_ONLINE";
         });
 
-        element.src = this.currentStation.mp3;
+        // Sync volume to settings reactively
+        $effect(() => {
+            if (this.element) {
+                this.element.volume = this.settings.stream.volume;
+            }
+        });
     }
 
     async setStation(station: Station) {
         if (this.currentStation.id === station.id) return;
+        if (!this.element) return;
 
         const wasPlaying = this.isPlaying;
 
         if (wasPlaying) {
-            this._element?.pause();
+            this.element.pause();
             this.isPlaying = false;
         }
 
         this.currentStation = station;
         this.settings.stream.lastStationId = station.id;
         this.statusText = "SWITCHING...";
-
-        if (this._element) {
-            this._element.src = this.currentStation.mp3;
-        }
+        this.element.src = station.mp3;
 
         if (wasPlaying) {
             await new Promise((resolve) => setTimeout(resolve, 50));
@@ -141,13 +131,12 @@ export class StreamStore {
     }
 
     async togglePlay() {
-        if (!this._element) return;
-        if (this.playPromise) return;
+        if (!this.element || this.playPromise) return;
 
         if (this.isPlaying) {
-            this._element.pause();
+            this.element.pause();
         } else {
-            this.playPromise = this._element.play();
+            this.playPromise = this.element.play();
 
             const result = await ResultAsync.fromPromise(
                 this.playPromise,
@@ -169,9 +158,9 @@ export class StreamStore {
     }
 
     toggleMute() {
-        if (!this._element) return;
+        if (!this.element) return;
         this.isMuted = !this.isMuted;
-        this._element.muted = this.isMuted;
+        this.element.muted = this.isMuted;
     }
 
     private startSignalAnimation() {
@@ -192,9 +181,9 @@ export class StreamStore {
     }
 
     disconnect() {
-        if (this._element) {
-            this._element.pause();
-            this._element.src = "";
+        if (this.element) {
+            this.element.pause();
+            this.element.src = "";
         }
         this.isPlaying = false;
         this.statusText = "SYSTEM_OFFLINE";
