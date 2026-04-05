@@ -69,18 +69,6 @@
                     </div>
                 {/if}
 
-                <div class="visualizer">
-                    {#each Array(8)}
-                        <div
-                            class="bar"
-                            style:height={nightride.stream.isPlaying && !nightride.stream.isMuted
-                                ? Math.random() * 100 + "%"
-                                : "2px"}
-                            style:opacity={nightride.stream.isPlaying && !nightride.stream.isMuted ? 1 : 0.3}
-                        ></div>
-                    {/each}
-                </div>
-
                 <div class="station-grid">
                     {#each STATIONS as station}
                         <button
@@ -142,7 +130,7 @@
     .radio-scanner {
         position: fixed;
         bottom: 15px;
-        right: 60px;
+        right: 30px;
         z-index: 2;
         display: flex;
         flex-direction: column-reverse;
@@ -274,24 +262,6 @@
         }
     }
 
-    .visualizer {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        height: 40px;
-        margin-bottom: 12px;
-        border-bottom: 1px solid var(--border-primary);
-        padding-bottom: 2px;
-    }
-
-    .bar {
-        width: 8%;
-        background-color: var(--fg-primary);
-        transition: height 0.1s ease;
-        min-height: 2px;
-        border-radius: calc(var(--radius) / 4);
-    }
-
     .station-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -326,7 +296,6 @@
     .volume-control {
         display: flex;
         align-items: center;
-        gap: 1rem;
         margin-bottom: 1rem;
     }
 
