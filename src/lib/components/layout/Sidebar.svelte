@@ -1,11 +1,7 @@
 <script lang="ts">
     import { sidebar, zenMode } from "$lib/stores/ui";
-    import RadioScanner from "./RadioScanner.svelte";
     import { fade, fly } from "svelte/transition";
     import { page } from "$app/state";
-    import type { MetadataStore, StreamStore } from "$lib/stores/nightride";
-
-    let { stream, metadata }: { stream: StreamStore; metadata: MetadataStore } = $props();
 
     // HACK: For some reason, it calls window.close() instead of sidebar.close()
     // `close` is a reserved name on `window`, so calling sidebar.close() inline
@@ -136,8 +132,6 @@
                 </li>
             </ul>
         </nav>
-
-        <RadioScanner {stream} {metadata} />
     </aside>
 {/if}
 

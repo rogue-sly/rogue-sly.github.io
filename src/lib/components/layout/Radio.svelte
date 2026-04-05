@@ -1,35 +1,47 @@
 <script lang="ts">
-    import * as ui from "$lib/stores/ui";
     import { slide } from "svelte/transition";
     import { settings } from "$lib/stores/settings.svelte";
     import { STATIONS, StreamStore, MetadataStore } from "$lib/stores/nightride";
 
     let { stream, metadata }: { stream: StreamStore; metadata: MetadataStore } = $props();
 
+    let isExpanded = $state(false);
+
     function handleVolumeChange(e: Event) {
         const target = e.target as HTMLInputElement;
         settings.stream.volume = parseFloat(target.value);
     }
+
+    function toggleExpand() {
+        isExpanded = !isExpanded;
+    }
 </script>
 
-<div class="scanner-section" class:collapsed={ui.scanner.isCollapsed}>
+<!-- Floating Ribbon -->
+<div class="radio-scanner">
+    <!-- Collapsed Ribbon -->
     <button
-        class="scanner-header"
-        onclick={() => ui.scanner.toggle()}
-        aria-expanded={!ui.scanner.isCollapsed}
-        aria-controls="scanner-content"
+        class="ribbon"
+        onclick={toggleExpand}
+        aria-expanded={isExpanded}
+        aria-label={isExpanded ? "Collapse Radio Scanner" : "Expand Radio Scanner"}
     >
-        <span class="label">RADIO_UNIT</span>
-        <div class="header-status">
+        <span class="ribbon-label">RADIO</span>
+        <div class="ribbon-status">
             {#if stream.isPlaying}
-                <span class="status-active">RECEIVING</span>
+                <span class="status-indicator active"></span>
+                <span class="status-text">RECEIVING</span>
+            {:else}
+                <span class="status-indicator"></span>
+                <span class="status-text">STANDBY</span>
             {/if}
-            <span class="toggle-icon">{ui.scanner.isCollapsed ? "[+]" : "[-]"}</span>
         </div>
+        <span class="ribbon-toggle">{isExpanded ? "[−]" : "[+]"}</span>
     </button>
 
-    {#if !ui.scanner.isCollapsed}
-        <div id="scanner-content" transition:slide={{ duration: 300 }}>
+    <!-- Expanded Panel -->
+    {#if isExpanded}
+        <div class="scanner-panel" transition:slide={{ duration: 300 }}>
             <div class="scanner-inner">
                 <div class="display">
                     <span class="label">FREQ:</span>
@@ -116,74 +128,127 @@
 </div>
 
 <style>
-    .scanner-section {
-        flex-shrink: 0;
-        padding: 0;
-        border: 1px solid var(--border-primary);
-        background: var(--bg-transparent-dark);
-        border-radius: var(--radius);
-        overflow: hidden;
-    }
-
-    .scanner-header {
-        width: 100%;
+    .radio-scanner {
+        position: fixed;
+        bottom: 15px;
+        right: 60px;
+        z-index: 1000;
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.75rem 1rem;
-        background: rgba(255, 255, 255, 0.03);
-        border: none;
-        border-bottom: 1px solid transparent;
-        border-radius: 0;
-        cursor: pointer;
+        flex-direction: column-reverse;
+        align-items: flex-end;
+        gap: 8px;
     }
 
-    .scanner-header:hover {
+    .ribbon {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.6rem 0.4rem;
+        background: var(--bg-transparent-dark);
+        border: 1px solid var(--border-primary);
+        border-radius: var(--radius);
+        color: var(--fg-primary);
+        cursor: pointer;
+        transition: all 0.2s;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        font-family: inherit;
+        font-size: 0.8rem;
+    }
+
+    .ribbon:hover {
         background: rgba(255, 255, 255, 0.08);
         color: var(--fg-primary-light);
+        border-color: var(--fg-primary-dark);
     }
 
-    .scanner-section:not(.collapsed) .scanner-header {
-        border-bottom-color: var(--border-primary);
+    .ribbon-label {
+        font-weight: bold;
+        text-transform: uppercase;
+        min-width: 80px;
     }
 
-    #scanner-content {
-        padding: 0;
-    }
-
-    .scanner-inner {
-        padding: 1rem;
-
-        & .label {
-            background-color: var(--bg-primary-dark);
-            z-index: 2;
-        }
-    }
-
-    .header-status {
+    .ribbon-status {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: 0.5rem;
         font-size: 0.7rem;
     }
 
-    .status-active {
-        color: var(--fg-accent);
-        font-weight: bold;
+    .status-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--fg-primary-dark);
+        transition: all 0.2s;
+    }
+
+    .status-indicator.active {
+        background: var(--fg-accent);
         animation: pulse 2s infinite;
     }
 
-    .toggle-icon {
-        color: var(--fg-primary-dark);
+    .status-text {
+        font-weight: bold;
+        text-transform: uppercase;
     }
 
     @keyframes pulse {
         0%,
         100% {
             opacity: 1;
+            box-shadow: 0 0 4px var(--fg-accent);
         }
         50% {
             opacity: 0.5;
+            box-shadow: 0 0 8px var(--fg-accent);
+        }
+    }
+
+    .ribbon-toggle {
+        font-weight: bold;
+        color: var(--fg-primary-dark);
+        min-width: 30px;
+        text-align: center;
+    }
+
+    .scanner-panel {
+        width: 400px;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        background: var(--bg-primary-dark);
+        border: 1px solid var(--border-primary);
+        border-radius: var(--radius);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(10px);
+    }
+
+    .scanner-panel::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background:
+            linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+            linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+        background-size:
+            100% 2px,
+            3px 100%;
+        pointer-events: none;
+        z-index: -1;
+        border-radius: var(--radius);
+    }
+
+    .scanner-inner {
+        padding: 1rem;
+        position: relative;
+        z-index: 1;
+
+        & .label {
+            background-color: var(--bg-primary-dark);
+            z-index: 2;
         }
     }
 
@@ -327,5 +392,16 @@
         flex: 1;
         padding: 0.5rem;
         font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+        .radio-scanner {
+            right: 20px;
+            left: 20px;
+        }
+
+        .scanner-panel {
+            width: 100%;
+        }
     }
 </style>

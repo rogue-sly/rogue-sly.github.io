@@ -3,6 +3,7 @@
     import Header from "$lib/components/layout/Header.svelte";
     import KeybindingsHelp from "$lib/components/layout/KeybindingsHelp.svelte";
     import Sidebar from "$lib/components/layout/Sidebar.svelte";
+    import Radio from "$lib/components/layout/Radio.svelte";
     import * as ui from "$lib/stores/ui";
     import { fade } from "svelte/transition";
     import { onMount } from "svelte";
@@ -32,7 +33,7 @@
 
 <Header />
 
-<Sidebar {stream} {metadata} />
+<Sidebar />
 
 <KeybindingsHelp {stream} />
 
@@ -56,6 +57,8 @@
 {/key}
 
 <Footer />
+
+<Radio {stream} {metadata} />
 
 <style>
     main {
