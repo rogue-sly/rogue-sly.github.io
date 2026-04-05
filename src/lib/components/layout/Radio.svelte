@@ -132,7 +132,7 @@
         position: fixed;
         bottom: 15px;
         right: 60px;
-        z-index: 1000;
+        z-index: 2;
         display: flex;
         flex-direction: column-reverse;
         align-items: flex-end;

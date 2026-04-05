@@ -141,7 +141,7 @@
         inset: 0;
         background: var(--bg-transparent-dark);
         backdrop-filter: blur(2px);
-        z-index: 998;
+        z-index: 3;
     }
 
     .sidebar {
@@ -153,7 +153,7 @@
         background: var(--bg-primary-dark);
         border-left: 1px solid var(--border-primary);
         padding: 1.5rem;
-        z-index: 999;
+        z-index: 4;
         display: flex;
         flex-direction: column;
         box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);

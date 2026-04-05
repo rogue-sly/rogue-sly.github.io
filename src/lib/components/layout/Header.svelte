@@ -37,7 +37,7 @@
         position: fixed;
         width: 100%;
         top: 0;
-        z-index: 100;
+        z-index: 1;
         background-color: var(--bg-primary-dark);
         border-bottom: 1px solid var(--fg-accent);
         backdrop-filter: blur(10px);

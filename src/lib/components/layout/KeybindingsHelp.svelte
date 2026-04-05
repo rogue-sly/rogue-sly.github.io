@@ -102,7 +102,7 @@
         position: fixed;
         inset: 0;
         background-color: color-mix(in srgb, var(--bg-primary) 60%, transparent);
-        z-index: 100;
+        z-index: 3;
         cursor: pointer;
         backdrop-filter: blur(2px);
     }
@@ -112,7 +112,7 @@
         top: 50%;
         left: 50%;
         translate: -50% -50%;
-        z-index: 101;
+        z-index: 4;
         background-color: var(--bg-primary-light);
         border: 1px solid var(--fg-accent);
         border-radius: var(--radius);
