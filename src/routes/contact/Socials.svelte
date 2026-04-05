@@ -50,7 +50,8 @@
 
         <a href="https://bsky.app/profile/rogue-sly.bsky.social" target="_blank" class="social">
             <div class="social-inner">
-                <span class="icon"><Icon icon="simple-icons:bluesky" width={svg.width} height={svg.height} /></span>
+                <span class="icon"><Icon icon="simple-icons:bluesky" width={svg.width} height={svg.height} /></span
+                >
             </div>
             <span>bluesky</span>
         </a>
