@@ -2,6 +2,7 @@
     import type { StreamStore } from "$lib/stores/nightride";
     import { help } from "$lib/stores/ui/help.svelte";
     import { KeybindingStore } from "$lib/stores/ui/keybindings.svelte";
+    import Icon from "@iconify/svelte";
     import { fade, scale } from "svelte/transition";
 
     let { stream }: { stream: StreamStore } = $props();
@@ -56,19 +57,7 @@
         <div class="overlay-header">
             <span class="title">KEYBINDINGS</span>
             <button class="close-btn" onclick={() => help.toggle()} aria-label="Close">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <path d="M18 6 6 18" /><path d="m6 6 12 12" />
-                </svg>
+                <span class="icon"><Icon icon="lucide:x" width="16" height="16" /></span>
             </button>
         </div>
 
@@ -151,6 +140,14 @@
 
         &:hover {
             color: var(--fg-primary);
+        }
+
+        & .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
         }
     }
 

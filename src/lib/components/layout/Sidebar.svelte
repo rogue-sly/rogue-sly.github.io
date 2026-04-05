@@ -1,5 +1,6 @@
 <script lang="ts">
     import { sidebar, zenMode } from "$lib/stores/ui";
+    import Icon from "@iconify/svelte";
     import { fade, fly } from "svelte/transition";
     import { page } from "$app/state";
 
@@ -35,78 +36,18 @@
                         aria-label={zenMode.isZenMode ? "Show Content" : "Hide Content"}
                     >
                         {#if zenMode.isZenMode}
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="18"
-                                height="18"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            >
-                                <path d="M9.88 9.88L4.62 4.62" />
-                                <path d="M7.714 15.151a11.96 11.96 0 0 1-5.714-3.151 12 12 0 0 1 18.274-4.051" />
-                                <path d="M14.122 14.122A3 3 0 0 1 12 15a3 3 0 0 1-3-3 3 3 0 0 1 .878-2.122" />
-                                <path d="M17.808 17.808a12.13 12.13 0 0 1-5.808 1.192 12.13 12.13 0 0 1-8-3.04" />
-                                <path d="m2 2 20 20" />
-                            </svg>
+                            <span class="icon"><Icon icon="lucide:eye-off" width="18" height="18" /></span>
                         {:else}
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="18"
-                                height="18"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                ><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle
-                                    cx="12"
-                                    cy="12"
-                                    r="3"
-                                />
-                            </svg>
+                            <span class="icon"><Icon icon="lucide:eye" width="18" height="18" /></span>
                         {/if}
                     </button>
                     <a href="/settings" class="btn-settings" onclick={close} aria-label="Settings">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="18"
-                            height="18"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-                            <path
-                                d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
-                            >
-                            </path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
+                        <span class="icon"><Icon icon="lucide:settings" width="18" height="18" /></span>
                     </a>
                 </div>
 
                 <button onclick={close} aria-label="Close Menu" class="btn-close">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <line x1="18" x2="6" y1="6" y2="18" />
-                        <line x1="6" x2="18" y1="6" y2="18" />
-                    </svg>
+                    <span class="icon"><Icon icon="lucide:x" width="20" height="20" /></span>
                 </button>
             </div>
         </div>
@@ -158,23 +99,6 @@
         flex-direction: column;
         box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
         overflow: hidden;
-    }
-
-    .sidebar::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background:
-            linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
-            linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-        background-size:
-            100% 2px,
-            3px 100%;
-        pointer-events: none;
-        z-index: -1;
     }
 
     .header {
@@ -303,8 +227,17 @@
         border-color: var(--bg-accent);
     }
 
-    .btn-close svg {
-        display: block;
+    .icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+    }
+
+    .btn-close .icon {
+        width: 20px;
+        height: 20px;
     }
 
     @media (max-width: 600px) {

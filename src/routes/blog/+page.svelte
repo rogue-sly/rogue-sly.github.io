@@ -5,6 +5,7 @@
     import { page } from "$app/state";
     import { goto } from "$app/navigation";
     import { browser } from "$app/environment";
+    import Icon from "@iconify/svelte";
 
     let { data } = $props();
 
@@ -90,12 +91,7 @@
 
 <div class="rss">
     <a href={`${url}/rss.xml`} aria-label="rss" target="_blank">
-        <svg xmlns="http://www.w3.org/2000/svg" width="2rem" viewBox="0 0 16 16">
-            <path
-                fill="currentColor"
-                d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm1.5 2.5c5.523 0 10 4.477 10 10a1 1 0 1 1-2 0a8 8 0 0 0-8-8a1 1 0 0 1 0-2m0 4a6 6 0 0 1 6 6a1 1 0 1 1-2 0a4 4 0 0 0-4-4a1 1 0 0 1 0-2m.5 7a1.5 1.5 0 1 1 0-3a1.5 1.5 0 0 1 0 3"
-            />
-        </svg>
+        <span class="rss-icon"><Icon icon="mdi:rss" width="2rem" /></span>
     </a>
 </div>
 
@@ -153,6 +149,14 @@
         margin-top: 16px;
         display: flex;
         justify-content: center;
+
+        & .rss-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+        }
     }
 
     a {

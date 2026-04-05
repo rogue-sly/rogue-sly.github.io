@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { Activity } from "$lib/types";
     import { LanyardConnection } from "$lib/stores/lanyard.svelte";
+    import Icon from "@iconify/svelte";
     import { onMount } from "svelte";
 
     const lanyard = new LanyardConnection("369982847496355841");
@@ -41,17 +42,7 @@
         aria-label="Previous Activity"
         disabled={!activities || activities.length === 0 || isLoading}
     >
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg
-        >
+        <Icon icon="lucide:chevron-left" width="20" height="20" style="display: inline-block" />
     </button>
 
     <div class="activity-carousel" bind:this={carouselContainer}>
@@ -116,17 +107,7 @@
         aria-label="Next Activity"
         disabled={!activities || activities.length === 0 || isLoading}
     >
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg
-        >
+        <Icon icon="lucide:chevron-right" width="20" height="20" style="display: inline-block" />
     </button>
 </div>
 
