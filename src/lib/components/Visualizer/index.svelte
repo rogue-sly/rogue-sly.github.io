@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { untrack } from "svelte";
     import { ok, err, type Result } from "neverthrow";
     import * as ui from "$lib/stores/ui";
     import { page } from "$app/state";
@@ -32,9 +33,6 @@
         cachedColors.accentFg = parseCSSColor(style.getPropertyValue("--fg-accent").trim() || "#675757");
         cachedColors.fgPrim = parseCSSColor(style.getPropertyValue("--fg-primary").trim() || "#cdcdcd");
     }
-
-    // Visualizer settings (reactive — read in the render loop each frame)
-    const BAR_COUNT = $derived(settings.visualizer.barCount);
 
     // -------------------------------------------------------------------------
     // WebGL helpers
@@ -82,7 +80,6 @@
     /** Parse a CSS hex/rgb color string into a normalised [r, g, b] float array. */
     function parseCSSColor(raw: string): [number, number, number] {
         const s = raw.trim();
-        // Try hex: #rrggbb or #rgb
         const hex6 = s.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
         if (hex6) {
             return [parseInt(hex6[1], 16) / 255, parseInt(hex6[2], 16) / 255, parseInt(hex6[3], 16) / 255];
@@ -95,22 +92,15 @@
                 parseInt(hex3[3] + hex3[3], 16) / 255,
             ];
         }
-        // Try rgb(r, g, b) / rgba(r, g, b, a)
         const rgb = s.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
         if (rgb) {
             return [parseInt(rgb[1]) / 255, parseInt(rgb[2]) / 255, parseInt(rgb[3]) / 255];
         }
-        // Fallback: near-black
         return [0.063, 0.063, 0.071];
     }
 
-    // -------------------------------------------------------------------------
-    // Svelte effect: initialise and drive the render loop
-    // -------------------------------------------------------------------------
-
     $effect(() => {
         if (!canvas || !settings.visualizer.enabled) {
-            if (animationFrame) cancelAnimationFrame(animationFrame);
             return;
         }
 
@@ -120,7 +110,6 @@
             return;
         }
 
-        // Compile program
         const programResult = createProgram(gl, VERT_SRC, FRAG_SRC);
         if (programResult.isErr()) {
             console.error(appErrorMessage(programResult.error));
@@ -128,7 +117,6 @@
         }
         const program = programResult.value;
 
-        // Fullscreen quad (two triangles covering clip space)
         const quadVerts = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
         const vbo = gl.createBuffer()!;
         gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
@@ -138,7 +126,6 @@
         gl.enableVertexAttribArray(aPosition);
         gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
 
-        // Uniform locations
         const uResolution = gl.getUniformLocation(program, "uResolution");
         const uTime = gl.getUniformLocation(program, "uTime");
         const uBarCount = gl.getUniformLocation(program, "uBarCount");
@@ -154,7 +141,6 @@
         const uFreqTex = gl.getUniformLocation(program, "uFreqTex");
         const uBufLen = gl.getUniformLocation(program, "uBufLen");
 
-        // 1-D frequency texture
         const freqTexture = gl.createTexture()!;
         gl.bindTexture(gl.TEXTURE_2D, freqTexture);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
@@ -165,7 +151,6 @@
         const bufferLength = analyser?.frequencyBinCount ?? 256;
         const dataArray = new Uint8Array(bufferLength);
 
-        // Resize observer
         const resizeObserver = new ResizeObserver((entries) => {
             for (const entry of entries) {
                 if (!canvas || !gl) continue;
@@ -179,27 +164,27 @@
         });
         resizeObserver.observe(canvas.parentElement!);
 
-        // Initialize cached colors
         updateCachedColors();
 
         gl.useProgram(program);
 
-        // ---- Render loop -------------------------------------------------------
+        // ---- Render loop (runs outside $effect tracking) ----
         function draw() {
-            if (!settings.visualizer.enabled) return;
             animationFrame = requestAnimationFrame(draw);
             if (!gl || !width || !height) return;
 
+            const currentIsPlaying = untrack(() => isPlaying);
+            const currentAnalyser = untrack(() => analyser);
+
             // Audio data
-            if (isPlaying && analyser) {
-                analyser.getByteFrequencyData(dataArray);
+            if (currentIsPlaying && currentAnalyser) {
+                currentAnalyser.getByteFrequencyData(dataArray);
             } else {
                 for (let i = 0; i < bufferLength; i++) {
                     dataArray[i] = Math.max(0, dataArray[i] - 2);
                 }
             }
 
-            // Upload frequency texture
             gl.bindTexture(gl.TEXTURE_2D, freqTexture);
             gl.texImage2D(
                 gl.TEXTURE_2D,
@@ -213,13 +198,11 @@
                 dataArray,
             );
 
-            // Use cached theme colors
             const { bgColor, accentBg, accentFg, fgPrim } = cachedColors;
 
-            // Set uniforms
             gl.uniform2f(uResolution, width, height);
             gl.uniform1f(uTime, performance.now() / 1000);
-            gl.uniform1i(uBarCount, BAR_COUNT);
+            gl.uniform1i(uBarCount, settings.visualizer.barCount);
             gl.uniform1i(uShowGrid, settings.visualizer.showGrid ? 1 : 0);
             gl.uniform1i(uShowReflections, settings.visualizer.showReflections ? 1 : 0);
             gl.uniform1i(uShowSun, settings.visualizer.showSun ? 1 : 0);
@@ -238,12 +221,11 @@
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         }
 
-        draw();
+        animationFrame = requestAnimationFrame(draw);
 
         return () => {
             cancelAnimationFrame(animationFrame);
             resizeObserver.disconnect();
-            // Clean up GL resources
             if (gl) {
                 gl.deleteTexture(freqTexture);
                 gl.deleteBuffer(vbo);
