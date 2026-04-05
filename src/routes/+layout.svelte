@@ -1,33 +1,24 @@
 <script lang="ts">
     import Footer from "$lib/components/layout/Footer.svelte";
     import Header from "$lib/components/layout/Header.svelte";
-    import KeybindingsHelp from "$lib/components/KeybindingsHelp.svelte";
+    import KeybindingsHelp from "$lib/components/layout/KeybindingsHelp.svelte";
     import Sidebar from "$lib/components/layout/Sidebar.svelte";
     import * as ui from "$lib/stores/ui";
-    import { keybindings } from "$lib/stores/ui/keybindings.svelte";
     import { fade } from "svelte/transition";
     import { onMount } from "svelte";
     import { page } from "$app/state";
-    import { stream, metadata } from "$lib/stores/nightride";
+    import { StreamStore, MetadataStore } from "$lib/stores/nightride";
     import "../app.css";
+    import { SettingsStore } from "$lib/stores/settings.svelte";
 
     let { children } = $props();
     let audioElement: HTMLAudioElement | undefined = $state();
 
+    const settings = new SettingsStore();
+    const stream = new StreamStore(settings);
+    const metadata = new MetadataStore();
+
     stream.initEffects();
-
-    function handleKeydown(e: KeyboardEvent) {
-        const target = e.target as HTMLElement;
-        if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable) {
-            return;
-        }
-
-        const binding = keybindings.find((kb) => kb.key === e.key);
-        if (binding) {
-            if (binding.key === " ") e.preventDefault();
-            binding.action();
-        }
-    }
 
     onMount(() => {
         metadata.connect();
@@ -39,12 +30,11 @@
     });
 </script>
 
-<svelte:window onkeydown={handleKeydown} />
-
 <Header />
 
-<Sidebar />
-<KeybindingsHelp />
+<Sidebar {stream} {metadata} />
+
+<KeybindingsHelp {stream} />
 
 {#await import("$lib/components/Visualizer/index.svelte") then { default: Visualizer }}
     <Visualizer analyser={stream.analyser} isPlaying={stream.isPlaying} />

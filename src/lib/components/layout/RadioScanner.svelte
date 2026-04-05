@@ -2,7 +2,9 @@
     import * as ui from "$lib/stores/ui";
     import { slide } from "svelte/transition";
     import { settings } from "$lib/stores/settings.svelte";
-    import { stream, metadata, STATIONS } from "$lib/stores/nightride";
+    import { STATIONS, StreamStore, MetadataStore } from "$lib/stores/nightride";
+
+    let { stream, metadata }: { stream: StreamStore; metadata: MetadataStore } = $props();
 
     function handleVolumeChange(e: Event) {
         const target = e.target as HTMLInputElement;

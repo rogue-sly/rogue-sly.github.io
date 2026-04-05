@@ -1,6 +1,6 @@
 <script lang="ts">
     import Activity from "./Activity.svelte";
-    import NowPlaying from "./NowPlaying.svelte";
+    // import NowPlaying from "./NowPlaying.svelte";
     import SEO from "$lib/components/SEO.svelte";
 </script>
 
@@ -16,9 +16,9 @@
 
     <Activity />
 
-    <div class="now-playing-anchor">
-        <NowPlaying />
-    </div>
+    <!-- <div class="now-playing-anchor"> -->
+    <!--     <NowPlaying /> -->
+    <!-- </div> -->
 </section>
 
 <style>

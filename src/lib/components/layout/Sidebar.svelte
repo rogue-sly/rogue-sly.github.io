@@ -3,6 +3,9 @@
     import RadioScanner from "./RadioScanner.svelte";
     import { fade, fly } from "svelte/transition";
     import { page } from "$app/state";
+    import type { MetadataStore, StreamStore } from "$lib/stores/nightride";
+
+    let { stream, metadata }: { stream: StreamStore; metadata: MetadataStore } = $props();
 
     // HACK: For some reason, it calls window.close() instead of sidebar.close()
     // `close` is a reserved name on `window`, so calling sidebar.close() inline
@@ -94,7 +97,17 @@
                 </div>
 
                 <button onclick={close} aria-label="Close Menu" class="btn-close">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
                         <line x1="18" x2="6" y1="6" y2="18" />
                         <line x1="6" x2="18" y1="6" y2="18" />
                     </svg>
@@ -124,7 +137,7 @@
             </ul>
         </nav>
 
-        <RadioScanner />
+        <RadioScanner {stream} {metadata} />
     </aside>
 {/if}
 

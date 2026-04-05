@@ -9,7 +9,7 @@ const parseTrackData = Result.fromThrowable(
     (cause): AppError => ({ type: "PARSE_ERROR", context: "Nightride SSE", cause }),
 );
 
-class MetadataStore {
+export class MetadataStore {
     private eventSource: EventSource | null = null;
     public tracks = $state<Record<string, NightrideTrack>>({});
     /** Typed error state — null when no error is present. */
@@ -69,5 +69,3 @@ class MetadataStore {
         }
     }
 }
-
-export const metadata = new MetadataStore();

@@ -1,15 +1,19 @@
 <script lang="ts">
+    import type { StreamStore } from "$lib/stores/nightride";
     import { help } from "$lib/stores/ui/help.svelte";
-    import { keybindings } from "$lib/stores/ui/keybindings.svelte";
+    import { KeybindingStore } from "$lib/stores/ui/keybindings.svelte";
     import { fade, scale } from "svelte/transition";
+
+    let { stream }: { stream: StreamStore } = $props();
 
     type Group = { label: string; keys: string[][]; descriptions: string[] };
 
+    const keybindings = $derived(new KeybindingStore(stream));
     // Derive display groups from the registry, deduplicating by description
     // (e.g. "+" and "=" both map to "Volume up" — show only once).
     const groups = $derived.by(() => {
         const map = new Map<string, Group>();
-        for (const kb of keybindings) {
+        for (const kb of keybindings.binds) {
             const group = map.get(kb.group) ?? { label: kb.group, keys: [], descriptions: [] };
             // Skip duplicate descriptions within the same group (e.g. "=" alias)
             if (!group.descriptions.includes(kb.description)) {
@@ -20,7 +24,22 @@
         }
         return [...map.values()];
     });
+
+    function handleKeydown(e: KeyboardEvent) {
+        const target = e.target as HTMLElement;
+        if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable) {
+            return;
+        }
+
+        const binding = keybindings.binds.find((kb) => kb.key === e.key);
+        if (binding) {
+            if (binding.key === " ") e.preventDefault();
+            binding.action();
+        }
+    }
 </script>
+
+<svelte:window onkeydown={handleKeydown} />
 
 {#if help.isOpen}
     <div
