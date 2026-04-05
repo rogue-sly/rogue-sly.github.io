@@ -2,6 +2,7 @@
     import { slide } from "svelte/transition";
     import { settings } from "$lib/stores/settings.svelte";
     import { STATIONS, StreamStore, MetadataStore } from "$lib/stores/nightride";
+    import Icon from "@iconify/svelte";
 
     let { stream, metadata }: { stream: StreamStore; metadata: MetadataStore } = $props();
 
@@ -26,17 +27,19 @@
         aria-expanded={isExpanded}
         aria-label={isExpanded ? "Collapse Radio Scanner" : "Expand Radio Scanner"}
     >
-        <span class="ribbon-label">RADIO</span>
+        <span class="ribbon-label">
+            <span class="icon"><Icon icon="lucide:radio" width="18" height="18" /></span>
+        </span>
         <div class="ribbon-status">
-            {#if stream.isPlaying}
-                <span class="status-indicator active"></span>
-                <span class="status-text">RECEIVING</span>
-            {:else}
-                <span class="status-indicator"></span>
-                <span class="status-text">STANDBY</span>
-            {/if}
+            <span class:status-indicator:active={stream.isPlaying}></span>
         </div>
-        <span class="ribbon-toggle">{isExpanded ? "[−]" : "[+]"}</span>
+        <span class="ribbon-toggle">
+            {#if isExpanded}
+                <span class="icon"><Icon icon="lucide:chevron-up" width="16" height="16" /></span>
+            {:else}
+                <span class="icon"><Icon icon="lucide:chevron-down" width="16" height="16" /></span>
+            {/if}
+        </span>
     </button>
 
     <!-- Expanded Panel -->
@@ -44,7 +47,7 @@
         <div class="scanner-panel" transition:slide={{ duration: 300 }}>
             <div class="scanner-inner">
                 <div class="display">
-                    <span class="label">FREQ:</span>
+                    <span class="label"><Icon icon="lucide:waves" width="14" height="14" /></span>
                     <span class="value" data-text={stream.statusText}>{stream.statusText}</span>
                 </div>
 
@@ -53,13 +56,13 @@
                     {@const trackLength = currentTrack.title.length}
                     {@const artistLength = currentTrack.artist.length}
                     <div class="display" transition:slide>
-                        <span class="label">TRACK:</span>
+                        <span class="label"><Icon icon="lucide:music" width="14" height="14" /></span>
                         <span class="value" class:marquee={trackLength > 20}>
                             {currentTrack.title}
                         </span>
                     </div>
                     <div class="display" transition:slide>
-                        <span class="label">ARTIST:</span>
+                        <span class="label"><Icon icon="lucide:user" width="14" height="14" /></span>
                         <span class="value" class:marquee={artistLength > 20}>
                             {currentTrack.artist}
                         </span>
@@ -90,7 +93,7 @@
                 </div>
 
                 <div class="volume-control">
-                    <span class="label">GAIN:</span>
+                    <span class="label"><Icon icon="lucide:volume-2" width="14" height="14" /></span>
                     <input
                         type="range"
                         min="0"
@@ -109,18 +112,24 @@
                         class="btn-scan"
                         aria-label={stream.isPlaying ? "Stop Scan" : "Start Scan"}
                     >
-                        [{stream.isPlaying ? "HALT" : "INIT_SCAN"}]
+                        {#if stream.isPlaying}
+                            <span class="icon"><Icon icon="lucide:stop-circle" width="20" height="20" /></span>
+                        {:else}
+                            <span class="icon"><Icon icon="lucide:play-circle" width="20" height="20" /></span>
+                        {/if}
                     </button>
 
-                    {#if stream.isPlaying}
-                        <button
-                            onclick={() => stream.toggleMute()}
-                            class="btn-mute"
-                            aria-label={stream.isMuted ? "Unmute" : "Mute"}
-                        >
-                            [{stream.isMuted ? "UNMUTE" : "MUTE"}]
-                        </button>
-                    {/if}
+                    <button
+                        onclick={() => stream.toggleMute()}
+                        class="btn-mute"
+                        aria-label={stream.isMuted ? "Unmute" : "Mute"}
+                    >
+                        {#if stream.isMuted}
+                            <span class="icon"><Icon icon="lucide:volume-x" width="20" height="20" /></span>
+                        {:else}
+                            <span class="icon"><Icon icon="lucide:volume-2" width="20" height="20" /></span>
+                        {/if}
+                    </button>
                 </div>
             </div>
         </div>
@@ -142,8 +151,8 @@
     .ribbon {
         display: flex;
         align-items: center;
-        gap: 1rem;
-        padding: 0.6rem 0.4rem;
+        justify-content: space-between;
+        padding: 0.55rem 0.7rem;
         background: var(--bg-transparent-dark);
         border: 1px solid var(--border-primary);
         border-radius: var(--radius);
@@ -152,8 +161,7 @@
         transition: all 0.2s;
         backdrop-filter: blur(10px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-        font-family: inherit;
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
 
     .ribbon:hover {
@@ -163,34 +171,23 @@
     }
 
     .ribbon-label {
-        font-weight: bold;
-        text-transform: uppercase;
-        min-width: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .ribbon-label .icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
     }
 
     .ribbon-status {
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        font-size: 0.7rem;
-    }
-
-    .status-indicator {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--fg-primary-dark);
-        transition: all 0.2s;
-    }
-
-    .status-indicator.active {
-        background: var(--fg-accent);
-        animation: pulse 2s infinite;
-    }
-
-    .status-text {
-        font-weight: bold;
-        text-transform: uppercase;
     }
 
     @keyframes pulse {
@@ -206,14 +203,24 @@
     }
 
     .ribbon-toggle {
-        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         color: var(--fg-primary-dark);
         min-width: 30px;
         text-align: center;
     }
 
+    .ribbon-toggle .icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+    }
+
     .scanner-panel {
-        width: 400px;
+        width: 320px;
         max-height: calc(100vh - 120px);
         overflow-y: auto;
         background: var(--bg-primary-dark);
@@ -322,9 +329,16 @@
     }
 
     .volume-control .label {
-        font-size: 0.7rem;
-        color: var(--fg-primary-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
         min-width: 40px;
+    }
+
+    .display .label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .range-input {
@@ -374,6 +388,17 @@
         flex: 1;
         padding: 0.5rem;
         font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .controls .icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
     }
 
     @media (max-width: 768px) {
