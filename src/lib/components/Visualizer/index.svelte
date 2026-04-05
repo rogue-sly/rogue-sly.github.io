@@ -2,10 +2,10 @@
     import { ok, err, type Result } from "neverthrow";
     import * as ui from "$lib/stores/ui";
     import { page } from "$app/state";
-    import { settings } from "$lib/stores/settings.svelte";
     import { type AppError, appErrorMessage } from "$lib/errors";
     import FRAG_SRC from "./visualizer.frag.glsl?raw";
     import VERT_SRC from "./visualizer.vert.glsl?raw";
+    import { settings } from "$lib/stores/settings.svelte";
 
     let { analyser, isPlaying }: { analyser: AnalyserNode | undefined; isPlaying: boolean } = $props();
 

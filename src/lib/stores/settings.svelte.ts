@@ -1,6 +1,6 @@
-import { browser } from "$app/environment";
 import { Result } from "neverthrow";
 import { type AppError, appErrorMessage } from "$lib/errors";
+import { browser } from "$app/environment";
 
 class VisualizerSettings {
     #parent: SettingsStore;

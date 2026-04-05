@@ -45,44 +45,35 @@ export const STATIONS: Station[] = [
 export class StreamStore {
     private _element: HTMLAudioElement | undefined = $state();
     private settings: SettingsStore;
-    private audioCtxManager: AudioContextManager;
+    private audioContextManager: AudioContextManager;
     private visualizerInterval: ReturnType<typeof setInterval> | undefined;
     private playPromise: Promise<void> | undefined;
 
-    // --- Public reactive state ---
     isPlaying = $state(false);
     isMuted = $state(false);
     statusText = $state("SYSTEM_OFFLINE");
     signalStrength = $state(0);
-    // Safe default; overridden in constructor after this.settings is assigned.
     currentStation: Station = $state(STATIONS[0]);
 
     get element() {
         return this._element;
     }
 
-    set element(el: HTMLAudioElement | undefined) {
-        this._element = el;
-        if (el) this.attachElement(el);
+    set element(element: HTMLAudioElement | undefined) {
+        this._element = element;
+        if (element) this.attachElement(element);
     }
 
     /** Exposes the analyser node for the Visualizer component. */
     get analyser() {
-        return this.audioCtxManager.analyser;
+        return this.audioContextManager.analyser;
     }
 
     constructor(settings: SettingsStore) {
         this.settings = settings;
-        this.audioCtxManager = new AudioContextManager();
-        // Resolve last-used station now that this.settings is available.
+        this.audioContextManager = new AudioContextManager();
         this.currentStation = STATIONS.find((s) => s.id === settings.stream.lastStationId) ?? STATIONS[0];
-    }
 
-    /**
-     * Initialises reactive effects. Must be called inside a Svelte component
-     * script (e.g. +layout.svelte) so the effects are tracked properly.
-     */
-    initEffects() {
         // Sync volume to settings reactively
         $effect(() => {
             if (this._element) {
@@ -91,38 +82,38 @@ export class StreamStore {
         });
     }
 
-    private attachElement(el: HTMLAudioElement) {
-        el.volume = this.settings.stream.volume;
-        el.muted = this.isMuted;
+    private attachElement(element: HTMLAudioElement) {
+        element.volume = this.settings.stream.volume;
+        element.muted = this.isMuted;
 
-        el.addEventListener("play", () => {
+        element.addEventListener("play", () => {
             this.isPlaying = true;
             this.statusText = "RECEIVING...";
             this.startSignalAnimation();
         });
 
-        el.addEventListener("playing", () => {
+        element.addEventListener("playing", () => {
             this.statusText = "RECEIVING...";
-            this.audioCtxManager.init(el);
-            this.audioCtxManager.resume();
+            this.audioContextManager.connect(element);
+            this.audioContextManager.resume();
         });
 
-        el.addEventListener("pause", () => {
+        element.addEventListener("pause", () => {
             this.isPlaying = false;
             this.statusText = "SIGNAL_LOST";
             this.signalStrength = 0;
             this.stopSignalAnimation();
         });
 
-        el.addEventListener("waiting", () => {
+        element.addEventListener("waiting", () => {
             this.statusText = "BUFFERING...";
         });
 
-        el.addEventListener("loadedmetadata", () => {
+        element.addEventListener("loadedmetadata", () => {
             this.statusText = "SYSTEM_ONLINE";
         });
 
-        el.src = this.currentStation.mp3;
+        element.src = this.currentStation.mp3;
     }
 
     async setStation(station: Station) {
@@ -198,5 +189,17 @@ export class StreamStore {
             return;
         }
         this.signalStrength = Math.random();
+    }
+
+    disconnect() {
+        if (this._element) {
+            this._element.pause();
+            this._element.src = "";
+        }
+        this.isPlaying = false;
+        this.statusText = "SYSTEM_OFFLINE";
+        this.signalStrength = 0;
+        this.stopSignalAnimation();
+        this.audioContextManager.disconnect();
     }
 }

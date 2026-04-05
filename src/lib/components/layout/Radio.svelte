@@ -1,11 +1,10 @@
 <script lang="ts">
     import { slide } from "svelte/transition";
-    import { settings } from "$lib/stores/settings.svelte";
-    import { STATIONS, StreamStore, MetadataStore } from "$lib/stores/nightride";
+    import { NightrideRadio, STATIONS } from "$lib/stores/nightride";
     import Icon from "@iconify/svelte";
+    import { settings } from "$lib/stores/settings.svelte";
 
-    let { stream, metadata }: { stream: StreamStore; metadata: MetadataStore } = $props();
-
+    let { nightride }: { nightride: NightrideRadio } = $props();
     let isExpanded = $state(false);
 
     function handleVolumeChange(e: Event) {
@@ -31,7 +30,7 @@
             <span class="icon"><Icon icon="lucide:radio" width="18" height="18" /></span>
         </span>
         <div class="ribbon-status">
-            <span class:status-indicator:active={stream.isPlaying}></span>
+            <span class:status-indicator:active={nightride.stream.isPlaying}></span>
         </div>
         <span class="ribbon-toggle">
             {#if isExpanded}
@@ -48,11 +47,12 @@
             <div class="scanner-inner">
                 <div class="display">
                     <span class="label"><Icon icon="lucide:waves" width="14" height="14" /></span>
-                    <span class="value" data-text={stream.statusText}>{stream.statusText}</span>
+                    <span class="value" data-text={nightride.stream.statusText}>{nightride.stream.statusText}</span
+                    >
                 </div>
 
-                {#if metadata.tracks[stream.currentStation.id]}
-                    {@const currentTrack = metadata.tracks[stream.currentStation.id]}
+                {#if nightride.metadata.tracks[nightride.stream.currentStation.id]}
+                    {@const currentTrack = nightride.metadata.tracks[nightride.stream.currentStation.id]}
                     {@const trackLength = currentTrack.title.length}
                     {@const artistLength = currentTrack.artist.length}
                     <div class="display" transition:slide>
@@ -73,8 +73,10 @@
                     {#each Array(8)}
                         <div
                             class="bar"
-                            style:height={stream.isPlaying && !stream.isMuted ? Math.random() * 100 + "%" : "2px"}
-                            style:opacity={stream.isPlaying && !stream.isMuted ? 1 : 0.3}
+                            style:height={nightride.stream.isPlaying && !nightride.stream.isMuted
+                                ? Math.random() * 100 + "%"
+                                : "2px"}
+                            style:opacity={nightride.stream.isPlaying && !nightride.stream.isMuted ? 1 : 0.3}
                         ></div>
                     {/each}
                 </div>
@@ -82,9 +84,9 @@
                 <div class="station-grid">
                     {#each STATIONS as station}
                         <button
-                            onclick={() => stream.setStation(station)}
+                            onclick={() => nightride.stream.setStation(station)}
                             class="btn-station"
-                            class:active={stream.currentStation.id === station.id}
+                            class:active={nightride.stream.currentStation.id === station.id}
                             aria-label="Select {station.name} station"
                         >
                             {station.name}
@@ -108,11 +110,11 @@
 
                 <div class="controls">
                     <button
-                        onclick={() => stream.togglePlay()}
+                        onclick={() => nightride.stream.togglePlay()}
                         class="btn-scan"
-                        aria-label={stream.isPlaying ? "Stop Scan" : "Start Scan"}
+                        aria-label={nightride.stream.isPlaying ? "Stop Scan" : "Start Scan"}
                     >
-                        {#if stream.isPlaying}
+                        {#if nightride.stream.isPlaying}
                             <span class="icon"><Icon icon="lucide:stop-circle" width="20" height="20" /></span>
                         {:else}
                             <span class="icon"><Icon icon="lucide:play-circle" width="20" height="20" /></span>
@@ -120,11 +122,11 @@
                     </button>
 
                     <button
-                        onclick={() => stream.toggleMute()}
+                        onclick={() => nightride.stream.toggleMute()}
                         class="btn-mute"
-                        aria-label={stream.isMuted ? "Unmute" : "Mute"}
+                        aria-label={nightride.stream.isMuted ? "Unmute" : "Mute"}
                     >
-                        {#if stream.isMuted}
+                        {#if nightride.stream.isMuted}
                             <span class="icon"><Icon icon="lucide:volume-x" width="20" height="20" /></span>
                         {:else}
                             <span class="icon"><Icon icon="lucide:volume-2" width="20" height="20" /></span>

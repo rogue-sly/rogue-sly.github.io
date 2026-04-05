@@ -1,10 +1,10 @@
 import { goto } from "$app/navigation";
 import { page } from "$app/state";
-import { settings } from "$lib/stores/settings.svelte";
-import { STATIONS, StreamStore } from "$lib/stores/nightride";
+import { STATIONS, type StreamStore } from "$lib/stores/nightride";
 import { sidebar } from "./sidebar.svelte";
 import { zenMode } from "./zen-mode.svelte";
 import { help } from "./help.svelte";
+import type { SettingsStore } from "../settings.svelte";
 
 export type Keybinding = {
     key: string;
@@ -16,6 +16,7 @@ export type Keybinding = {
 
 export class KeybindingStore {
     private stream: StreamStore;
+    private settings: SettingsStore;
     private VOLUME_STEP = 0.05;
 
     binds: Keybinding[] = [
@@ -39,21 +40,24 @@ export class KeybindingStore {
             keys: ["+"],
             description: "Volume up",
             group: "Playback",
-            action: () => (settings.stream.volume = Math.min(1, settings.stream.volume + this.VOLUME_STEP)),
+            action: () =>
+                (this.settings.stream.volume = Math.min(1, this.settings.stream.volume + this.VOLUME_STEP)),
         },
         {
             key: "=",
             keys: ["="],
             description: "Volume up (equals key)",
             group: "Playback",
-            action: () => (settings.stream.volume = Math.min(1, settings.stream.volume + this.VOLUME_STEP)),
+            action: () =>
+                (this.settings.stream.volume = Math.min(1, this.settings.stream.volume + this.VOLUME_STEP)),
         },
         {
             key: "-",
             keys: ["-"],
             description: "Volume down",
             group: "Playback",
-            action: () => (settings.stream.volume = Math.max(0, settings.stream.volume - this.VOLUME_STEP)),
+            action: () =>
+                (this.settings.stream.volume = Math.max(0, this.settings.stream.volume - this.VOLUME_STEP)),
         },
         {
             key: "n",
@@ -135,7 +139,8 @@ export class KeybindingStore {
         },
     ] as const;
 
-    constructor(stream: StreamStore) {
+    constructor(stream: StreamStore, settings: SettingsStore) {
         this.stream = stream;
+        this.settings = settings;
     }
 }

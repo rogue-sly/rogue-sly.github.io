@@ -1,46 +1,34 @@
 <script lang="ts">
+    import "../app.css";
+    import * as ui from "$lib/stores/ui";
     import Footer from "$lib/components/layout/Footer.svelte";
     import Header from "$lib/components/layout/Header.svelte";
-    import KeybindingsHelp from "$lib/components/layout/KeybindingsHelp.svelte";
-    import Sidebar from "$lib/components/layout/Sidebar.svelte";
     import Radio from "$lib/components/layout/Radio.svelte";
-    import * as ui from "$lib/stores/ui";
+    import Sidebar from "$lib/components/layout/Sidebar.svelte";
+    import { NightrideRadio } from "$lib/stores/nightride";
     import { fade } from "svelte/transition";
     import { onMount } from "svelte";
     import { page } from "$app/state";
-    import { StreamStore, MetadataStore } from "$lib/stores/nightride";
-    import "../app.css";
-    import { SettingsStore } from "$lib/stores/settings.svelte";
+    import { settings } from "$lib/stores/settings.svelte";
 
     let { children } = $props();
     let audioElement: HTMLAudioElement | undefined = $state();
 
-    const settings = new SettingsStore();
-    const stream = new StreamStore(settings);
-    const metadata = new MetadataStore();
-
-    stream.initEffects();
-
+    const nightride = new NightrideRadio(settings);
     onMount(() => {
-        metadata.connect();
-        if (audioElement) stream.element = audioElement;
-
-        return () => {
-            metadata.disconnect();
-        };
+        nightride.connect(audioElement);
+        return () => nightride.disconnect();
     });
 </script>
 
 <Header />
 
 <Sidebar />
-
-<KeybindingsHelp {stream} />
+<audio bind:this={audioElement} crossorigin="anonymous"></audio>
 
 {#await import("$lib/components/Visualizer/index.svelte") then { default: Visualizer }}
-    <Visualizer analyser={stream.analyser} isPlaying={stream.isPlaying} />
+    <Visualizer analyser={nightride.stream.analyser} isPlaying={nightride.stream.isPlaying} />
 {/await}
-<audio bind:this={audioElement} crossorigin="anonymous"></audio>
 
 {#key page.url.pathname}
     {@const pathname = page.url.pathname}
@@ -58,7 +46,7 @@
 
 <Footer />
 
-<Radio {stream} {metadata} />
+<Radio {nightride} />
 
 <style>
     main {
