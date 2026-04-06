@@ -145,6 +145,10 @@
         }
     }
 
+    ul {
+        padding-left: 0;
+    }
+
     .rss {
         margin-top: 16px;
         display: flex;
