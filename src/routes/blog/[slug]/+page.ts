@@ -9,8 +9,9 @@ type Post = { default: () => any; metadata: PostMetadata };
 
 export async function load({ params }: PageLoadEvent) {
     const slug = params.slug ?? "";
+
     const result = await ResultAsync.fromPromise(
-        import(`../../../lib/data/posts/${slug}.md`) as Promise<Post>,
+        import(`$lib/data/posts/${slug}/index.md`) as Promise<Post>,
         (): AppError => ({ type: "POST_NOT_FOUND", slug }),
     );
 

@@ -4,6 +4,7 @@ import adapter from "@sveltejs/adapter-static";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import rehypeSlug from "rehype-slug";
 import rehypeTocExtract from "./src/lib/utils/rehype/toc-extract.js";
+import relativeImages from "mdsvex-relative-images"
 
 /** @type {import('shiki').BundledTheme} */
 const theme = "kanagawa-dragon";
@@ -17,6 +18,7 @@ const highlighter = await createHighlighter({
 const mdsvexOptions = {
     extensions: [".md"],
     rehypePlugins: [rehypeSlug, rehypeTocExtract],
+    remarkPlugins: [relativeImages],
     highlight: {
         highlighter: async (code, lang = "text") => {
             const html = escapeSvelte(highlighter.codeToHtml(code, { lang, theme: theme }));

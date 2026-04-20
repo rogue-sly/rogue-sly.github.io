@@ -30,9 +30,9 @@ It's also possible to use language-specific package managers (e.g., `npm install
 
 One could argue that shell scripts can automate this process, but they tend to be brittle and break easily.
 
-### 2. <img src="/posts/alternatives-to-mason-nvim/mise.svg" alt="tool-logo" width="50" style="vertical-align: middle;"> [mise-en-place](https://mise.jdx.dev/)
+### 2. <img src="./assets/mise.svg" alt="tool-logo" width="50" style="vertical-align: middle;"> [mise-en-place](https://mise.jdx.dev/)
 
-<Asciinema src="/posts/alternatives-to-mason-nvim/mise.cast" />
+<Asciinema src="./assets/mise.cast" />
 
 This tool is pretty much a more modern and faster [asdf](https://asdf-vm.com/). It supports installing directly from GitHub and other services like GitLab and Codeberg. It works similarly to mason.nvim but is more flexible; since it operates at the shell level, you can use these tools with any editor, such as Helix or Sublime, not just Neovim (Any LSP compliant editor in general).
 
@@ -104,7 +104,7 @@ echo 'mise activate fish | source' >> ~/.config/fish/config.fish
 
 To install a package globally, run `mise use -g <package>`. Running `mise use <package>` without the `-g` flag will add it to a `mise.toml` in your current directory, making the tool available only when you are in that project.
 
-### 3. <img src="/posts/alternatives-to-mason-nvim/brew.svg" alt="tool-logo" width="50" style="vertical-align: middle;"> [Brew/LinuxBrew](https://brew.sh/)
+### 3. <img src="./assets/brew.svg" alt="tool-logo" width="50" style="vertical-align: middle;"> [Brew/LinuxBrew](https://brew.sh/)
 
 Brew is a popular alternative package manager written in Ruby. On Linux, it installs packages and their dependencies into a separate directory in your home folder. This isolation is convenient because it doesn't interfere with your system libraries, though it does mean downloading extra copies of common dependencies.
 
@@ -112,17 +112,17 @@ It is very user-friendly, operating like a standard package manager. For example
 
 It covers a wide range of language servers, linters, and formatters. However, there is one small drawback:
 
-![macOS fanboy package manager](/posts/alternatives-to-mason-nvim/brew-really-loves-macos.png)
+![macOS fanboy package manager](./assets/brew-really-loves-macos.png)
 
 It favors macOS over other platforms sometimes.
 
-### 4. <img src="/posts/alternatives-to-mason-nvim/nix.png" alt="tool-logo" width="50" style="vertical-align: middle;"> [Nix Package Manager](https://nixos.org/)
+### 4. <img src="./assets/nix.png" alt="tool-logo" width="50" style="vertical-align: middle;"> [Nix Package Manager](https://nixos.org/)
 
 Nix has a steeper learning curve because it uses its own functional language, but it isn't as daunting as it might seem; however, the language wasn't made with beauty in mind (bit of an eye sore sometimes).
 
 A major advantage of the Nix package manager is its massive repository. It is one of the largest in the world! You can be rest assured that almost any tool you need is available.
 
-![repology-repo-sizes-graph](/posts/alternatives-to-mason-nvim/repos_size_graph.svg)
+![repology-repo-sizes-graph](./assets/repos_size_graph.svg)
 
 On recent versions of Fedora (42+), you can install Nix directly from the official repositories. If you are on an older version, I recommend the [Determinate Nix Installer](https://github.com/DeterminateSystems/nix-installer).
 
@@ -130,7 +130,7 @@ Why don't I use Nix? Personally, I find Mise easier to manage for my specific ne
 
 Similar to Brew, Nix pulls its own system libraries to ensure reproducibility. However, the sheer volume of dependencies it downloads can be overwhelming for slower internet connections. Perhaps that was the reason why my wifi card died 😅.
 
-![nix taking forever to install things](/posts/alternatives-to-mason-nvim/nix-packages-taking-too-long-to-install.png)
+![nix taking forever to install things](./assets/nix-packages-taking-too-long-to-install.png)
 
 Okay I've been holding you from seeing how a nix config file looks like. Take a look:
 

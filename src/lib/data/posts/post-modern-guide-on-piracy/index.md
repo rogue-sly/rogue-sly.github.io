@@ -24,11 +24,23 @@ And with that out of the way, let's get into the fun stuff shall we?
 
 Here's a list of what I'm going to cover today:
 
-1. 🎮 Video Games (PC only)
+1. 🎮 Video Games
 2. 🎵 Music
 3. 📺 Cartoon & Anime
 
 ### Video Games
+
+You love video games right? and so I do, but you don't wanna go and dive through many sketchy websites and have to deal with annoying pop up ads that bypasses the best of adblockers? well I got you covered.
+
+#### ![Hydralauncher Icon](https://hydralauncher.gg/images/icons/hydra.svg) Hydralauncher
+
+#### Running Pirated Games on Linux (optional)
+
+#### Minecraft (PineconeMC)
+
+#### Console Games
+
+I'm only gonna show you how to get those games. Running those games is an issue you'll have to deal with on your end. I don't think you'll have much trouble running those games tho.
 
 ### Music
 

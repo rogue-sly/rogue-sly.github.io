@@ -21,15 +21,19 @@ function getPosts(): Result<PostMetadata[], AppError> {
         () => {
             let posts: PostMetadata[] = [];
 
-            const paths = import.meta.glob("/src/lib/data/posts/*.md", { eager: true });
+            const paths = import.meta.glob("$lib/data/posts/*/index.md", { eager: true });
 
             for (const path in paths) {
                 const file = paths[path];
-                const slug = path.split("/").at(-1)?.replace(".md", "");
+
+                const pathParts = path.split("/");
+                // grabs the folder name grabs folder name right before index.md e.g. (cool-post/index.md)
+                const slug = pathParts.at(-2);
 
                 if (file && typeof file === "object" && "metadata" in file && slug) {
                     const metadata = file.metadata as Omit<PostMetadata, "slug">;
                     const post = { ...metadata, slug } satisfies PostMetadata;
+
                     if (post.published || dev) posts.push(post);
                 }
             }

@@ -4,7 +4,7 @@ import type { AppError } from "$lib/errors";
 
 export function getAllPosts(): ResultAsync<PostLink[], AppError> {
     const pathPrefix = "../../data/posts/";
-    const allPostFiles = import.meta.glob("../../data/posts/*.md");
+    const allPostFiles = import.meta.glob("../../data/posts/*/index.md");
     const iterablePostFiles = Object.entries(allPostFiles);
 
     const postJobs: ResultAsync<PostLink, AppError>[] = iterablePostFiles.map(([path, resolver]) =>
