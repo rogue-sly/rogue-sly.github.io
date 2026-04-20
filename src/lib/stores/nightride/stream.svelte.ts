@@ -1,9 +1,7 @@
-import { ResultAsync } from "neverthrow";
 import { AudioContextManager } from "./audio-context-manager";
 import { SettingsStore } from "$lib/stores/settings.svelte";
 import { STATIONS } from "$lib/data/stations";
 import type { Station } from "$lib/types";
-import type { AppError } from "$lib/errors";
 
 export { STATIONS };
 
@@ -18,7 +16,6 @@ export class StreamStore {
     statusText = $state("SYSTEM_OFFLINE");
     currentStation: Station = $state(STATIONS[0]);
 
-    /** Exposes the analyser node for the Visualizer component. */
     get analyser() {
         return this.audioContextManager.analyser;
     }
@@ -29,7 +26,6 @@ export class StreamStore {
         this.currentStation = STATIONS.find((s) => s.id === settings.stream.lastStationId) ?? STATIONS[0];
     }
 
-    /** Call from onMount to create and wire up the audio element. */
     connect() {
         this.element = new Audio();
         this.element.crossOrigin = "anonymous";
@@ -60,7 +56,6 @@ export class StreamStore {
             this.statusText = "SYSTEM_ONLINE";
         });
 
-        // Sync volume to settings reactively
         $effect(() => {
             if (this.element) {
                 this.element.volume = this.settings.stream.volume;
@@ -98,22 +93,16 @@ export class StreamStore {
         } else {
             this.playPromise = this.element.play();
 
-            const result = await ResultAsync.fromPromise(
-                this.playPromise,
-                (cause): AppError => ({
-                    type: "STREAM_ERROR",
-                    message: cause instanceof DOMException ? cause.name : String(cause),
-                }),
-            );
-
-            this.playPromise = undefined;
-
-            if (result.isErr()) {
-                if (result.error.type === "STREAM_ERROR" && result.error.message !== "AbortError") {
-                    console.error("Audio playback failed:", result.error);
+            try {
+                await this.playPromise;
+            } catch (cause) {
+                if (cause instanceof DOMException && cause.name !== "AbortError") {
+                    console.error("Audio playback failed:", cause);
                     this.statusText = "ERR: INTERFERENCE";
                 }
             }
+
+            this.playPromise = undefined;
         }
     }
 

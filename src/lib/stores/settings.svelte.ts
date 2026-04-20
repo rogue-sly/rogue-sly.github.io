@@ -1,5 +1,3 @@
-import { Result } from "neverthrow";
-import { type AppError, appErrorMessage } from "$lib/errors";
 import { browser } from "$app/environment";
 
 class VisualizerSettings {
@@ -166,23 +164,16 @@ export class SettingsStore {
         this.stream = new StreamSettings(this);
 
         if (browser) {
-            const parseJSON = Result.fromThrowable(
-                JSON.parse,
-                (cause): AppError => ({ type: "PARSE_ERROR", context: "localStorage settings", cause }),
-            );
-
             const stored = localStorage.getItem("settings");
             if (!stored) return;
 
-            const result = parseJSON(stored);
-            if (!result.isOk()) {
-                console.error(appErrorMessage(result.error), result.error.type);
-                return;
+            try {
+                const parsed = JSON.parse(stored);
+                if (parsed.visualizer) this.visualizer.fromJSON(parsed.visualizer);
+                if (parsed.stream) this.stream.fromJSON(parsed.stream);
+            } catch (e) {
+                console.error("Failed to parse settings from localStorage:", e);
             }
-
-            const parsed = result.value;
-            if (parsed.visualizer) this.visualizer.fromJSON(parsed.visualizer);
-            if (parsed.stream) this.stream.fromJSON(parsed.stream);
         }
     }
 

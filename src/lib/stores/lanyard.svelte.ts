@@ -1,6 +1,4 @@
-import { Result } from "neverthrow";
 import type { DiscordPresence } from "$lib/types";
-import type { AppError } from "$lib/errors";
 
 type LanyardMessage = {
     op: number;
@@ -8,13 +6,6 @@ type LanyardMessage = {
     d: any;
 };
 
-/** Parse a raw WebSocket message string into a LanyardMessage. */
-const parseLanyardMessage = Result.fromThrowable(
-    (raw: string): LanyardMessage => JSON.parse(raw),
-    (cause): AppError => ({ type: "PARSE_ERROR", context: "Lanyard WebSocket", cause }),
-);
-
-// Op Codes
 const OP = {
     EVENT: 0,
     HELLO: 1,
@@ -39,7 +30,7 @@ export class LanyardConnection {
             return;
         }
 
-        this.cleanup(); // Ensure clean state
+        this.cleanup();
 
         this.socket = new WebSocket("wss://api.lanyard.rest/socket");
 
@@ -51,14 +42,12 @@ export class LanyardConnection {
         };
 
         this.socket.onmessage = (event) => {
-            const result = parseLanyardMessage(event.data);
-
-            if (result.isErr()) {
-                console.error("Failed to parse Lanyard message:", result.error);
-                return;
+            try {
+                const parsed: LanyardMessage = JSON.parse(event.data);
+                this.handleMessage(parsed);
+            } catch (e) {
+                console.error("Failed to parse Lanyard message:", e);
             }
-
-            this.handleMessage(result.value);
         };
 
         this.socket.onclose = () => {
@@ -84,7 +73,6 @@ export class LanyardConnection {
             this.heartbeatInterval = null;
         }
         if (this.socket) {
-            // Remove listeners to prevent loops if we are manually closing
             this.socket.onclose = null;
             this.socket.onerror = null;
             this.socket.onmessage = null;

@@ -1,24 +1,17 @@
-import { ResultAsync } from "neverthrow";
 import type { PostMetadata, PostLink } from "$lib/types";
-import type { AppError } from "$lib/errors";
 
-export function getAllPosts(): ResultAsync<PostLink[], AppError> {
+export async function getAllPosts(): Promise<PostLink[]> {
     const pathPrefix = "../../data/posts/";
     const allPostFiles = import.meta.glob("../../data/posts/*/index.md");
     const iterablePostFiles = Object.entries(allPostFiles);
 
-    const postJobs: ResultAsync<PostLink, AppError>[] = iterablePostFiles.map(([path, resolver]) =>
-        ResultAsync.fromPromise(
-            (resolver() as Promise<{ metadata: PostMetadata }>).then((mod) => {
-                const postPath = path.replace(pathPrefix, "").replace(".md", "");
-                return { metadata: mod.metadata, postPath } satisfies PostLink;
-            }),
-            (cause): AppError => ({ type: "POST_LOAD_ERROR", path, cause }),
-        ),
-    );
-
-    return ResultAsync.combine(postJobs).map((posts) => {
-        posts.sort((a, b) => new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime());
-        return posts;
+    const postJobs = iterablePostFiles.map(async ([path, resolver]) => {
+        const mod = await (resolver() as Promise<{ metadata: PostMetadata }>);
+        const postPath = path.replace(pathPrefix, "").replace(".md", "");
+        return { metadata: mod.metadata, postPath } satisfies PostLink;
     });
+
+    const posts = await Promise.all(postJobs);
+    posts.sort((a, b) => new Date(b.metadata.date).getTime() - new Date(a.metadata.date).getTime());
+    return posts;
 }

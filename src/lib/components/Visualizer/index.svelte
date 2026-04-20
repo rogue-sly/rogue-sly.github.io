@@ -1,9 +1,7 @@
 <script lang="ts">
     import { untrack } from "svelte";
-    import { ok, err, type Result } from "neverthrow";
     import * as ui from "$lib/stores/ui";
     import { page } from "$app/state";
-    import { type AppError, appErrorMessage } from "$lib/errors";
     import FRAG_SRC from "./visualizer.frag.glsl?raw";
     import VERT_SRC from "./visualizer.vert.glsl?raw";
     import { settings } from "$lib/stores/settings.svelte";
@@ -42,39 +40,44 @@
         glCtx: WebGLRenderingContext,
         type: number,
         src: string,
-    ): Result<WebGLShader, AppError> {
-        const shader = glCtx.createShader(type)!;
+    ): WebGLShader | null {
+        const shader = glCtx.createShader(type);
+        if (!shader) return null;
         glCtx.shaderSource(shader, src);
         glCtx.compileShader(shader);
         if (!glCtx.getShaderParameter(shader, glCtx.COMPILE_STATUS)) {
             const log = glCtx.getShaderInfoLog(shader);
             glCtx.deleteShader(shader);
-            return err({ type: "WEBGL_ERROR", message: `Shader compile error: ${log}` });
+            console.error(`Shader compile error: ${log}`);
+            return null;
         }
-        return ok(shader);
+        return shader;
     }
 
     function createProgram(
         glCtx: WebGLRenderingContext,
         vertSrc: string,
         fragSrc: string,
-    ): Result<WebGLProgram, AppError> {
-        return compileShader(glCtx, glCtx.VERTEX_SHADER, vertSrc).andThen((vert) =>
-            compileShader(glCtx, glCtx.FRAGMENT_SHADER, fragSrc).andThen((frag) => {
-                const prog = glCtx.createProgram()!;
-                glCtx.attachShader(prog, vert);
-                glCtx.attachShader(prog, frag);
-                glCtx.linkProgram(prog);
-                if (!glCtx.getProgramParameter(prog, glCtx.LINK_STATUS)) {
-                    const log = glCtx.getProgramInfoLog(prog);
-                    glCtx.deleteProgram(prog);
-                    return err({ type: "WEBGL_ERROR", message: `Program link error: ${log}` } satisfies AppError);
-                }
-                glCtx.deleteShader(vert);
-                glCtx.deleteShader(frag);
-                return ok(prog);
-            }),
-        );
+    ): WebGLProgram | null {
+        const vert = compileShader(glCtx, glCtx.VERTEX_SHADER, vertSrc);
+        if (!vert) return null;
+        const frag = compileShader(glCtx, glCtx.FRAGMENT_SHADER, fragSrc);
+        if (!frag) return null;
+
+        const prog = glCtx.createProgram();
+        if (!prog) return null;
+        glCtx.attachShader(prog, vert);
+        glCtx.attachShader(prog, frag);
+        glCtx.linkProgram(prog);
+        if (!glCtx.getProgramParameter(prog, glCtx.LINK_STATUS)) {
+            const log = glCtx.getProgramInfoLog(prog);
+            glCtx.deleteProgram(prog);
+            console.error(`Program link error: ${log}`);
+            return null;
+        }
+        glCtx.deleteShader(vert);
+        glCtx.deleteShader(frag);
+        return prog;
     }
 
     /** Parse a CSS hex/rgb color string into a normalised [r, g, b] float array. */
@@ -110,12 +113,10 @@
             return;
         }
 
-        const programResult = createProgram(gl, VERT_SRC, FRAG_SRC);
-        if (programResult.isErr()) {
-            console.error(appErrorMessage(programResult.error));
+        const program = createProgram(gl, VERT_SRC, FRAG_SRC);
+        if (!program) {
             return;
         }
-        const program = programResult.value;
 
         const quadVerts = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
         const vbo = gl.createBuffer()!;

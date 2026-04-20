@@ -2,19 +2,18 @@ import type { ServerLoadEvent } from "@sveltejs/kit";
 import { create } from "xmlbuilder2";
 import { getAllPosts } from "$lib/utils/post";
 import { url } from "$lib/data/site";
-import { appErrorMessage } from "$lib/errors";
 
 export const prerender = true;
 
 export async function GET({}: ServerLoadEvent) {
-    const postsResult = await getAllPosts();
-
-    if (postsResult.isErr()) {
-        console.error("Sitemap generation failed:", appErrorMessage(postsResult.error), postsResult.error);
+    let posts;
+    try {
+        posts = await getAllPosts();
+    } catch (e) {
+        console.error("Sitemap generation failed:", e);
         return new Response("Failed to generate sitemap", { status: 500 });
     }
 
-    const posts = postsResult.value;
     const staticPages = ["", "whoami", "contact", "blog"];
 
     const root = create({ version: "1.0", encoding: "UTF-8" }).ele("urlset", {

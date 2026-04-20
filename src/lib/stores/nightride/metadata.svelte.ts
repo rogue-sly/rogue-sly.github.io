@@ -1,12 +1,4 @@
-import { Result } from "neverthrow";
 import type { NightrideTrack } from "$lib/types";
-import type { AppError } from "$lib/errors";
-
-/** Parse a raw SSE data string into a list of NightrideTrack objects. */
-const parseTrackData = Result.fromThrowable(
-    (raw: string): NightrideTrack[] => JSON.parse(raw),
-    (cause): AppError => ({ type: "PARSE_ERROR", context: "Nightride SSE", cause }),
-);
 
 export class MetadataStore {
     private eventSource: EventSource | null = null;
@@ -18,14 +10,12 @@ export class MetadataStore {
             const raw: string | undefined = event.data?.trim();
             if (!raw || !raw.startsWith("[")) return;
 
-            const parseResult = parseTrackData(raw);
-
-            if (parseResult.isErr()) {
-                console.error("Failed to parse Nightride meta:", parseResult.error);
-                return;
+            try {
+                const parsed: NightrideTrack[] = JSON.parse(raw);
+                parsed.forEach((track) => (this.tracks[track.station] = track));
+            } catch (e) {
+                console.error("Failed to parse Nightride meta:", e);
             }
-
-            parseResult.value.forEach((track) => (this.tracks[track.station] = track));
         };
 
         this.eventSource.onerror = () => {

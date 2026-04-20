@@ -1,49 +1,39 @@
 import { json } from "@sveltejs/kit";
-import { Result } from "neverthrow";
 import type { PostMetadata } from "$lib/types";
-import type { AppError } from "$lib/errors";
-import { appErrorMessage } from "$lib/errors";
 import { dev } from "$app/environment";
 
 export async function GET() {
-    const result = getPosts();
-
-    if (result.isErr()) {
-        console.error("Failed to build posts list:", appErrorMessage(result.error), result.error);
+    try {
+        const posts = getPosts();
+        return json(posts);
+    } catch (e) {
+        console.error("Failed to build posts list:", e);
         return new Response("Failed to load posts", { status: 500 });
     }
-
-    return json(result.value);
 }
 
-function getPosts(): Result<PostMetadata[], AppError> {
-    return Result.fromThrowable(
-        () => {
-            let posts: PostMetadata[] = [];
+function getPosts(): PostMetadata[] {
+    let posts: PostMetadata[] = [];
 
-            const paths = import.meta.glob("$lib/data/posts/*/index.md", { eager: true });
+    const paths = import.meta.glob("$lib/data/posts/*/index.md", { eager: true });
 
-            for (const path in paths) {
-                const file = paths[path];
+    for (const path in paths) {
+        const file = paths[path];
 
-                const pathParts = path.split("/");
-                // grabs the folder name grabs folder name right before index.md e.g. (cool-post/index.md)
-                const slug = pathParts.at(-2);
+        const pathParts = path.split("/");
+        const slug = pathParts.at(-2);
 
-                if (file && typeof file === "object" && "metadata" in file && slug) {
-                    const metadata = file.metadata as Omit<PostMetadata, "slug">;
-                    const post = { ...metadata, slug } satisfies PostMetadata;
+        if (file && typeof file === "object" && "metadata" in file && slug) {
+            const metadata = file.metadata as Omit<PostMetadata, "slug">;
+            const post = { ...metadata, slug } satisfies PostMetadata;
 
-                    if (post.published || dev) posts.push(post);
-                }
-            }
+            if (post.published || dev) posts.push(post);
+        }
+    }
 
-            posts = posts.sort(
-                (first, second) => new Date(second.date).getTime() - new Date(first.date).getTime(),
-            );
+    posts = posts.sort(
+        (first, second) => new Date(second.date).getTime() - new Date(first.date).getTime(),
+    );
 
-            return posts;
-        },
-        (cause): AppError => ({ type: "POSTS_LOAD_ERROR", cause }),
-    )();
+    return posts;
 }

@@ -6,7 +6,7 @@ declare global {
     namespace App {
         interface Error {
             message: string;
-            /** The AppError discriminant, set when errors are thrown via neverthrow Result types. */
+            /** The AppError discriminant for typed error handling. */
             errorType?: AppError["type"];
         }
         // interface Locals {}

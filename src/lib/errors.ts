@@ -1,6 +1,5 @@
 /**
  * Discriminated union of all typed application errors.
- * Use this as the Err side of neverthrow Result/ResultAsync types.
  */
 export type AppError =
     | { type: "POST_NOT_FOUND"; slug: string }
