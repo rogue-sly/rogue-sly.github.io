@@ -1,8 +1,35 @@
 <script lang="ts">
     import SEO from "$lib/components/SEO.svelte";
-    import { formatDate } from "$lib/utils/date";
-    import { createHeadings, type TocStateItem } from "$lib/utils/post/toc";
     import type { PageData } from "./$types";
+    import type { TocItem } from "$lib/types";
+    import { formatDate } from "$lib/utils/date";
+
+    type TocStateItem = TocItem & { children: TocStateItem[] };
+
+    function createHeadings(toc: TocItem[]): TocStateItem[] {
+        const stack: TocStateItem[] = [];
+        const roots: TocStateItem[] = [];
+
+        // Map incoming items to state items
+        const nodes: TocStateItem[] = toc.map((item) => ({
+            ...item,
+            children: [],
+        }));
+
+        for (const node of nodes) {
+            while (stack.length > 0 && stack[stack.length - 1].level >= node.level) {
+                stack.pop();
+            }
+            if (stack.length > 0) {
+                stack[stack.length - 1].children.push(node);
+            } else {
+                roots.push(node);
+            }
+            stack.push(node);
+        }
+
+        return roots;
+    }
 
     let { data }: { data: PageData } = $props();
 
