@@ -1,14 +1,14 @@
+import { error } from "@sveltejs/kit";
 import type { PageLoadEvent } from "./$types";
 import type { PostMetadata } from "$lib/types";
-import { error } from "@sveltejs/kit";
 
 export async function load({ fetch }: PageLoadEvent) {
-    const posts = await fetch("/api/posts.json").then((response) => {
-        if (!response.ok) return error(response.status, { message: "Failed to load posts" });
+    const response = await fetch("/api/posts.json");
+    if (!response.ok) {
+        throw error(response.status, { message: "Failed to load posts." });
+    }
 
-        const json = response.json().then((data: PostMetadata[]) => data);
-        return json;
-    });
+    const { posts }: { posts: PostMetadata[] } = await response.json();
 
     return { posts };
 }

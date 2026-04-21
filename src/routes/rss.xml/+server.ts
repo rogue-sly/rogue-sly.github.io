@@ -1,6 +1,6 @@
+import type { PostMetadata } from "$lib/types";
 import * as config from "$lib/data/site";
 import { create } from "xmlbuilder2";
-import { getAllPosts } from "$lib/utils/post";
 import rehypeStringify from "rehype-stringify";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
@@ -8,10 +8,11 @@ import remarkRehype from "remark-rehype";
 import { JSDOM } from "jsdom";
 import { readFile } from "fs/promises";
 import { unified } from "unified";
+import type { ServerLoadEvent } from "@sveltejs/kit";
 
 export const prerender = true;
 
-export async function GET() {
+export async function GET({ fetch }: ServerLoadEvent) {
     const headers = {
         "Cache-Control": "max-age=0, s-maxage=3600",
         "Content-Type": "application/xml",
@@ -19,7 +20,10 @@ export async function GET() {
 
     let xml: string;
     try {
-        xml = await generateXml();
+        const response = await fetch("/api/posts.json");
+        if (!response.ok) throw new Error("Failed to fetch posts");
+        const { posts } = await response.json();
+        xml = await generateXml(posts);
     } catch (e) {
         console.error("RSS feed generation failed:", e);
         return new Response("Failed to generate RSS feed", { status: 500 });
@@ -33,7 +37,7 @@ async function getHtmlForPost(
     leadImageFilename?: string,
     leadImageCaption?: string,
 ): Promise<string> {
-    const postMarkdownWithFrontmatter = await readFile(`src/lib/data/posts/${postPath}.md`, "utf-8");
+    const postMarkdownWithFrontmatter = await readFile(`src/lib/data/posts/${postPath}/index.md`, "utf-8");
     const postMarkdown = postMarkdownWithFrontmatter.split("---").slice(2).join("---").trim();
 
     const processedMarkdown = await unified()
@@ -64,8 +68,7 @@ async function getHtmlForPost(
 }
 
 // prettier-ignore
-async function generateXml(): Promise<string> {
-    const posts = await getAllPosts();
+async function generateXml(posts: PostMetadata[]): Promise<string> {
     const rssUrl = `${config.url}/rss.xml`;
     const root = create({ version: "1.0", encoding: "utf-8" })
         .ele("feed", { xmlns: "http://www.w3.org/2005/Atom" })
@@ -81,22 +84,19 @@ async function generateXml(): Promise<string> {
             .ele("subtitle").txt(config.desc).up();
 
     for (const post of posts) {
-        if (!post.metadata.published) continue;
-
-        const postHtml = await getHtmlForPost(post.postPath, post.metadata.image, post.metadata.caption);
-
-        const pubDate = post.metadata.date;
-        const postUrl = `${config.url}/blog/${post.postPath}`;
-        const summary = post.metadata.desc;
+        const postHtml = await getHtmlForPost(post.slug, post.image, post.caption);
+        const pubDate = post.date;
+        const postUrl = `${config.url}/blog/${post.slug}`;
+        const summary = post.desc;
 
         root.ele("entry")
-                .ele("title").txt(post.metadata.title).up()
-                .ele("link", { href: postUrl }).up()
-                .ele("updated").txt(pubDate).up()
-                .ele("id").txt(postUrl).up()
-                .ele("content", { type: "html" }).txt(postHtml).up()
-                .ele("summary").txt(summary).up()
-            .up();
+            .ele("title").txt(post.title).up()
+            .ele("link", { href: postUrl }).up()
+            .ele("updated").txt(pubDate).up()
+            .ele("id").txt(postUrl).up()
+            .ele("content", { type: "html" }).txt(postHtml).up()
+            .ele("summary").txt(summary).up()
+        .up();
     }
 
     return root.end();
