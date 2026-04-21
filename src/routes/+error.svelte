@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-    <title>{status} {status === 404 ? "Not Found" : "Error"} | rogue87</title>
+    <title>{status} {status === 404 ? "Not Found" : "Error"}</title>
 </svelte:head>
 
 <section class="error-container">

@@ -8,9 +8,9 @@
         <div class="logo">
             <!-- svelte-ignore a11y_no_static_element_interactions -->
             <div class="pfp" role="presentation">
-                <img src="/images/gideon.webp" alt="Rogue87 Avatar" width="50" height="50" />
+                <img src="/images/gideon.webp" alt="Rogue.Sly Avatar" width="50" height="50" />
             </div>
-            <a href="/">Rogue87</a>
+            <a href="/">Rogue.Sly</a>
         </div>
 
         <button class="menu-btn" onclick={() => ui.sidebar.toggle()} aria-label="Toggle Menu">

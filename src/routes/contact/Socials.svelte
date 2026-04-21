@@ -27,21 +27,21 @@
     <h2 class="divider">Socials</h2>
 
     <div class="links-grid">
-        <a href="https://github.com/rogue-87" target="_blank" class="social">
+        <a href="https://github.com/rogue-sly" target="_blank" class="social">
             <div class="social-inner">
                 <span class="icon"><Icon icon="mdi:github" width={svg.width} height={svg.height} /></span>
             </div>
             <span>github</span>
         </a>
 
-        <a href="https://gitlab.com/rogue87" target="_blank" class="social">
+        <a href="https://gitlab.com/rogue-sly" target="_blank" class="social">
             <div class="social-inner">
                 <span class="icon"><Icon icon="mdi:gitlab" width={svg.width} height={svg.height} /></span>
             </div>
             <span>gitlab</span>
         </a>
 
-        <a href="https://www.youtube.com/@rogue87dotsly" target="_blank" class="social">
+        <a href="https://www.youtube.com/@rogue-slydotsly" target="_blank" class="social">
             <div class="social-inner">
                 <span class="icon"><Icon icon="mdi:youtube" width={svg.width} height={svg.height} /></span>
             </div>
@@ -60,11 +60,11 @@
     <h2 class="divider">Chat with me!</h2>
 
     <div class="links-grid">
-        <a href="https://matrix.to/#/@rogue87:matrix.org" target="_blank" class="social">
+        <a href="https://matrix.to/#/@rogue-sly:matrix.org" target="_blank" class="social">
             <div class="social-inner">
                 <span class="icon"><Icon icon="simple-icons:matrix" width={svg.width} height={svg.height} /></span>
             </div>
-            <span>matrix: @rogue87:matrix.org</span>
+            <span>matrix: @rogue-sly:matrix.org</span>
         </a>
 
         <button class="social" onclick={() => copyToClipboard(discordHandle, "discord")}>

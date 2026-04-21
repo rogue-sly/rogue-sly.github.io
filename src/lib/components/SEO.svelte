@@ -7,7 +7,7 @@
         desc = siteDesc,
         type = "website",
         image = "/images/gideon.webp",
-        imageAlt = "Rogue87 Avatar",
+        imageAlt = "Rogue.Sly Avatar",
         publishedTime,
         articleBody,
     }: {

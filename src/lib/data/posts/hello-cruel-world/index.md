@@ -16,6 +16,6 @@ once I'm satisfied with my website, I'll finally start working on some REEEEEAAA
 
 ## Who are you?
 
-Just a random webdev wannabe, but if you wanna know more about me, then check [whoami](https://rogue87.gitlab.io/whoami/) page.
+Just a random webdev wannabe, but if you wanna know more about me, then check [whoami](https://rogue-sly.gitlab.io/whoami/) page.
 
 okay I really need to sleep, it's almost 3am lol.

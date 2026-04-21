@@ -11,8 +11,8 @@
         description="My personal portfolio and blog built with SvelteKit and Svelte 5 Runes."
         techStack={["SvelteKit 5", "TypeScript", "Static Website"]}
         links={{
-            repo: "https://gitlab.com/rogue87/rogue87.gitlab.io",
-            live: "https://rogue87.gitlab.io",
+            repo: "https://gitlab.com/rogue-sly/rogue-sly.gitlab.io",
+            live: "https://rogue-sly.gitlab.io",
         }}
     />
 
@@ -21,7 +21,7 @@
         description="Easy to use dotfiles manager"
         techStack={["Rust"]}
         links={{
-            repo: "https://gitlab.com/rogue87/dotbee",
+            repo: "https://gitlab.com/rogue-sly/dotbee",
         }}
     />
 
@@ -30,7 +30,7 @@
         description="A neovim plugin wrapper for inlyne (a browserless markdown viewer)"
         techStack={["Lua", "Neovim"]}
         links={{
-            repo: "https://github.com/rogue-87/inlyne.nvim",
+            repo: "https://github.com/rogue-sly/inlyne.nvim",
         }}
     />
 </div>
