@@ -67,10 +67,7 @@ PineconeMC comes with [ely.by](https://ely.by/) service which allows you to have
 
 I'm only gonna show you how to get those games. Running those games is an issue you'll have to deal with on your end. I don't think you'll have much trouble running those games tho.
 
-For most console games, [vimm's lair](https://vimm.net/) is all you need, but here's a list of notable sources:
-
-- [r-roms.github.io](https://r-roms.github.io/)
-- [fmhy.net](https://fmhy.net/)
+For most console games, [vimm's lair](https://vimm.net/) is all you need.
 
 ### Music
 
@@ -92,6 +89,10 @@ I don't see much point in saving whole cartoons as I only watch them once and ne
 
 ### Conclusion
 
-If you wanna dive deeper into the world of piracy, I recommend [reading the megathread](https://www.reddit.com/r/Piracy/wiki/megathread/).
+If you wanna dive deeper into the world of piracy, I recommend these sources for reading:
+
+- [Piracy Megathread](https://www.reddit.com/r/Piracy/wiki/megathread/).
+- [freemediaheckyeah](https://fmhy.net/)
+- [r-roms.github.io](https://r-roms.github.io/)
 
 Thanks for reading :)
