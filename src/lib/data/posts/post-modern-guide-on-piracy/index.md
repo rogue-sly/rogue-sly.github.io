@@ -1,7 +1,7 @@
 ---
 title: "Post Modern Guide on Piracy"
 desc: "A guide on how to become a pirate in the current digital age"
-date: "2026-04-26"
+date: "2026-04-24"
 tags: ["Piracy", "Free Stuff"]
 published: true
 ---
