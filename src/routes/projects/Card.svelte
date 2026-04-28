@@ -37,7 +37,9 @@
         display: flex;
         flex-direction: column;
         gap: 1rem;
-        transition: all 0.2s ease;
+        transition:
+            border-color 0.2s ease,
+            background-color 0.2s ease;
         position: relative;
         overflow: hidden;
     }

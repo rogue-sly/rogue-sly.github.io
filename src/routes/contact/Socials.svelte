@@ -118,7 +118,9 @@
         border: 1px solid transparent;
         border-radius: var(--radius);
         width: 100%;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        transition:
+            background 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+            border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: pointer;
         overflow: hidden;
         text-decoration: none;

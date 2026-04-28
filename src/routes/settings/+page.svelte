@@ -177,7 +177,9 @@
         background-color: var(--bg-primary-dark);
         border: 1px solid var(--border-primary);
         border-radius: var(--radius);
-        transition: all 0.2s;
+        transition:
+            background-color 0.2s,
+            color 0.2s;
     }
 
     .info h3 {
@@ -201,7 +203,10 @@
         padding: 0.5rem 1rem;
         font-weight: bold;
         cursor: pointer;
-        transition: all 0.2s;
+        transition:
+            color 0.2s,
+            border-color 0.2s,
+            background 0.2s;
         min-width: 120px;
         border-radius: calc(var(--radius) / 2);
     }
@@ -230,7 +235,10 @@
         padding: 0.5rem 0.75rem;
         font-weight: bold;
         cursor: pointer;
-        transition: all 0.2s;
+        transition:
+            background 0.2s,
+            border-color 0.2s,
+            color 0.2s;
         border-radius: calc(var(--radius) / 2);
         font-size: 0.85rem;
     }

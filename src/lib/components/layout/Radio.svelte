@@ -148,7 +148,10 @@
         border-radius: var(--radius);
         color: var(--fg-primary);
         cursor: pointer;
-        transition: all 0.2s;
+        transition:
+            background 0.2s,
+            color 0.2s,
+            border-color 0.2s;
         backdrop-filter: blur(10px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         font-size: 0.7rem;
@@ -340,7 +343,9 @@
         border: 1px solid var(--border-primary);
         color: var(--fg-primary);
         cursor: pointer;
-        transition: all 0.2s;
+        transition:
+            background 0.2s,
+            color 0.2s;
         text-transform: uppercase;
         border-radius: calc(var(--radius) / 2);
     }

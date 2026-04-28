@@ -68,7 +68,9 @@
         text-decoration: none;
         border: 1px solid var(--border-primary);
         border-radius: var(--radius);
-        transition: all 0.2s ease;
+        transition:
+            background 0.2s ease,
+            border-color 0.2s ease;
     }
 
     .home-link:hover {

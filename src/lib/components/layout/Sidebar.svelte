@@ -131,7 +131,9 @@
         color: var(--fg-primary);
         border: 1px solid var(--border-primary);
         border-radius: calc(var(--radius) / 2);
-        transition: all 0.2s;
+        transition:
+            background 0.2s,
+            color 0.2s;
     }
 
     .btn-settings:hover {
@@ -178,7 +180,11 @@
         text-decoration: none;
         font-size: 1.1rem;
         padding: 0.5rem;
-        transition: all 0.2s;
+        transition:
+            color 0.2s,
+            background 0.2s,
+            border-color 0.2s,
+            padding-left 0.2s;
         border: 1px solid transparent;
         text-transform: uppercase;
         border-radius: calc(var(--radius) / 2);
@@ -202,7 +208,9 @@
         border: 1px solid var(--border-primary);
         color: var(--fg-primary);
         cursor: pointer;
-        transition: all 0.2s;
+        transition:
+            background 0.2s,
+            color 0.2s;
         text-transform: uppercase;
         border-radius: calc(var(--radius) / 2);
     }
