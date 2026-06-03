@@ -4,7 +4,7 @@ import adapter from "@sveltejs/adapter-static";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import rehypeSlug from "rehype-slug";
 import rehypeTocExtract from "./src/lib/utils/rehype/toc-extract.js";
-import relativeImages from "mdsvex-relative-images"
+import relativeImages from "mdsvex-relative-images";
 
 /** @type {import('shiki').BundledTheme} */
 const theme = "kanagawa-dragon";

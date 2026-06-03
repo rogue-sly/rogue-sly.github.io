@@ -36,11 +36,7 @@
     // WebGL helpers
     // -------------------------------------------------------------------------
 
-    function compileShader(
-        glCtx: WebGLRenderingContext,
-        type: number,
-        src: string,
-    ): WebGLShader | null {
+    function compileShader(glCtx: WebGLRenderingContext, type: number, src: string): WebGLShader | null {
         const shader = glCtx.createShader(type);
         if (!shader) return null;
         glCtx.shaderSource(shader, src);
@@ -54,11 +50,7 @@
         return shader;
     }
 
-    function createProgram(
-        glCtx: WebGLRenderingContext,
-        vertSrc: string,
-        fragSrc: string,
-    ): WebGLProgram | null {
+    function createProgram(glCtx: WebGLRenderingContext, vertSrc: string, fragSrc: string): WebGLProgram | null {
         const vert = compileShader(glCtx, glCtx.VERTEX_SHADER, vertSrc);
         if (!vert) return null;
         const frag = compileShader(glCtx, glCtx.FRAGMENT_SHADER, fragSrc);
