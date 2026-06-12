@@ -1,5 +1,5 @@
 default:
-  image: oven/bun:alpine
+  image: node:alpine
 
 stages:
   - deploy 
@@ -7,8 +7,8 @@ stages:
 pages:
   stage: deploy
   script:
-    - bun install
-    - bun run build
+    - npm ci
+    - npm run build
   artifacts:
     paths:
       - public 
