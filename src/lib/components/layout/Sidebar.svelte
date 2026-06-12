@@ -1,88 +1,100 @@
 <script lang="ts">
-    import { sidebar, zenMode } from "$lib/stores/ui";
+    import { zenMode } from "$lib/stores/ui";
     import Icon from "@iconify/svelte";
-    import { fade, fly } from "svelte/transition";
     import { page } from "$app/state";
 
-    // HACK: For some reason, it calls window.close() instead of sidebar.close()
-    // `close` is a reserved name on `window`, so calling sidebar.close() inline
-    // as onclick={sidebar.close} would invoke window.close() instead. This wrapper
-    // avoids that name collision.
     function close() {
-        sidebar.close();
+        const cb = document.getElementById("sidebar-toggle") as HTMLInputElement;
+        if (cb) cb.checked = false;
     }
 </script>
 
-{#if sidebar.isOpen}
-    <!-- Backdrop -->
-    <div
-        class="backdrop"
-        transition:fade={{ duration: 200 }}
-        onclick={close}
-        role="button"
-        tabindex="0"
-        onkeydown={(e) => e.key === "Escape" && close()}
-    ></div>
+<input type="checkbox" id="sidebar-toggle" class="hidden-checkbox" />
 
-    <!-- Sidebar Panel -->
-    <aside class="sidebar" transition:fly={{ x: 300, duration: 300 }}>
-        <div class="header">
-            <div class="header-actions">
-                <div>
-                    <button
-                        onclick={() => zenMode.toggle()}
-                        class="btn-settings"
-                        class:active={zenMode.isZenMode}
-                        aria-label={zenMode.isZenMode ? "Show Content" : "Hide Content"}
-                    >
-                        {#if zenMode.isZenMode}
-                            <span class="icon"><Icon icon="lucide:eye-off" width="18" height="18" /></span>
-                        {:else}
-                            <span class="icon"><Icon icon="lucide:eye" width="18" height="18" /></span>
-                        {/if}
-                    </button>
-                    <a href="/settings" class="btn-settings" onclick={close} aria-label="Settings">
-                        <span class="icon"><Icon icon="lucide:settings" width="18" height="18" /></span>
-                    </a>
-                </div>
+<!-- svelte-ignore a11y_no_noninteractive_tabindex a11y_no_noninteractive_element_interactions -->
+<label for="sidebar-toggle" class="backdrop"
+    onkeydown={(e) => e.key === "Escape" && close()}
+    tabindex="0"
+    aria-label="Close menu"
+></label>
 
-                <button onclick={close} aria-label="Close Menu" class="btn-close">
-                    <span class="icon"><Icon icon="lucide:x" width="20" height="20" /></span>
+<aside class="sidebar">
+    <div class="header">
+        <div class="header-actions">
+            <div>
+                <button
+                    onclick={() => zenMode.toggle()}
+                    class="btn-settings"
+                    class:active={zenMode.isZenMode}
+                    aria-label={zenMode.isZenMode ? "Show Content" : "Hide Content"}
+                >
+                    {#if zenMode.isZenMode}
+                        <span class="icon"><Icon icon="lucide:eye-off" width="18" height="18" /></span>
+                    {:else}
+                        <span class="icon"><Icon icon="lucide:eye" width="18" height="18" /></span>
+                    {/if}
                 </button>
+                <a href="/settings" class="btn-settings" onclick={close} aria-label="Settings">
+                    <span class="icon"><Icon icon="lucide:settings" width="18" height="18" /></span>
+                </a>
             </div>
-        </div>
 
-        <nav>
-            <ul>
-                <li><a href="/" class:active={page.url.pathname === "/"} onclick={close}>/home</a></li>
-                <li>
-                    <a href="/whoami" class:active={page.url.pathname === "/whoami/"} onclick={close}>/whoami</a>
-                </li>
-                <li>
-                    <a href="/blog" class:active={page.url.pathname.startsWith("/blog")} onclick={close}>/blog</a>
-                </li>
-                <li>
-                    <a href="/projects/" class:active={page.url.pathname === "/projects/"} onclick={close}>
-                        /projects
-                    </a>
-                </li>
-                <li>
-                    <a href="/contact" class:active={page.url.pathname === "/contact/"} onclick={close}>
-                        /contact
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-{/if}
+            <label for="sidebar-toggle" class="btn-close" aria-label="Close Menu">
+                <span class="icon"><Icon icon="lucide:x" width="20" height="20" /></span>
+            </label>
+        </div>
+    </div>
+
+    <nav>
+        <ul>
+            <li><a href="/" class:active={page.url.pathname === "/"} onclick={close}>/home</a></li>
+            <li>
+                <a href="/whoami" class:active={page.url.pathname === "/whoami/"} onclick={close}>/whoami</a>
+            </li>
+            <li>
+                <a href="/blog" class:active={page.url.pathname.startsWith("/blog")} onclick={close}>/blog</a>
+            </li>
+            <li>
+                <a href="/projects/" class:active={page.url.pathname === "/projects/"} onclick={close}>
+                    /projects
+                </a>
+            </li>
+            <li>
+                <a href="/contact" class:active={page.url.pathname === "/contact/"} onclick={close}>
+                    /contact
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>
 
 <style>
+    .hidden-checkbox {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+        pointer-events: none;
+    }
+
     .backdrop {
         position: fixed;
         inset: 0;
         background: var(--bg-transparent-dark);
         backdrop-filter: blur(2px);
         z-index: 3;
+
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.2s ease, visibility 0s 0.2s;
+    }
+
+    #sidebar-toggle:checked ~ .backdrop {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transition: opacity 0.2s ease, visibility 0s 0s;
     }
 
     .sidebar {
@@ -99,6 +111,16 @@
         flex-direction: column;
         box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
         overflow: hidden;
+
+        transform: translateX(100%);
+        visibility: hidden;
+        transition: transform 0.3s ease, visibility 0s 0.3s;
+    }
+
+    #sidebar-toggle:checked ~ .sidebar {
+        transform: translateX(0);
+        visibility: visible;
+        transition: transform 0.3s ease, visibility 0s 0s;
     }
 
     .header {
@@ -227,6 +249,12 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        cursor: pointer;
+        background: transparent;
+        border: 1px solid var(--border-primary);
+        color: var(--fg-primary);
+        text-transform: uppercase;
+        border-radius: calc(var(--radius) / 2);
     }
 
     .btn-close:hover {

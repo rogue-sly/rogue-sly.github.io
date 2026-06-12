@@ -1,5 +1,4 @@
 <script lang="ts">
-    import * as ui from "$lib/stores/ui";
     import Icon from "@iconify/svelte";
 </script>
 
@@ -13,9 +12,9 @@
             <a href="/">Rogue.Sly</a>
         </div>
 
-        <button class="menu-btn" onclick={() => ui.sidebar.toggle()} aria-label="Toggle Menu">
+        <label for="sidebar-toggle" class="menu-btn" aria-label="Toggle Menu">
             <span class="menu-icon"><Icon icon="lucide:menu" width="24" height="24" /></span>
-        </button>
+        </label>
     </div>
 </header>
 
