@@ -6,5 +6,5 @@
     "printWidth": 115,
     "sortPackageJson": false,
     "ignorePatterns": ["package-lock.json", "pnpm-lock.yaml", "yarn.lock", ".gitlab-ci.yml"],
-    "svelte": true
+    "svelte": false
 }
