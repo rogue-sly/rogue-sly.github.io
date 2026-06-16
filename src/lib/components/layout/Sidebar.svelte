@@ -12,7 +12,9 @@
 <input type="checkbox" id="sidebar-toggle" class="hidden-checkbox" />
 
 <!-- svelte-ignore a11y_no_noninteractive_tabindex a11y_no_noninteractive_element_interactions -->
-<label for="sidebar-toggle" class="backdrop"
+<label
+    for="sidebar-toggle"
+    class="backdrop"
     onkeydown={(e) => e.key === "Escape" && close()}
     tabindex="0"
     aria-label="Close menu"
@@ -60,9 +62,7 @@
                 </a>
             </li>
             <li>
-                <a href="/contact" class:active={page.url.pathname === "/contact/"} onclick={close}>
-                    /contact
-                </a>
+                <a href="/contact" class:active={page.url.pathname === "/contact/"} onclick={close}> /contact </a>
             </li>
         </ul>
     </nav>
@@ -87,14 +87,18 @@
         opacity: 0;
         visibility: hidden;
         pointer-events: none;
-        transition: opacity 0.2s ease, visibility 0s 0.2s;
+        transition:
+            opacity 0.2s ease,
+            visibility 0s 0.2s;
     }
 
     #sidebar-toggle:checked ~ .backdrop {
         opacity: 1;
         visibility: visible;
         pointer-events: auto;
-        transition: opacity 0.2s ease, visibility 0s 0s;
+        transition:
+            opacity 0.2s ease,
+            visibility 0s 0s;
     }
 
     .sidebar {
@@ -114,13 +118,17 @@
 
         transform: translateX(100%);
         visibility: hidden;
-        transition: transform 0.3s ease, visibility 0s 0.3s;
+        transition:
+            transform 0.3s ease,
+            visibility 0s 0.3s;
     }
 
     #sidebar-toggle:checked ~ .sidebar {
         transform: translateX(0);
         visibility: visible;
-        transition: transform 0.3s ease, visibility 0s 0s;
+        transition:
+            transform 0.3s ease,
+            visibility 0s 0s;
     }
 
     .header {
