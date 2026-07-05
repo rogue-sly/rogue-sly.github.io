@@ -4,4 +4,4 @@ export const title = "Den";
 export const desc = "I like doing random things :)";
 export const author = "Rogue.Sly";
 export const email = "rogue87@tuta.io";
-export const url = dev ? "http://localhost:5173" : "https://rogue-sly.gitlab.io";
+export const url = dev ? "http://localhost:5173" : "https://rogue-sly.github.io";

@@ -7,21 +7,11 @@
 
 <div class="projects-grid">
     <Card
-        title="Personal Website"
-        description="My personal portfolio and blog built with SvelteKit and Svelte 5 Runes."
-        techStack={["SvelteKit 5", "TypeScript", "Static Website"]}
-        links={{
-            repo: "https://gitlab.com/rogue-sly/rogue-sly.gitlab.io",
-            live: "https://rogue-sly.gitlab.io",
-        }}
-    />
-
-    <Card
         title="Dotbee"
         description="Easy to use dotfiles manager"
         techStack={["Rust"]}
         links={{
-            repo: "https://gitlab.com/rogue-sly/dotbee",
+            repo: "https://github.com/rogue-sly/dotbee",
         }}
     />
 

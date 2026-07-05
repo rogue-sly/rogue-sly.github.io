@@ -1,3 +1,3 @@
-# rogue-sly.gitlab.io
+# rogue-sly.github.io
 
 My personal website :p
