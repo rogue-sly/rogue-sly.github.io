@@ -3,21 +3,11 @@
     import * as ui from "$lib/stores/ui";
     import Footer from "$lib/components/layout/Footer.svelte";
     import Header from "$lib/components/layout/Header.svelte";
-    import Radio from "$lib/components/layout/Radio.svelte";
     import Sidebar from "$lib/components/layout/Sidebar.svelte";
-    import { NightrideRadio } from "$lib/stores/nightride";
     import { fade } from "svelte/transition";
-    import { onMount } from "svelte";
     import { page } from "$app/state";
-    import { settings } from "$lib/stores/settings.svelte";
 
     let { children } = $props();
-
-    const nightride = new NightrideRadio(settings);
-    onMount(() => {
-        nightride.connect();
-        return () => nightride.disconnect();
-    });
 </script>
 
 <Header />
@@ -25,10 +15,7 @@
 <Sidebar />
 
 {#await import("$lib/components/Visualizer/index.svelte") then { default: Visualizer }}
-    <Visualizer
-        analyser={nightride.stream.analyser}
-        isPlaying={nightride.stream.isPlaying}
-    />
+    <Visualizer />
 {/await}
 
 {#key page.url.pathname}
@@ -48,8 +35,6 @@
 {/key}
 
 <Footer />
-
-<Radio {nightride} />
 
 <style>
     main {

@@ -58,20 +58,6 @@ export type PostLink = {
     postPath: string;
 };
 
-export type Station = {
-    id: string;
-    name: string;
-    mp3: string;
-};
-
-export type NightrideTrack = {
-    station: string;
-    title: string;
-    artist: string;
-    album: string;
-    comment: string;
-};
-
 export type Project = {
     title: string;
     description: string;

@@ -1,8 +1,6 @@
 <script lang="ts">
     import { settings } from "$lib/stores/settings.svelte";
     import SEO from "$lib/components/SEO.svelte";
-
-    const BAR_COUNT_OPTIONS: Array<16 | 32 | 64 | 128> = [16, 32, 64, 128];
 </script>
 
 <SEO title="Settings" desc="Configuration and preferences." />
@@ -15,69 +13,18 @@
             <div class="setting-item">
                 <div class="info">
                     <h3>Visualizer</h3>
-                    <p>Enable or disable the background frequency visualizer.</p>
+                    <p>
+                        Enable or disable the background frequency visualizer.
+                    </p>
                 </div>
                 <button
                     class="toggle-btn"
                     class:active={settings.visualizer.enabled}
-                    onclick={() => (settings.visualizer.enabled = !settings.visualizer.enabled)}
+                    onclick={() =>
+                        (settings.visualizer.enabled =
+                            !settings.visualizer.enabled)}
                 >
                     [{settings.visualizer.enabled ? "ENABLED" : "DISABLED"}]
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Spectrum Bars -->
-    <section class="settings-group">
-        <h2 class="group-title">Spectrum Bars</h2>
-        <div class="settings-grid">
-            <div class="setting-item">
-                <div class="info">
-                    <h3>Bar Count</h3>
-                    <p>Number of frequency bars. Higher values show more detail but cost more GPU.</p>
-                </div>
-                <div class="segmented">
-                    {#each BAR_COUNT_OPTIONS as n}
-                        <button
-                            class="seg-btn"
-                            class:active={settings.visualizer.barCount === n}
-                            onclick={() => (settings.visualizer.barCount = n)}
-                        >
-                            {n}
-                        </button>
-                    {/each}
-                </div>
-            </div>
-
-            <div class="setting-item">
-                <div class="info">
-                    <h3>Bar Height</h3>
-                    <p>Maximum height of frequency bars as a fraction of screen height.</p>
-                </div>
-                <div class="slider-group">
-                    <input
-                        type="range"
-                        min="0.1"
-                        max="0.5"
-                        step="0.05"
-                        bind:value={settings.visualizer.barHeightScale}
-                    />
-                    <span class="slider-value">{Math.round(settings.visualizer.barHeightScale * 100)}%</span>
-                </div>
-            </div>
-
-            <div class="setting-item">
-                <div class="info">
-                    <h3>Reflections</h3>
-                    <p>Show bar reflections below the horizon line.</p>
-                </div>
-                <button
-                    class="toggle-btn"
-                    class:active={settings.visualizer.showReflections}
-                    onclick={() => (settings.visualizer.showReflections = !settings.visualizer.showReflections)}
-                >
-                    [{settings.visualizer.showReflections ? "ENABLED" : "DISABLED"}]
                 </button>
             </div>
         </div>
@@ -90,11 +37,22 @@
             <div class="setting-item">
                 <div class="info">
                     <h3>Opacity</h3>
-                    <p>Overall brightness of the visualizer when on the home page.</p>
+                    <p>
+                        Overall brightness of the visualizer when on the home
+                        page.
+                    </p>
                 </div>
                 <div class="slider-group">
-                    <input type="range" min="0.1" max="1.0" step="0.05" bind:value={settings.visualizer.opacity} />
-                    <span class="slider-value">{Math.round(settings.visualizer.opacity * 100)}%</span>
+                    <input
+                        type="range"
+                        min="0.1"
+                        max="1.0"
+                        step="0.05"
+                        bind:value={settings.visualizer.opacity}
+                    />
+                    <span class="slider-value"
+                        >{Math.round(settings.visualizer.opacity * 100)}%</span
+                    >
                 </div>
             </div>
 
@@ -106,7 +64,9 @@
                 <button
                     class="toggle-btn"
                     class:active={settings.visualizer.showSun}
-                    onclick={() => (settings.visualizer.showSun = !settings.visualizer.showSun)}
+                    onclick={() =>
+                        (settings.visualizer.showSun =
+                            !settings.visualizer.showSun)}
                 >
                     [{settings.visualizer.showSun ? "ENABLED" : "DISABLED"}]
                 </button>
@@ -115,12 +75,17 @@
             <div class="setting-item">
                 <div class="info">
                     <h3>Grid</h3>
-                    <p>Show the retro perspective grid and animated horizontal lines.</p>
+                    <p>
+                        Show the retro perspective grid and animated horizontal
+                        lines.
+                    </p>
                 </div>
                 <button
                     class="toggle-btn"
                     class:active={settings.visualizer.showGrid}
-                    onclick={() => (settings.visualizer.showGrid = !settings.visualizer.showGrid)}
+                    onclick={() =>
+                        (settings.visualizer.showGrid =
+                            !settings.visualizer.showGrid)}
                 >
                     [{settings.visualizer.showGrid ? "ENABLED" : "DISABLED"}]
                 </button>
@@ -139,7 +104,9 @@
                         step="0.1"
                         bind:value={settings.visualizer.gridSpeed}
                     />
-                    <span class="slider-value">{settings.visualizer.gridSpeed.toFixed(1)}x</span>
+                    <span class="slider-value"
+                        >{settings.visualizer.gridSpeed.toFixed(1)}x</span
+                    >
                 </div>
             </div>
         </div>
@@ -222,38 +189,6 @@
         color: var(--bg-primary);
     }
 
-    /* Segmented control */
-    .segmented {
-        display: flex;
-        gap: 0.25rem;
-    }
-
-    .seg-btn {
-        background: transparent;
-        border: 1px solid var(--border-primary);
-        color: var(--fg-primary-dark);
-        padding: 0.5rem 0.75rem;
-        font-weight: bold;
-        cursor: pointer;
-        transition:
-            background 0.2s,
-            border-color 0.2s,
-            color 0.2s;
-        border-radius: calc(var(--radius) / 2);
-        font-size: 0.85rem;
-    }
-
-    .seg-btn.active {
-        color: var(--fg-accent);
-        border-color: var(--fg-accent);
-        background: rgba(var(--accent-rgb), 0.1);
-    }
-
-    .seg-btn:hover:not(.active) {
-        background: var(--fg-primary);
-        color: var(--bg-primary);
-    }
-
     /* Slider */
     .slider-group {
         display: flex;
@@ -309,15 +244,6 @@
 
         .toggle-btn {
             width: 100%;
-        }
-
-        .segmented {
-            width: 100%;
-        }
-
-        .seg-btn {
-            flex: 1;
-            text-align: center;
         }
 
         .slider-group {

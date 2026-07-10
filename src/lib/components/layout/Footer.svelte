@@ -20,12 +20,6 @@
     <div class="footer-inner">
         <div class="footer-info">
             <p>
-                music brought to you by <a
-                    href="https://nightride.fm"
-                    target="_blank">nightride.fm</a
-                >.
-            </p>
-            <p>
                 icons are licensed under the
                 <a
                     href="https://en.wikipedia.org/wiki/MIT_License"
