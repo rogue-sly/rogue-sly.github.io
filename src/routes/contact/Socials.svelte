@@ -3,18 +3,11 @@
     import Icon from "@iconify/svelte";
     let svg = { width: "1.4rem", height: "1.4rem" };
 
-    let discordHandle = "rogue.sly";
-    let discordText = $state(`discord: ${discordHandle}`);
     let emailText = $state(`email: ${email}`);
 
-    function copyToClipboard(text: string, type: "discord" | "email") {
+    function copyToClipboard(text: string, type: "email") {
         navigator.clipboard.writeText(text);
-        if (type === "discord") {
-            discordText = "copied to clipboard 👍";
-            setTimeout(() => {
-                discordText = `discord: ${discordHandle}`;
-            }, 2000);
-        } else {
+        if (type === "email") {
             emailText = "copied to clipboard 👍";
             setTimeout(() => {
                 emailText = `email: ${email}`;
@@ -29,28 +22,59 @@
     <div class="links-grid">
         <a href="https://github.com/rogue-sly" target="_blank" class="social">
             <div class="social-inner">
-                <span class="icon"><Icon icon="mdi:github" width={svg.width} height={svg.height} /></span>
+                <span class="icon"
+                    ><Icon
+                        icon="mdi:github"
+                        width={svg.width}
+                        height={svg.height}
+                    /></span
+                >
             </div>
             <span>github</span>
         </a>
 
         <a href="https://gitlab.com/rogue-sly" target="_blank" class="social">
             <div class="social-inner">
-                <span class="icon"><Icon icon="mdi:gitlab" width={svg.width} height={svg.height} /></span>
+                <span class="icon"
+                    ><Icon
+                        icon="mdi:gitlab"
+                        width={svg.width}
+                        height={svg.height}
+                    /></span
+                >
             </div>
             <span>gitlab</span>
         </a>
 
-        <a href="https://www.youtube.com/@rogue-slydotsly" target="_blank" class="social">
+        <a
+            href="https://www.youtube.com/@rogue-slydotsly"
+            target="_blank"
+            class="social"
+        >
             <div class="social-inner">
-                <span class="icon"><Icon icon="mdi:youtube" width={svg.width} height={svg.height} /></span>
+                <span class="icon"
+                    ><Icon
+                        icon="mdi:youtube"
+                        width={svg.width}
+                        height={svg.height}
+                    /></span
+                >
             </div>
             <span>youtube</span>
         </a>
 
-        <a href="https://bsky.app/profile/rogue-sly.bsky.social" target="_blank" class="social">
+        <a
+            href="https://bsky.app/profile/rogue-sly.bsky.social"
+            target="_blank"
+            class="social"
+        >
             <div class="social-inner">
-                <span class="icon"><Icon icon="simple-icons:bluesky" width={svg.width} height={svg.height} /></span
+                <span class="icon"
+                    ><Icon
+                        icon="simple-icons:bluesky"
+                        width={svg.width}
+                        height={svg.height}
+                    /></span
                 >
             </div>
             <span>bluesky</span>
@@ -60,23 +84,32 @@
     <h2 class="divider">Chat with me!</h2>
 
     <div class="links-grid">
-        <a href="https://matrix.to/#/@rogue-sly:matrix.org" target="_blank" class="social">
+        <a
+            href="https://matrix.to/#/@rogue-sly:matrix.org"
+            target="_blank"
+            class="social"
+        >
             <div class="social-inner">
-                <span class="icon"><Icon icon="simple-icons:matrix" width={svg.width} height={svg.height} /></span>
+                <span class="icon"
+                    ><Icon
+                        icon="simple-icons:matrix"
+                        width={svg.width}
+                        height={svg.height}
+                    /></span
+                >
             </div>
             <span>matrix: @rogue-sly:matrix.org</span>
         </a>
 
-        <button class="social" onclick={() => copyToClipboard(discordHandle, "discord")}>
-            <div class="social-inner">
-                <span class="icon"><Icon icon="mdi:discord" width={svg.width} height={svg.height} /></span>
-            </div>
-            <span>{discordText}</span>
-        </button>
-
         <button class="social" onclick={() => copyToClipboard(email, "email")}>
             <div class="social-inner">
-                <span class="icon"><Icon icon="mdi:email" width={svg.width} height={svg.height} /></span>
+                <span class="icon"
+                    ><Icon
+                        icon="mdi:email"
+                        width={svg.width}
+                        height={svg.height}
+                    /></span
+                >
             </div>
             <span>{emailText}</span>
         </button>

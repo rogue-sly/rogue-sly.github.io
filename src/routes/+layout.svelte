@@ -25,7 +25,10 @@
 <Sidebar />
 
 {#await import("$lib/components/Visualizer/index.svelte") then { default: Visualizer }}
-    <Visualizer analyser={nightride.stream.analyser} isPlaying={nightride.stream.isPlaying} />
+    <Visualizer
+        analyser={nightride.stream.analyser}
+        isPlaying={nightride.stream.isPlaying}
+    />
 {/await}
 
 {#key page.url.pathname}
@@ -34,7 +37,9 @@
         in:fade={{ duration: 400 }}
         class:blog={pathname === "/blog/"}
         class:centered={pathname === "/" || pathname === "/contact/"}
-        class:padded={pathname.startsWith("/whoami") || pathname.startsWith("/blog") || pathname === "/settings/"}
+        class:padded={pathname.startsWith("/whoami") ||
+            pathname.startsWith("/blog") ||
+            pathname === "/settings/"}
         style:opacity={ui.zenMode.isZenMode ? 0 : 1}
         style:pointer-events={ui.zenMode.isZenMode ? "none" : "auto"}
     >
@@ -48,8 +53,10 @@
 
 <style>
     main {
-        margin-top: var(--header-height); /* push content down so it's not hidden behind header */
-        min-height: calc(100svh - var(--header-height)); /* ensure footer stays at bottom */
+        /* push content down so it's not hidden behind header */
+        margin-top: var(--header-height);
+        /* ensure footer stays at bottom */
+        min-height: calc(100svh - var(--header-height));
 
         width: var(--global-width);
         margin-inline: auto;

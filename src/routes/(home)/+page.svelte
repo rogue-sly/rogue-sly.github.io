@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Activity from "./Activity.svelte";
     import SEO from "$lib/components/SEO.svelte";
 </script>
 
@@ -9,11 +8,9 @@
     <h1>Hi there! my name is Ali, but you can call me Rogue</h1>
 
     <p class="intro">
-        Yet another CS student. Trying to make something out of himself. Hope you find something that interests you
-        here.
+        Yet another CS student. Trying to make something out of himself. Hope
+        you find something that interests you here.
     </p>
-
-    <Activity />
 </section>
 
 <style>

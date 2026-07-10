@@ -10,15 +10,6 @@ export type Spotify = {
     album: string;
 };
 
-export type DiscordUser = {
-    id: string;
-    username: string;
-    avatar: string;
-    discriminator: string;
-    global_name: string;
-    display_name: string;
-};
-
 export type Activity = {
     type: number;
     name: string;
@@ -41,18 +32,6 @@ export type Activity = {
         id?: string;
         animated?: boolean;
     };
-};
-
-export type DiscordPresence = {
-    kv: object;
-    spotify: Spotify | null;
-    discord_user: DiscordUser;
-    activities: Activity[];
-    discord_status: "online" | "idle" | "dnd" | "offline";
-    active_on_discord_web: boolean;
-    active_on_discord_desktop: boolean;
-    active_on_discord_mobile: boolean;
-    listening_to_spotify: boolean;
 };
 
 export type TocItem = {
