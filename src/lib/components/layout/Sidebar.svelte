@@ -31,24 +31,24 @@
                     aria-label={zenMode.isZenMode ? "Show Content" : "Hide Content"}
                 >
                     {#if zenMode.isZenMode}
-                        <span class="icon">
+                        <span class="icon-wrap">
                             <Icon icon="lucide:eye-off" width="18" height="18" />
                         </span>
                     {:else}
-                        <span class="icon">
+                        <span class="icon-wrap">
                             <Icon icon="lucide:eye" width="18" height="18" />
                         </span>
                     {/if}
                 </button>
                 <a href="/settings" class="btn-settings" onclick={close} aria-label="Settings">
-                    <span class="icon">
+                    <span class="icon-wrap">
                         <Icon icon="lucide:settings" width="18" height="18" />
                     </span>
                 </a>
             </div>
 
-            <label for="sidebar-toggle" class="btn-close" aria-label="Close Menu">
-                <span class="icon">
+            <label for="sidebar-toggle" class="btn-close" aria-label="Close Sidebar">
+                <span class="icon-wrap">
                     <Icon icon="lucide:x" width="20" height="20" />
                 </span>
             </label>
@@ -276,19 +276,6 @@
         background: var(--bg-accent);
         color: var(--fg-primary-light);
         border-color: var(--bg-accent);
-    }
-
-    .icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 18px;
-        height: 18px;
-    }
-
-    .btn-close .icon {
-        width: 20px;
-        height: 20px;
     }
 
     @media (max-width: 600px) {

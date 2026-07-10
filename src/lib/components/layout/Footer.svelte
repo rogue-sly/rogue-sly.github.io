@@ -1,7 +1,6 @@
 <script lang="ts">
     import { email } from "$lib/data/site";
     import Icon from "@iconify/svelte";
-    let svg = { width: "1rem", height: "1rem" };
 
     let emailText = $state(`email: ${email}`);
 
@@ -37,24 +36,27 @@
 
         <div class="footer-socials">
             <a href="https://github.com/rogue-sly" target="_blank">
-                <Icon icon="mdi:github" width={svg.width} height={svg.height} />
+                <span class="icon-wrap"><Icon icon="mdi:github" width="20" height="20" /></span>
                 github
             </a>
             <a href="https://gitlab.com/rogue-sly" target="_blank">
-                <Icon icon="mdi:gitlab" width={svg.width} height={svg.height} />
+                <span class="icon-wrap"><Icon icon="mdi:gitlab" width="20" height="20" /></span>
                 gitlab
             </a>
             <a href="https://www.youtube.com/@rogue-slydotsly" target="_blank">
-                <Icon icon="mdi:youtube" width={svg.width} height={svg.height} /> youtube
+                <span class="icon-wrap"><Icon icon="mdi:youtube" width="20" height="20" /></span>
+                youtube
             </a>
             <a href="https://bsky.app/profile/rogue-sly.bsky.social" target="_blank">
-                <Icon icon="simple-icons:bluesky" width={svg.width} height={svg.height} /> bluesky
+                <span class="icon-wrap"><Icon icon="simple-icons:bluesky" width="20" height="20" /></span>
+                bluesky
             </a>
             <a href="https://matrix.to/#/@rogue-sly:matrix.org" target="_blank">
-                <Icon icon="simple-icons:matrix" width={svg.width} height={svg.height} /> matrix: @rogue-sly:matrix.org
+                <span class="icon-wrap"><Icon icon="simple-icons:matrix" width="20" height="20" /> </span>
+                matrix: @rogue-sly:matrix.org
             </a>
             <button onclick={() => copyToClipboard(email, "email")}>
-                <Icon icon="mdi:email" width={svg.width} height={svg.height} />
+                <span class="icon-wrap"><Icon icon="mdi:email" width="20" height="20" /></span>
                 {emailText}
             </button>
         </div>

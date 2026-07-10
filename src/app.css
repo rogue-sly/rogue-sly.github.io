@@ -29,7 +29,7 @@
     --highlight: #717171;
 }
 
-/* NOTE Resets */
+/* Resets */
 * {
     box-sizing: border-box;
 }
@@ -106,7 +106,16 @@ select {
     font-family: "Quantico", sans-serif;
 }
 
-/* NOTE: Fonts */
+/* Helper */
+.icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+}
+
+/* Fonts */
 /* quantico-regular - latin */
 @font-face {
     font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
