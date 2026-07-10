@@ -15,7 +15,7 @@ export async function GET({ fetch }: ServerLoadEvent) {
         return new Response("Failed to generate sitemap", { status: 500 });
     }
 
-    const staticPages = ["", "whoami", "contact", "blog"];
+    const staticPages = ["", "whoami", "blog"];
 
     const root = create({ version: "1.0", encoding: "UTF-8" }).ele("urlset", {
         xmlns: "http://www.sitemaps.org/schemas/sitemap/0.9",

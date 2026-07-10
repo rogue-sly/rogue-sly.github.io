@@ -36,7 +36,7 @@
     <main
         in:fade={{ duration: 400 }}
         class:blog={pathname === "/blog/"}
-        class:centered={pathname === "/" || pathname === "/contact/"}
+        class:centered={pathname === "/"}
         class:padded={pathname.startsWith("/whoami") ||
             pathname.startsWith("/blog") ||
             pathname === "/settings/"}

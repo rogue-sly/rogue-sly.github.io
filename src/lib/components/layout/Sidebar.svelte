@@ -4,7 +4,9 @@
     import { page } from "$app/state";
 
     function close() {
-        const cb = document.getElementById("sidebar-toggle") as HTMLInputElement;
+        const cb = document.getElementById(
+            "sidebar-toggle",
+        ) as HTMLInputElement;
         if (cb) cb.checked = false;
     }
 </script>
@@ -28,41 +30,79 @@
                     onclick={() => zenMode.toggle()}
                     class="btn-settings"
                     class:active={zenMode.isZenMode}
-                    aria-label={zenMode.isZenMode ? "Show Content" : "Hide Content"}
+                    aria-label={zenMode.isZenMode
+                        ? "Show Content"
+                        : "Hide Content"}
                 >
                     {#if zenMode.isZenMode}
-                        <span class="icon"><Icon icon="lucide:eye-off" width="18" height="18" /></span>
+                        <span class="icon">
+                            <Icon
+                                icon="lucide:eye-off"
+                                width="18"
+                                height="18"
+                            />
+                        </span>
                     {:else}
-                        <span class="icon"><Icon icon="lucide:eye" width="18" height="18" /></span>
+                        <span class="icon">
+                            <Icon icon="lucide:eye" width="18" height="18" />
+                        </span>
                     {/if}
                 </button>
-                <a href="/settings" class="btn-settings" onclick={close} aria-label="Settings">
-                    <span class="icon"><Icon icon="lucide:settings" width="18" height="18" /></span>
+                <a
+                    href="/settings"
+                    class="btn-settings"
+                    onclick={close}
+                    aria-label="Settings"
+                >
+                    <span class="icon">
+                        <Icon icon="lucide:settings" width="18" height="18" />
+                    </span>
                 </a>
             </div>
 
-            <label for="sidebar-toggle" class="btn-close" aria-label="Close Menu">
-                <span class="icon"><Icon icon="lucide:x" width="20" height="20" /></span>
+            <label
+                for="sidebar-toggle"
+                class="btn-close"
+                aria-label="Close Menu"
+            >
+                <span class="icon">
+                    <Icon icon="lucide:x" width="20" height="20" />
+                </span>
             </label>
         </div>
     </div>
 
     <nav>
         <ul>
-            <li><a href="/" class:active={page.url.pathname === "/"} onclick={close}>/home</a></li>
             <li>
-                <a href="/whoami" class:active={page.url.pathname === "/whoami/"} onclick={close}>/whoami</a>
+                <a
+                    href="/"
+                    class:active={page.url.pathname === "/"}
+                    onclick={close}>/home</a
+                >
             </li>
             <li>
-                <a href="/blog" class:active={page.url.pathname.startsWith("/blog")} onclick={close}>/blog</a>
+                <a
+                    href="/whoami"
+                    class:active={page.url.pathname === "/whoami/"}
+                    onclick={close}>/whoami</a
+                >
             </li>
             <li>
-                <a href="/projects/" class:active={page.url.pathname === "/projects/"} onclick={close}>
+                <a
+                    href="/blog"
+                    class:active={page.url.pathname.startsWith("/blog")}
+                    onclick={close}>/blog</a
+                >
+            </li>
+            <li>
+                <a
+                    href="/projects/"
+                    class:active={page.url.pathname === "/projects/"}
+                    onclick={close}
+                >
                     /projects
                 </a>
-            </li>
-            <li>
-                <a href="/contact" class:active={page.url.pathname === "/contact/"} onclick={close}> /contact </a>
             </li>
         </ul>
     </nav>
