@@ -14,6 +14,7 @@ if ok then
 		typescript = { "oxfmt" },
 		typescriptreact = { "oxfmt" },
 		yaml = { "oxfmt" },
+		svelte = { "oxfmt" },
 	}
 	conform.formatters_by_ft = vim.tbl_extend("error", conform.formatters_by_ft, formats)
 end
