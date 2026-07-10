@@ -24,19 +24,28 @@
         class="ribbon"
         onclick={toggleExpand}
         aria-expanded={isExpanded}
-        aria-label={isExpanded ? "Collapse Radio Scanner" : "Expand Radio Scanner"}
+        aria-label={isExpanded
+            ? "Collapse Radio Scanner"
+            : "Expand Radio Scanner"}
     >
         <span class="ribbon-label">
-            <span class="icon"><Icon icon="lucide:radio" width="18" height="18" /></span>
+            <span class="icon">
+                <Icon icon="lucide:radio" width="18" height="18" />
+            </span>
         </span>
         <div class="ribbon-status">
-            <span class:status-indicator:active={nightride.stream.isPlaying}></span>
+            <span class:status-indicator:active={nightride.stream.isPlaying}>
+            </span>
         </div>
         <span class="ribbon-toggle">
             {#if isExpanded}
-                <span class="icon"><Icon icon="lucide:chevron-up" width="16" height="16" /></span>
+                <span class="icon">
+                    <Icon icon="lucide:chevron-up" width="16" height="16" />
+                </span>
             {:else}
-                <span class="icon"><Icon icon="lucide:chevron-down" width="16" height="16" /></span>
+                <span class="icon">
+                    <Icon icon="lucide:chevron-down" width="16" height="16" />
+                </span>
             {/if}
         </span>
     </button>
@@ -46,23 +55,37 @@
         <div class="scanner-panel" transition:slide={{ duration: 300 }}>
             <div class="scanner-inner">
                 <div class="display">
-                    <span class="label"><Icon icon="lucide:waves" width="14" height="14" /></span>
-                    <span class="value" data-text={nightride.stream.statusText}>{nightride.stream.statusText}</span
-                    >
+                    <span class="label">
+                        <Icon icon="lucide:waves" width="14" height="14" />
+                    </span>
+                    <span class="value" data-text={nightride.stream.statusText}>
+                        {nightride.stream.statusText}
+                    </span>
                 </div>
 
                 {#if nightride.metadata.tracks[nightride.stream.currentStation.id]}
-                    {@const currentTrack = nightride.metadata.tracks[nightride.stream.currentStation.id]}
+                    {@const currentTrack =
+                        nightride.metadata.tracks[
+                            nightride.stream.currentStation.id
+                        ]}
                     {@const trackLength = currentTrack.title.length}
                     {@const artistLength = currentTrack.artist.length}
                     <div class="display" transition:slide>
-                        <span class="label"><Icon icon="lucide:music" width="14" height="14" /></span>
+                        <span class="label">
+                            <Icon icon="lucide:music" width="14" height="14" />
+                        </span>
                         <span class="value" class:marquee={trackLength > 20}>
                             {currentTrack.title}
                         </span>
                     </div>
                     <div class="display" transition:slide>
-                        <span class="label"><Icon icon="lucide:user" width="14" height="14" /></span>
+                        <span class="label"
+                            ><Icon
+                                icon="lucide:user"
+                                width="14"
+                                height="14"
+                            /></span
+                        >
                         <span class="value" class:marquee={artistLength > 20}>
                             {currentTrack.artist}
                         </span>
@@ -74,7 +97,8 @@
                         <button
                             onclick={() => nightride.stream.setStation(station)}
                             class="btn-station"
-                            class:active={nightride.stream.currentStation.id === station.id}
+                            class:active={nightride.stream.currentStation.id ===
+                                station.id}
                             aria-label="Select {station.name} station"
                         >
                             {station.name}
@@ -83,7 +107,9 @@
                 </div>
 
                 <div class="volume-control">
-                    <span class="label"><Icon icon="lucide:volume-2" width="14" height="14" /></span>
+                    <span class="label">
+                        <Icon icon="lucide:volume-2" width="14" height="14" />
+                    </span>
                     <input
                         type="range"
                         min="0"
@@ -100,24 +126,52 @@
                     <button
                         onclick={() => nightride.stream.togglePlay()}
                         class="btn-scan"
-                        aria-label={nightride.stream.isPlaying ? "Stop Scan" : "Start Scan"}
+                        aria-label={nightride.stream.isPlaying
+                            ? "Stop Scan"
+                            : "Start Scan"}
                     >
                         {#if nightride.stream.isPlaying}
-                            <span class="icon"><Icon icon="lucide:stop-circle" width="20" height="20" /></span>
+                            <span class="icon">
+                                <Icon
+                                    icon="lucide:stop-circle"
+                                    width="20"
+                                    height="20"
+                                />
+                            </span>
                         {:else}
-                            <span class="icon"><Icon icon="lucide:play-circle" width="20" height="20" /></span>
+                            <span class="icon">
+                                <Icon
+                                    icon="lucide:play-circle"
+                                    width="20"
+                                    height="20"
+                                />
+                            </span>
                         {/if}
                     </button>
 
                     <button
                         onclick={() => nightride.stream.toggleMute()}
                         class="btn-mute"
-                        aria-label={nightride.stream.isMuted ? "Unmute" : "Mute"}
+                        aria-label={nightride.stream.isMuted
+                            ? "Unmute"
+                            : "Mute"}
                     >
                         {#if nightride.stream.isMuted}
-                            <span class="icon"><Icon icon="lucide:volume-x" width="20" height="20" /></span>
+                            <span class="icon">
+                                <Icon
+                                    icon="lucide:volume-x"
+                                    width="20"
+                                    height="20"
+                                />
+                            </span>
                         {:else}
-                            <span class="icon"><Icon icon="lucide:volume-2" width="20" height="20" /></span>
+                            <span class="icon">
+                                <Icon
+                                    icon="lucide:volume-2"
+                                    width="20"
+                                    height="20"
+                                />
+                            </span>
                         {/if}
                     </button>
                 </div>
@@ -151,30 +205,33 @@
         transition:
             background 0.2s,
             color 0.2s,
-            border-color 0.2s;
+            border-color 0.2s,
+            opacity 0.2s;
+        opacity: 0.5;
         backdrop-filter: blur(10px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         font-size: 0.7rem;
-    }
 
-    .ribbon:hover {
-        background: rgba(255, 255, 255, 0.08);
-        color: var(--fg-primary-light);
-        border-color: var(--fg-primary-dark);
+        &:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--fg-primary-light);
+            border-color: var(--fg-primary-dark);
+            opacity: 1;
+        }
     }
 
     .ribbon-label {
         display: flex;
         align-items: center;
         justify-content: center;
-    }
 
-    .ribbon-label .icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 18px;
-        height: 18px;
+        & .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+        }
     }
 
     .ribbon-status {
@@ -202,14 +259,14 @@
         color: var(--fg-primary-dark);
         min-width: 30px;
         text-align: center;
-    }
 
-    .ribbon-toggle .icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 16px;
-        height: 16px;
+        & .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+        }
     }
 
     .scanner-panel {
@@ -221,6 +278,12 @@
         border-radius: var(--radius);
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
         backdrop-filter: blur(10px);
+        opacity: 0.5;
+        transition: opacity 0.2s;
+
+        &:hover {
+            opacity: 1;
+        }
     }
 
     .scanner-inner {
