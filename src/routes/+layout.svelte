@@ -24,9 +24,7 @@
         in:fade={{ duration: 400 }}
         class:blog={pathname === "/blog/"}
         class:centered={pathname === "/"}
-        class:padded={pathname.startsWith("/whoami") ||
-            pathname.startsWith("/blog") ||
-            pathname === "/settings/"}
+        class:padded={pathname.startsWith("/whoami") || pathname.startsWith("/blog") || pathname === "/settings/"}
         style:opacity={ui.zenMode.isZenMode ? 0 : 1}
         style:pointer-events={ui.zenMode.isZenMode ? "none" : "auto"}
     >

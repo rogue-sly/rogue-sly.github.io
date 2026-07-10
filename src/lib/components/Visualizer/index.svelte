@@ -23,29 +23,17 @@
     function updateCachedColors() {
         if (!document) return;
         const style = getComputedStyle(document.documentElement);
-        cachedColors.bgColor = parseCSSColor(
-            style.getPropertyValue("--bg-primary-dark").trim() || "#101012",
-        );
-        cachedColors.accentBg = parseCSSColor(
-            style.getPropertyValue("--bg-accent").trim() || "#4b0202",
-        );
-        cachedColors.accentFg = parseCSSColor(
-            style.getPropertyValue("--fg-accent").trim() || "#675757",
-        );
-        cachedColors.fgPrim = parseCSSColor(
-            style.getPropertyValue("--fg-primary").trim() || "#cdcdcd",
-        );
+        cachedColors.bgColor = parseCSSColor(style.getPropertyValue("--bg-primary-dark").trim() || "#101012");
+        cachedColors.accentBg = parseCSSColor(style.getPropertyValue("--bg-accent").trim() || "#4b0202");
+        cachedColors.accentFg = parseCSSColor(style.getPropertyValue("--fg-accent").trim() || "#675757");
+        cachedColors.fgPrim = parseCSSColor(style.getPropertyValue("--fg-primary").trim() || "#cdcdcd");
     }
 
     // -------------------------------------------------------------------------
     // WebGL helpers
     // -------------------------------------------------------------------------
 
-    function compileShader(
-        glCtx: WebGLRenderingContext,
-        type: number,
-        src: string,
-    ): WebGLShader | null {
+    function compileShader(glCtx: WebGLRenderingContext, type: number, src: string): WebGLShader | null {
         const shader = glCtx.createShader(type);
         if (!shader) return null;
         glCtx.shaderSource(shader, src);
@@ -59,11 +47,7 @@
         return shader;
     }
 
-    function createProgram(
-        glCtx: WebGLRenderingContext,
-        vertSrc: string,
-        fragSrc: string,
-    ): WebGLProgram | null {
+    function createProgram(glCtx: WebGLRenderingContext, vertSrc: string, fragSrc: string): WebGLProgram | null {
         const vert = compileShader(glCtx, glCtx.VERTEX_SHADER, vertSrc);
         if (!vert) return null;
         const frag = compileShader(glCtx, glCtx.FRAGMENT_SHADER, fragSrc);
@@ -90,11 +74,7 @@
         const s = raw.trim();
         const hex6 = s.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
         if (hex6) {
-            return [
-                parseInt(hex6[1], 16) / 255,
-                parseInt(hex6[2], 16) / 255,
-                parseInt(hex6[3], 16) / 255,
-            ];
+            return [parseInt(hex6[1], 16) / 255, parseInt(hex6[2], 16) / 255, parseInt(hex6[3], 16) / 255];
         }
         const hex3 = s.match(/^#([0-9a-f])([0-9a-f])([0-9a-f])$/i);
         if (hex3) {
@@ -106,11 +86,7 @@
         }
         const rgb = s.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
         if (rgb) {
-            return [
-                parseInt(rgb[1]) / 255,
-                parseInt(rgb[2]) / 255,
-                parseInt(rgb[3]) / 255,
-            ];
+            return [parseInt(rgb[1]) / 255, parseInt(rgb[2]) / 255, parseInt(rgb[3]) / 255];
         }
         return [0.063, 0.063, 0.071];
     }
@@ -211,11 +187,7 @@
 </script>
 
 {#if settings.visualizer.enabled}
-    <div
-        class="visualizer-container"
-        class:dimmed
-        style="--visualizer-opacity: {settings.visualizer.opacity}"
-    >
+    <div class="visualizer-container" class:dimmed style="--visualizer-opacity: {settings.visualizer.opacity}">
         <canvas bind:this={canvas}></canvas>
     </div>
 {/if}

@@ -13,16 +13,12 @@
             <div class="setting-item">
                 <div class="info">
                     <h3>Visualizer</h3>
-                    <p>
-                        Enable or disable the background frequency visualizer.
-                    </p>
+                    <p>Enable or disable the background frequency visualizer.</p>
                 </div>
                 <button
                     class="toggle-btn"
                     class:active={settings.visualizer.enabled}
-                    onclick={() =>
-                        (settings.visualizer.enabled =
-                            !settings.visualizer.enabled)}
+                    onclick={() => (settings.visualizer.enabled = !settings.visualizer.enabled)}
                 >
                     [{settings.visualizer.enabled ? "ENABLED" : "DISABLED"}]
                 </button>
@@ -37,22 +33,11 @@
             <div class="setting-item">
                 <div class="info">
                     <h3>Opacity</h3>
-                    <p>
-                        Overall brightness of the visualizer when on the home
-                        page.
-                    </p>
+                    <p>Overall brightness of the visualizer when on the home page.</p>
                 </div>
                 <div class="slider-group">
-                    <input
-                        type="range"
-                        min="0.1"
-                        max="1.0"
-                        step="0.05"
-                        bind:value={settings.visualizer.opacity}
-                    />
-                    <span class="slider-value"
-                        >{Math.round(settings.visualizer.opacity * 100)}%</span
-                    >
+                    <input type="range" min="0.1" max="1.0" step="0.05" bind:value={settings.visualizer.opacity} />
+                    <span class="slider-value">{Math.round(settings.visualizer.opacity * 100)}%</span>
                 </div>
             </div>
 
@@ -64,9 +49,7 @@
                 <button
                     class="toggle-btn"
                     class:active={settings.visualizer.showSun}
-                    onclick={() =>
-                        (settings.visualizer.showSun =
-                            !settings.visualizer.showSun)}
+                    onclick={() => (settings.visualizer.showSun = !settings.visualizer.showSun)}
                 >
                     [{settings.visualizer.showSun ? "ENABLED" : "DISABLED"}]
                 </button>
@@ -75,10 +58,7 @@
             <div class="setting-item">
                 <div class="info">
                     <h3>Sun Size</h3>
-                    <p>
-                        Radius of the retro gradient sun as a fraction of screen
-                        height.
-                    </p>
+                    <p>Radius of the retro gradient sun as a fraction of screen height.</p>
                 </div>
                 <div class="slider-group">
                     <input
@@ -97,17 +77,12 @@
             <div class="setting-item">
                 <div class="info">
                     <h3>Grid</h3>
-                    <p>
-                        Show the retro perspective grid and animated horizontal
-                        lines.
-                    </p>
+                    <p>Show the retro perspective grid and animated horizontal lines.</p>
                 </div>
                 <button
                     class="toggle-btn"
                     class:active={settings.visualizer.showGrid}
-                    onclick={() =>
-                        (settings.visualizer.showGrid =
-                            !settings.visualizer.showGrid)}
+                    onclick={() => (settings.visualizer.showGrid = !settings.visualizer.showGrid)}
                 >
                     [{settings.visualizer.showGrid ? "ENABLED" : "DISABLED"}]
                 </button>
@@ -126,9 +101,7 @@
                         step="0.1"
                         bind:value={settings.visualizer.gridSpeed}
                     />
-                    <span class="slider-value"
-                        >{settings.visualizer.gridSpeed.toFixed(1)}x</span
-                    >
+                    <span class="slider-value">{settings.visualizer.gridSpeed.toFixed(1)}x</span>
                 </div>
             </div>
         </div>

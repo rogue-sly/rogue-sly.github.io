@@ -21,24 +21,17 @@
         <div class="footer-info">
             <p>
                 icons are licensed under the
-                <a
-                    href="https://en.wikipedia.org/wiki/MIT_License"
-                    target="_blank">MIT license</a
-                >.
+                <a href="https://en.wikipedia.org/wiki/MIT_License" target="_blank">MIT license</a>.
             </p>
             <p>
                 both "Quantico" and "JetBrains Mono" fonts are licensed under
-                <a
-                    href="https://openfontlicense.org/open-font-license-official-text/"
-                    target="_blank">open font license</a
+                <a href="https://openfontlicense.org/open-font-license-official-text/" target="_blank"
+                    >open font license</a
                 >.
             </p>
             <p>
                 consider other content is licensed under the
-                <a
-                    href="https://creativecommons.org/licenses/by-sa/4.0/"
-                    target="_blank">CC BY-SA 4.0</a
-                >.
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.
             </p>
         </div>
 
@@ -52,28 +45,13 @@
                 gitlab
             </a>
             <a href="https://www.youtube.com/@rogue-slydotsly" target="_blank">
-                <Icon
-                    icon="mdi:youtube"
-                    width={svg.width}
-                    height={svg.height}
-                /> youtube
+                <Icon icon="mdi:youtube" width={svg.width} height={svg.height} /> youtube
             </a>
-            <a
-                href="https://bsky.app/profile/rogue-sly.bsky.social"
-                target="_blank"
-            >
-                <Icon
-                    icon="simple-icons:bluesky"
-                    width={svg.width}
-                    height={svg.height}
-                /> bluesky
+            <a href="https://bsky.app/profile/rogue-sly.bsky.social" target="_blank">
+                <Icon icon="simple-icons:bluesky" width={svg.width} height={svg.height} /> bluesky
             </a>
             <a href="https://matrix.to/#/@rogue-sly:matrix.org" target="_blank">
-                <Icon
-                    icon="simple-icons:matrix"
-                    width={svg.width}
-                    height={svg.height}
-                /> matrix: @rogue-sly:matrix.org
+                <Icon icon="simple-icons:matrix" width={svg.width} height={svg.height} /> matrix: @rogue-sly:matrix.org
             </a>
             <button onclick={() => copyToClipboard(email, "email")}>
                 <Icon icon="mdi:email" width={svg.width} height={svg.height} />
@@ -102,6 +80,7 @@
     .footer-info {
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         gap: 8px;
         flex: 1;
     }
@@ -125,7 +104,7 @@
         align-items: center;
         gap: 6px;
         font-size: 0.85rem;
-        color: var(--fg-primary-dark);
+        color: var(--fg-accent);
         text-decoration: none;
         background: none;
         border: none;
