@@ -5,6 +5,7 @@ uniform float uTime;
 uniform bool uShowGrid;
 uniform bool uShowSun;
 uniform float uGridSpeed;
+uniform float uSunSize;
 
 // Colors sourced from CSS variables each frame
 uniform vec3 uBgColor;     // --bg-primary-dark
@@ -38,7 +39,7 @@ void main() {
             float xRel = (uv.x - centerX) / spread;
 
             float nearest = abs(xRel - floor(xRel + 0.5));
-            float lineHalfW = 0.5 / (spread * uResolution.x);
+            float lineHalfW = 1.5 / (spread * uResolution.x);
 
             float gridFade = t;
 
@@ -56,7 +57,7 @@ void main() {
                 if (yH > 1.0 || yH < horizonY) continue;
 
                 float lineOpacity = max(0.0, (yH - horizonY) / (1.0 - horizonY)) * 0.5;
-                float lineHalfH = 0.5 / uResolution.y;
+                float lineHalfH = 1.5 / uResolution.y;
 
                 if (abs(uv.y - yH) < lineHalfH) {
                     bestOpacity = max(bestOpacity, lineOpacity);
@@ -72,7 +73,7 @@ void main() {
     // 2. Retro gradient sun
     // ------------------------------------------------------------------------
     if (uShowSun) {
-        float sunRadiusPx = min(uResolution.x, uResolution.y) * 0.15;
+        float sunRadiusPx = min(uResolution.x, uResolution.y) * uSunSize;
         float sunRadiusY = sunRadiusPx / uResolution.y;
 
         vec2 sunCenterUV = vec2(centerX, horizonY - sunRadiusY * 0.8);

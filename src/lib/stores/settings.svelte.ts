@@ -7,6 +7,7 @@ class VisualizerSettings {
     #showSun = $state(true);
     #opacity = $state(0.6);
     #gridSpeed = $state(1.0);
+    #sunSize = $state(0.18);
 
     toJSON() {
         return {
@@ -15,6 +16,7 @@ class VisualizerSettings {
             showSun: this.#showSun,
             opacity: this.#opacity,
             gridSpeed: this.#gridSpeed,
+            sunSize: this.#sunSize,
         };
     }
 
@@ -25,6 +27,7 @@ class VisualizerSettings {
         if (typeof data.showSun === "boolean") this.#showSun = data.showSun;
         if (typeof data.opacity === "number") this.#opacity = data.opacity;
         if (typeof data.gridSpeed === "number") this.#gridSpeed = data.gridSpeed;
+        if (typeof data.sunSize === "number") this.#sunSize = data.sunSize;
     }
 
     constructor(parent: SettingsStore) {
@@ -34,7 +37,6 @@ class VisualizerSettings {
     get enabled() {
         return this.#enabled;
     }
-
     set enabled(value: boolean) {
         this.#enabled = value;
         this.#parent.save();
@@ -43,7 +45,6 @@ class VisualizerSettings {
     get showGrid() {
         return this.#showGrid;
     }
-
     set showGrid(value: boolean) {
         this.#showGrid = value;
         this.#parent.save();
@@ -52,7 +53,6 @@ class VisualizerSettings {
     get showSun() {
         return this.#showSun;
     }
-
     set showSun(value: boolean) {
         this.#showSun = value;
         this.#parent.save();
@@ -61,7 +61,6 @@ class VisualizerSettings {
     get opacity() {
         return this.#opacity;
     }
-
     set opacity(value: number) {
         this.#opacity = value;
         this.#parent.save();
@@ -70,9 +69,16 @@ class VisualizerSettings {
     get gridSpeed() {
         return this.#gridSpeed;
     }
-
     set gridSpeed(value: number) {
         this.#gridSpeed = value;
+        this.#parent.save();
+    }
+
+    get sunSize() {
+        return this.#sunSize;
+    }
+    set sunSize(value: number) {
+        this.#sunSize = value;
         this.#parent.save();
     }
 }

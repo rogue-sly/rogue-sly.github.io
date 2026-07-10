@@ -74,6 +74,28 @@
 
             <div class="setting-item">
                 <div class="info">
+                    <h3>Sun Size</h3>
+                    <p>
+                        Radius of the retro gradient sun as a fraction of screen
+                        height.
+                    </p>
+                </div>
+                <div class="slider-group">
+                    <input
+                        type="range"
+                        min="0.05"
+                        max="0.35"
+                        step="0.01"
+                        bind:value={settings.visualizer.sunSize}
+                    />
+                    <span class="slider-value">
+                        {Math.round(settings.visualizer.sunSize * 100)}%
+                    </span>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="info">
                     <h3>Grid</h3>
                     <p>
                         Show the retro perspective grid and animated horizontal

@@ -149,6 +149,7 @@
         const uAccentBg = gl.getUniformLocation(program, "uAccentBg");
         const uAccentFg = gl.getUniformLocation(program, "uAccentFg");
         const uFgPrimary = gl.getUniformLocation(program, "uFgPrimary");
+        const uSunSize = gl.getUniformLocation(program, "uSunSize");
 
         let resizeTimeout: ReturnType<typeof setTimeout>;
         const resizeObserver = new ResizeObserver((entries) => {
@@ -186,6 +187,7 @@
             gl.uniform1i(uShowGrid, settings.visualizer.showGrid ? 1 : 0);
             gl.uniform1i(uShowSun, settings.visualizer.showSun ? 1 : 0);
             gl.uniform1f(uGridSpeed, settings.visualizer.gridSpeed);
+            gl.uniform1f(uSunSize, settings.visualizer.sunSize);
             gl.uniform3fv(uBgColor, bgColor);
             gl.uniform3fv(uAccentBg, accentBg);
             gl.uniform3fv(uAccentFg, accentFg);
