@@ -43,13 +43,9 @@
                 <span class="icon-wrap"><Icon icon="mdi:gitlab" width="20" height="20" /></span>
                 gitlab
             </a>
-            <a href="https://www.youtube.com/@rogue-slydotsly" target="_blank">
+            <a href="https://www.youtube.com/@rogue-sly" target="_blank">
                 <span class="icon-wrap"><Icon icon="mdi:youtube" width="20" height="20" /></span>
                 youtube
-            </a>
-            <a href="https://bsky.app/profile/rogue-sly.bsky.social" target="_blank">
-                <span class="icon-wrap"><Icon icon="simple-icons:bluesky" width="20" height="20" /></span>
-                bluesky
             </a>
             <a href="https://matrix.to/#/@rogue-sly:matrix.org" target="_blank">
                 <span class="icon-wrap"><Icon icon="simple-icons:matrix" width="20" height="20" /> </span>
@@ -75,7 +71,7 @@
         display: flex;
         justify-content: space-between;
         gap: 32px;
-        padding: 24px 16px;
+        padding: 24px 0;
         box-sizing: border-box;
     }
 
