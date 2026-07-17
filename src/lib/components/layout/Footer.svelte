@@ -1,18 +1,6 @@
 <script lang="ts">
     import { email } from "$lib/data/site";
     import Icon from "@iconify/svelte";
-
-    let emailText = $state(`email: ${email}`);
-
-    function copyToClipboard(text: string, type: "email") {
-        navigator.clipboard.writeText(text);
-        if (type === "email") {
-            emailText = "copied to clipboard 👍";
-            setTimeout(() => {
-                emailText = `email: ${email}`;
-            }, 2000);
-        }
-    }
 </script>
 
 <footer>
@@ -47,14 +35,10 @@
                 <span class="icon-wrap"><Icon icon="mdi:youtube" width="20" height="20" /></span>
                 youtube
             </a>
-            <a href="https://matrix.to/#/@rogue-sly:matrix.org" target="_blank">
-                <span class="icon-wrap"><Icon icon="simple-icons:matrix" width="20" height="20" /> </span>
-                matrix: @rogue-sly:matrix.org
-            </a>
-            <button onclick={() => copyToClipboard(email, "email")}>
+            <a href="mailto:{email}">
                 <span class="icon-wrap"><Icon icon="mdi:email" width="20" height="20" /></span>
-                {emailText}
-            </button>
+                email: {email}
+            </a>
         </div>
     </div>
 </footer>
@@ -96,8 +80,7 @@
         gap: 6px;
     }
 
-    .footer-socials a,
-    .footer-socials button {
+    .footer-socials a {
         display: inline-flex;
         align-items: center;
         gap: 6px;
@@ -112,8 +95,7 @@
         transition: color 0.2s;
     }
 
-    .footer-socials a:hover,
-    .footer-socials button:hover {
+    .footer-socials a:hover {
         color: var(--fg-primary-light);
     }
 
