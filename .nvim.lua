@@ -1,5 +1,5 @@
 ---@diagnostic disable: redefined-local
-vim.lsp.enable({ "svelte", "tsgo" })
+vim.lsp.enable({ "svelte" })
 
 local ok, conform = pcall(require, "conform")
 if ok then

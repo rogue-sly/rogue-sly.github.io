@@ -1,4 +1,0 @@
-[tools]
-"npm:@typescript/native-preview" = "latest"
-"npm:oxfmt" = "latest"
-"npm:svelte-language-server" = "latest"
