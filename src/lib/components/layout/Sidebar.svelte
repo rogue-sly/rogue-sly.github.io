@@ -1,6 +1,6 @@
 <script lang="ts">
     import { zenMode } from "./zen-mode.svelte";
-    import { settings } from "$lib/components/Visualizer/settings.svelte";
+    import { settings as visualizer } from "$lib/components/Visualizer/settings.svelte";
     import Icon from "@iconify/svelte";
     import { page } from "$app/state";
 
@@ -28,10 +28,10 @@
                 <button
                     onclick={() => zenMode.toggle()}
                     class="btn-settings"
-                    class:active={zenMode.isZenMode}
-                    aria-label={zenMode.isZenMode ? "Show Content" : "Hide Content"}
+                    class:active={zenMode.enabled}
+                    aria-label={zenMode.enabled ? "Show Content" : "Hide Content"}
                 >
-                    {#if zenMode.isZenMode}
+                    {#if zenMode.enabled}
                         <span class="icon-wrap">
                             <Icon icon="lucide:eye-off" width="18" height="18" />
                         </span>
@@ -42,10 +42,10 @@
                     {/if}
                 </button>
                 <button
-                    onclick={() => settings.toggle()}
+                    onclick={() => visualizer.toggle()}
                     class="btn-settings"
-                    class:active={settings.enabled}
-                    aria-label={settings.enabled ? "Disable Visualizer" : "Enable Visualizer"}
+                    class:active={!visualizer.enabled}
+                    aria-label={visualizer.enabled ? "Disable Visualizer" : "Enable Visualizer"}
                 >
                     <span class="icon-wrap">
                         <Icon icon="lucide:tv-minimal" width="18" height="18" />

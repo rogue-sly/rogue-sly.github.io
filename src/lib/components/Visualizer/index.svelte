@@ -5,7 +5,7 @@
     import VERT_SRC from "./visualizer.vert.glsl?raw";
     import { settings } from "./settings.svelte";
 
-    let dimmed = $derived(!zenMode.isZenMode && page.url.pathname !== "/");
+    let dimmed = $derived(!zenMode.enabled && page.url.pathname !== "/");
 
     let canvas = $state<HTMLCanvasElement>();
     let gl: WebGLRenderingContext | null = null;
@@ -114,8 +114,6 @@
 
         const uResolution = gl.getUniformLocation(program, "uResolution");
         const uTime = gl.getUniformLocation(program, "uTime");
-        const uShowGrid = gl.getUniformLocation(program, "uShowGrid");
-        const uShowSun = gl.getUniformLocation(program, "uShowSun");
         const uGridSpeed = gl.getUniformLocation(program, "uGridSpeed");
         const uBgColor = gl.getUniformLocation(program, "uBgColor");
         const uAccentBg = gl.getUniformLocation(program, "uAccentBg");
@@ -151,8 +149,6 @@
 
             gl.uniform2f(uResolution, width, height);
             gl.uniform1f(uTime, performance.now() / 1000);
-            gl.uniform1i(uShowGrid, 1);
-            gl.uniform1i(uShowSun, 1);
             gl.uniform1f(uGridSpeed, 1.0);
             gl.uniform1f(uSunSize, 0.18);
             gl.uniform3fv(uBgColor, bgColor);

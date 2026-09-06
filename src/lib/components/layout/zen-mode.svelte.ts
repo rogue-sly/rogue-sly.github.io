@@ -1,12 +1,12 @@
 function createZenMode() {
-    let isZenMode = $state(false);
+    let enabled = $state(false);
 
     return {
-        get isZenMode() {
-            return isZenMode;
+        get enabled() {
+            return enabled;
         },
         toggle() {
-            isZenMode = !isZenMode;
+            enabled = !enabled;
         },
     };
 }

@@ -25,8 +25,8 @@
         class:blog={pathname === "/blog/"}
         class:centered={pathname === "/"}
         class:padded={pathname.startsWith("/whoami") || pathname.startsWith("/blog") || pathname === "/settings/"}
-        style:opacity={zenMode.isZenMode ? 0 : 1}
-        style:pointer-events={zenMode.isZenMode ? "none" : "auto"}
+        style:opacity={zenMode.enabled ? 0 : 1}
+        style:pointer-events={zenMode.enabled ? "none" : "auto"}
     >
         {@render children()}
     </main>

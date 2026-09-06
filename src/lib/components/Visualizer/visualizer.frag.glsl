@@ -2,8 +2,6 @@ precision highp float;
 
 uniform vec2 uResolution;
 uniform float uTime;
-uniform bool uShowGrid;
-uniform bool uShowSun;
 uniform float uGridSpeed;
 uniform float uSunSize;
 
@@ -24,11 +22,9 @@ void main() {
     vec3 color = uBgColor;
     float alpha = 1.0;
 
-    // ------------------------------------------------------------------------
-    // 1. Retro perspective grid
-    // ------------------------------------------------------------------------
-    if (uShowGrid) {
-        // -- Vertical fan lines --
+    //  Perspective grid
+    {
+        // Vertical fan lines --
         if (uv.y > horizonY) {
             float t = (uv.y - horizonY) / (1.0 - horizonY);
 
@@ -69,10 +65,8 @@ void main() {
         }
     }
 
-    // ------------------------------------------------------------------------
-    // 2. Retro gradient sun
-    // ------------------------------------------------------------------------
-    if (uShowSun) {
+    // Retro gradient sun
+    {
         float sunRadiusPx = min(uResolution.x, uResolution.y) * uSunSize;
         float sunRadiusY = sunRadiusPx / uResolution.y;
 
@@ -99,7 +93,6 @@ void main() {
                 slatAlpha = max(slatAlpha, inside);
             }
             sunColor = mix(sunColor, uBgColor, slatAlpha);
-
             color = mix(color, sunColor, sunAlpha);
         }
     }
