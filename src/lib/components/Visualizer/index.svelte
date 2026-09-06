@@ -12,23 +12,6 @@
     let animationFrame: number;
     let width: number;
     let height: number;
-
-    const cachedColors = $state({
-        bgColor: [0.063, 0.063, 0.071] as [number, number, number],
-        accentBg: [0.063, 0.063, 0.071] as [number, number, number],
-        accentFg: [0.063, 0.063, 0.071] as [number, number, number],
-        fgPrim: [0.063, 0.063, 0.071] as [number, number, number],
-    });
-
-    function updateCachedColors() {
-        if (!document) return;
-        const style = getComputedStyle(document.documentElement);
-        cachedColors.bgColor = parseCSSColor(style.getPropertyValue("--bg-primary-dark").trim() || "#101012");
-        cachedColors.accentBg = parseCSSColor(style.getPropertyValue("--bg-accent").trim() || "#4b0202");
-        cachedColors.accentFg = parseCSSColor(style.getPropertyValue("--fg-accent").trim() || "#675757");
-        cachedColors.fgPrim = parseCSSColor(style.getPropertyValue("--fg-primary").trim() || "#cdcdcd");
-    }
-
     // -------------------------------------------------------------------------
     // WebGL helpers
     // -------------------------------------------------------------------------
@@ -88,7 +71,7 @@
         if (rgb) {
             return [parseInt(rgb[1]) / 255, parseInt(rgb[2]) / 255, parseInt(rgb[3]) / 255];
         }
-        return [0.063, 0.063, 0.071];
+        throw new Error(`Could not parse CSS color: "${raw}"`);
     }
 
     $effect(() => {
@@ -108,6 +91,12 @@
         canvas.width = width;
         canvas.height = height;
         gl.viewport(0, 0, width, height);
+
+        const style = getComputedStyle(document.documentElement);
+        const bgColor = parseCSSColor(style.getPropertyValue("--bg-primary").trim());
+        const accentBg = parseCSSColor(style.getPropertyValue("--bg-accent").trim());
+        const accentFg = parseCSSColor(style.getPropertyValue("--fg-accent").trim());
+        const fgPrim = parseCSSColor(style.getPropertyValue("--fg-primary").trim());
 
         const program = createProgram(gl, VERT_SRC, FRAG_SRC);
         if (!program) {
@@ -148,13 +137,10 @@
                     canvas!.width = width;
                     canvas!.height = height;
                     gl!.viewport(0, 0, width, height);
-                    updateCachedColors();
                 }, 100);
             }
         });
         resizeObserver.observe(canvas.parentElement!);
-
-        updateCachedColors();
 
         gl.useProgram(program);
 
@@ -162,8 +148,6 @@
         function draw() {
             animationFrame = requestAnimationFrame(draw);
             if (!gl || !width || !height) return;
-
-            const { bgColor, accentBg, accentFg, fgPrim } = cachedColors;
 
             gl.uniform2f(uResolution, width, height);
             gl.uniform1f(uTime, performance.now() / 1000);

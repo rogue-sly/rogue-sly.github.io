@@ -8,7 +8,7 @@ uniform float uGridSpeed;
 uniform float uSunSize;
 
 // Colors sourced from CSS variables each frame
-uniform vec3 uBgColor;     // --bg-primary-dark
+uniform vec3 uBgColor;     // --bg-primary
 uniform vec3 uAccentBg;    // --bg-accent  (dark red grid / sun top)
 uniform vec3 uAccentFg;    // --fg-accent  (muted red grid lines)
 uniform vec3 uFgPrimary;   // --fg-primary (sun glow)
