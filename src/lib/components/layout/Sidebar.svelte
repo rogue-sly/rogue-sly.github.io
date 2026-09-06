@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { zenMode } from "$lib/stores/ui";
+    import { zenMode } from "./zen-mode.svelte";
+    import { settings } from "$lib/components/Visualizer/settings.svelte";
     import Icon from "@iconify/svelte";
     import { page } from "$app/state";
 
@@ -40,11 +41,16 @@
                         </span>
                     {/if}
                 </button>
-                <a href="/settings" class="btn-settings" onclick={close} aria-label="Settings">
+                <button
+                    onclick={() => settings.toggle()}
+                    class="btn-settings"
+                    class:active={settings.enabled}
+                    aria-label={settings.enabled ? "Disable Visualizer" : "Enable Visualizer"}
+                >
                     <span class="icon-wrap">
-                        <Icon icon="lucide:settings" width="18" height="18" />
+                        <Icon icon="lucide:tv-minimal" width="18" height="18" />
                     </span>
-                </a>
+                </button>
             </div>
 
             <label for="sidebar-toggle" class="btn-close" aria-label="Close Sidebar">

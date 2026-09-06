@@ -1,6 +1,6 @@
 <script lang="ts">
     import "../app.css";
-    import * as ui from "$lib/stores/ui";
+    import { zenMode } from "$lib/components/layout/zen-mode.svelte";
     import Footer from "$lib/components/layout/Footer.svelte";
     import Header from "$lib/components/layout/Header.svelte";
     import Sidebar from "$lib/components/layout/Sidebar.svelte";
@@ -25,8 +25,8 @@
         class:blog={pathname === "/blog/"}
         class:centered={pathname === "/"}
         class:padded={pathname.startsWith("/whoami") || pathname.startsWith("/blog") || pathname === "/settings/"}
-        style:opacity={ui.zenMode.isZenMode ? 0 : 1}
-        style:pointer-events={ui.zenMode.isZenMode ? "none" : "auto"}
+        style:opacity={zenMode.isZenMode ? 0 : 1}
+        style:pointer-events={zenMode.isZenMode ? "none" : "auto"}
     >
         {@render children()}
     </main>

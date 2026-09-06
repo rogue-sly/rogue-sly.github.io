@@ -1,11 +1,11 @@
 <script lang="ts">
-    import * as ui from "$lib/stores/ui";
+    import { zenMode } from "$lib/components/layout/zen-mode.svelte";
     import { page } from "$app/state";
     import FRAG_SRC from "./visualizer.frag.glsl?raw";
     import VERT_SRC from "./visualizer.vert.glsl?raw";
-    import { settings } from "$lib/stores/settings.svelte";
+    import { settings } from "./settings.svelte";
 
-    let dimmed = $derived(!ui.zenMode.isZenMode && page.url.pathname !== "/");
+    let dimmed = $derived(!zenMode.isZenMode && page.url.pathname !== "/");
 
     let canvas = $state<HTMLCanvasElement>();
     let gl: WebGLRenderingContext | null = null;
@@ -92,7 +92,7 @@
     }
 
     $effect(() => {
-        if (!canvas || !settings.visualizer.enabled) {
+        if (!canvas || !settings.enabled) {
             return;
         }
 
@@ -101,6 +101,13 @@
             console.warn("Visualizer: WebGL not available, falling back.");
             return;
         }
+
+        const rect = canvas.parentElement!.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        canvas.width = width;
+        canvas.height = height;
+        gl.viewport(0, 0, width, height);
 
         const program = createProgram(gl, VERT_SRC, FRAG_SRC);
         if (!program) {
@@ -160,10 +167,10 @@
 
             gl.uniform2f(uResolution, width, height);
             gl.uniform1f(uTime, performance.now() / 1000);
-            gl.uniform1i(uShowGrid, settings.visualizer.showGrid ? 1 : 0);
-            gl.uniform1i(uShowSun, settings.visualizer.showSun ? 1 : 0);
-            gl.uniform1f(uGridSpeed, settings.visualizer.gridSpeed);
-            gl.uniform1f(uSunSize, settings.visualizer.sunSize);
+            gl.uniform1i(uShowGrid, 1);
+            gl.uniform1i(uShowSun, 1);
+            gl.uniform1f(uGridSpeed, 1.0);
+            gl.uniform1f(uSunSize, 0.18);
             gl.uniform3fv(uBgColor, bgColor);
             gl.uniform3fv(uAccentBg, accentBg);
             gl.uniform3fv(uAccentFg, accentFg);
@@ -186,8 +193,8 @@
     });
 </script>
 
-{#if settings.visualizer.enabled}
-    <div class="visualizer-container" class:dimmed style="--visualizer-opacity: {settings.visualizer.opacity}">
+{#if settings.enabled}
+    <div class="visualizer-container" class:dimmed>
         <canvas bind:this={canvas}></canvas>
     </div>
 {/if}
@@ -201,13 +208,13 @@
         height: 100vh;
         z-index: -1;
         pointer-events: none;
-        opacity: var(--visualizer-opacity, 0.6);
+        opacity: 0.6;
         overflow: hidden;
         transition: opacity 0.5s ease-in-out;
     }
 
     .visualizer-container.dimmed {
-        opacity: calc(var(--visualizer-opacity, 0.6) * 0.25);
+        opacity: 0.15;
     }
 
     canvas {
