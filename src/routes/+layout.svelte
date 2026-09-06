@@ -1,6 +1,8 @@
 <script lang="ts">
     import "../app.css";
-    import { zenMode } from "$lib/components/layout/zen-mode.svelte";
+    import { browser } from "$app/environment";
+    import { createZenMode } from "$lib/components/layout/zen-mode.svelte";
+    import { createSettings } from "$lib/components/Visualizer/settings.svelte";
     import Footer from "$lib/components/layout/Footer.svelte";
     import Header from "$lib/components/layout/Header.svelte";
     import Sidebar from "$lib/components/layout/Sidebar.svelte";
@@ -8,14 +10,17 @@
     import { page } from "$app/state";
 
     let { children } = $props();
+
+    const zenMode = createZenMode();
+    const visualizerSettings = createSettings(browser ? localStorage : null);
 </script>
 
 <Header />
 
-<Sidebar />
+<Sidebar {zenMode} {visualizerSettings} />
 
 {#await import("$lib/components/Visualizer/index.svelte") then { default: Visualizer }}
-    <Visualizer />
+    <Visualizer {zenMode} {visualizerSettings} />
 {/await}
 
 {#key page.url.pathname}

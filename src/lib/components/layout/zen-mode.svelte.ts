@@ -1,4 +1,9 @@
-function createZenMode() {
+export interface ZenMode {
+    readonly enabled: boolean;
+    toggle(): void;
+}
+
+export function createZenMode(): ZenMode {
     let enabled = $state(false);
 
     return {
@@ -10,5 +15,3 @@ function createZenMode() {
         },
     };
 }
-
-export const zenMode = createZenMode();

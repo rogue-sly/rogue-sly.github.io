@@ -1,8 +1,13 @@
 <script lang="ts">
-    import { zenMode } from "./zen-mode.svelte";
-    import { settings as visualizer } from "$lib/components/Visualizer/settings.svelte";
+    import type { ZenMode } from "./zen-mode.svelte";
+    import type { VisualizerSettings } from "$lib/components/Visualizer/settings.svelte";
     import Icon from "@iconify/svelte";
     import { page } from "$app/state";
+
+    let {
+        zenMode,
+        visualizerSettings,
+    }: { zenMode: ZenMode; visualizerSettings: VisualizerSettings } = $props();
 
     function close() {
         const cb = document.getElementById("sidebar-toggle") as HTMLInputElement;
@@ -42,10 +47,10 @@
                     {/if}
                 </button>
                 <button
-                    onclick={() => visualizer.toggle()}
+                    onclick={() => visualizerSettings.toggle()}
                     class="btn-settings"
-                    class:active={!visualizer.enabled}
-                    aria-label={visualizer.enabled ? "Disable Visualizer" : "Enable Visualizer"}
+                    class:active={!visualizerSettings.enabled}
+                    aria-label={visualizerSettings.enabled ? "Disable Visualizer" : "Enable Visualizer"}
                 >
                     <span class="icon-wrap">
                         <Icon icon="lucide:tv-minimal" width="18" height="18" />

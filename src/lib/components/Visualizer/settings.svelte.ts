@@ -1,16 +1,17 @@
-import { browser } from "$app/environment";
+export interface VisualizerSettings {
+    readonly enabled: boolean;
+    toggle(): void;
+}
 
-function createSettings() {
+export function createSettings(storage?: Storage | null): VisualizerSettings {
     let enabled = $state(true);
 
     function save() {
-        if (browser) {
-            localStorage.setItem("settings", JSON.stringify({ enabled }));
-        }
+        storage?.setItem("settings", JSON.stringify({ enabled }));
     }
 
-    if (browser) {
-        const stored = localStorage.getItem("settings");
+    if (storage) {
+        const stored = storage.getItem("settings");
         if (stored) {
             try {
                 const parsed = JSON.parse(stored);
@@ -31,5 +32,3 @@ function createSettings() {
         },
     };
 }
-
-export const settings = createSettings();

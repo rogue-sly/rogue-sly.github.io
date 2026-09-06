@@ -1,9 +1,11 @@
 <script lang="ts">
-    import { zenMode } from "$lib/components/layout/zen-mode.svelte";
+    import type { ZenMode } from "$lib/components/layout/zen-mode.svelte";
+    import type { VisualizerSettings } from "$lib/components/Visualizer/settings.svelte";
     import { page } from "$app/state";
     import FRAG_SRC from "./visualizer.frag.glsl?raw";
     import VERT_SRC from "./visualizer.vert.glsl?raw";
-    import { settings } from "./settings.svelte";
+
+    let { zenMode, visualizerSettings }: { zenMode: ZenMode; visualizerSettings: VisualizerSettings } = $props();
 
     let dimmed = $derived(!zenMode.enabled && page.url.pathname !== "/");
 
@@ -12,10 +14,10 @@
     let animationFrame: number;
     let width: number;
     let height: number;
+
     // -------------------------------------------------------------------------
     // WebGL helpers
     // -------------------------------------------------------------------------
-
     function compileShader(glCtx: WebGLRenderingContext, type: number, src: string): WebGLShader | null {
         const shader = glCtx.createShader(type);
         if (!shader) return null;
@@ -75,7 +77,7 @@
     }
 
     $effect(() => {
-        if (!canvas || !settings.enabled) {
+        if (!canvas || !visualizerSettings.enabled) {
             return;
         }
 
@@ -173,7 +175,7 @@
     });
 </script>
 
-{#if settings.enabled}
+{#if visualizerSettings.enabled}
     <div class="visualizer-container" class:dimmed>
         <canvas bind:this={canvas}></canvas>
     </div>
