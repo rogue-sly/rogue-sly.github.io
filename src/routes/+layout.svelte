@@ -5,8 +5,9 @@
     import { createSettings } from "$lib/components/Visualizer/settings.svelte";
     import Footer from "$lib/components/layout/Footer.svelte";
     import Header from "$lib/components/layout/Header.svelte";
+    import ProgressBar from "$lib/components/layout/ProgressBar.svelte";
     import Sidebar from "$lib/components/layout/Sidebar.svelte";
-    import { fade } from "svelte/transition";
+    import { fly } from "svelte/transition";
     import { page } from "$app/state";
 
     let { children } = $props();
@@ -14,6 +15,8 @@
     const zenMode = createZenMode();
     const visualizerSettings = createSettings(browser ? localStorage : null);
 </script>
+
+<ProgressBar />
 
 <Header />
 
@@ -26,7 +29,7 @@
 {#key page.url.pathname}
     {@const pathname = page.url.pathname}
     <main
-        in:fade={{ duration: 400 }}
+        in:fly={{ duration: 400 }}
         class:blog={pathname === "/blog/"}
         class:centered={pathname === "/"}
         class:padded={pathname.startsWith("/whoami") || pathname.startsWith("/blog") || pathname === "/settings/"}
