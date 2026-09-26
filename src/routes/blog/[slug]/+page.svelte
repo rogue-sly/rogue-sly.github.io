@@ -1,8 +1,8 @@
 <script lang="ts">
-    import SEO from "$lib/components/SEO.svelte";
+    import SEO from "#lib/components/SEO.svelte";
     import type { PageData } from "./$types";
-    import type { TocItem } from "$lib/types";
-    import { formatDate } from "$lib/utils/date";
+    import type { TocItem } from "#lib/types.js";
+    import { formatDate } from "#lib/utils/date.js";
 
     type TocStateItem = TocItem & { children: TocStateItem[] };
 

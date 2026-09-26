@@ -1,11 +1,10 @@
-import { json } from "@sveltejs/kit";
-import type { PostMetadata } from "$lib/types";
-import { dev } from "$app/environment";
-import { resolveRelativeImage } from "$lib/utils/resolve-image";
+import type { PostMetadata } from "#lib/types.js";
+import { dev } from "$app/env";
+import { resolveRelativeImage } from "#lib/utils/resolve-image.js";
 
 export const prerender = true;
 
-const postImages = import.meta.glob<string>("$lib/data/posts/*/assets/**/*.{png,jpg,jpeg,gif,svg,webp}", {
+const postImages = import.meta.glob<string>("#lib/data/posts/*/assets/**/*.{png,jpg,jpeg,gif,svg,webp}", {
     eager: true,
     query: "?url",
     import: "default",
@@ -14,15 +13,15 @@ const postImages = import.meta.glob<string>("$lib/data/posts/*/assets/**/*.{png,
 export async function GET() {
     try {
         const posts = getPosts();
-        return json({ posts });
-    } catch (error) {
-        console.error("Failed to build posts:", error);
+        return Response.json({ posts });
+    } catch (e) {
+        console.error("Failed to build posts:", e);
         return new Response("Failed to load posts", { status: 500 });
     }
 }
 function getPosts(): PostMetadata[] {
     const posts: PostMetadata[] = [];
-    const paths = import.meta.glob("$lib/data/posts/*/index.md", { eager: true });
+    const paths = import.meta.glob("#lib/data/posts/*/index.md", { eager: true });
 
     for (const path in paths) {
         const file = paths[path];

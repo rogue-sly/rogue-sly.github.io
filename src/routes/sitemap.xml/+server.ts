@@ -1,5 +1,5 @@
 import { create } from "xmlbuilder2";
-import { url } from "$lib/data/site";
+import { url } from "#lib/data/site.js";
 import type { ServerLoadEvent } from "@sveltejs/kit";
 
 export const prerender = true;

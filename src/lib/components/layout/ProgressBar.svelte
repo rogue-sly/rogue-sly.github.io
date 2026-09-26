@@ -5,7 +5,9 @@
     let visible = $state(false);
     let timeout: ReturnType<typeof setTimeout> | undefined;
 
-    beforeNavigate(() => {
+    beforeNavigate(({ shallow }) => {
+        if (shallow) return;
+
         visible = true;
         progress = 0;
 
@@ -24,7 +26,9 @@
         }, 500);
     });
 
-    afterNavigate(() => {
+    afterNavigate(({ shallow }) => {
+        if (shallow) return;
+
         clearTimeout(timeout);
         progress = 1;
         setTimeout(() => {

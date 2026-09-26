@@ -1,10 +1,10 @@
 <script lang="ts">
     import Post from "./Post.svelte";
-    import SEO from "$lib/components/SEO.svelte";
-    import { url } from "$lib/data/site";
+    import SEO from "#lib/components/SEO.svelte";
+    import { url } from "#lib/data/site.js";
     import { page } from "$app/state";
     import { goto } from "$app/navigation";
-    import { browser } from "$app/environment";
+    import { browser } from "$app/env";
     import Icon from "@iconify/svelte";
 
     let { data } = $props();
@@ -42,18 +42,18 @@
 
     function updateTag(e: Event & { currentTarget: HTMLSelectElement }) {
         const tag = e.currentTarget.value;
-        const params = new URLSearchParams(page.url.searchParams);
+        const params = new URL(page.url.href).searchParams;
 
         tag ? params.set("tag", tag) : params.delete("tag");
-        goto(`?${params.toString()}`, { keepFocus: true, noScroll: true });
+        goto(`?${params.toString()}`, { reset: false });
     }
 
     function updateSort(e: Event & { currentTarget: HTMLSelectElement }) {
         const sort = e.currentTarget.value;
-        const params = new URLSearchParams(page.url.searchParams);
+        const params = new URL(page.url.href).searchParams;
 
         sort !== "date-desc" ? params.set("sort", sort) : params.delete("sort");
-        goto(`?${params.toString()}`, { keepFocus: true, noScroll: true });
+        goto(`?${params.toString()}`, { reset: false });
     }
 </script>
 

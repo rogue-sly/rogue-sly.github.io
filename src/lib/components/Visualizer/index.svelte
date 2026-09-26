@@ -1,6 +1,6 @@
 <script lang="ts">
-    import type { ZenMode } from "$lib/components/layout/zen-mode.svelte";
-    import type { VisualizerSettings } from "$lib/components/Visualizer/settings.svelte";
+    import type { ZenMode } from "#lib/components/layout/zen-mode.svelte.js";
+    import type { VisualizerSettings } from "#lib/components/Visualizer/settings.svelte.js";
     import { page } from "$app/state";
     import FRAG_SRC from "./visualizer.frag.glsl?raw";
     import VERT_SRC from "./visualizer.vert.glsl?raw";

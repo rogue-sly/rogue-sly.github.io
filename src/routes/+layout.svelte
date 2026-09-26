@@ -1,12 +1,12 @@
 <script lang="ts">
     import "../app.css";
-    import { browser } from "$app/environment";
-    import { createZenMode } from "$lib/components/layout/zen-mode.svelte";
-    import { createSettings } from "$lib/components/Visualizer/settings.svelte";
-    import Footer from "$lib/components/layout/Footer.svelte";
-    import Header from "$lib/components/layout/Header.svelte";
-    import ProgressBar from "$lib/components/layout/ProgressBar.svelte";
-    import Sidebar from "$lib/components/layout/Sidebar.svelte";
+    import { browser } from "$app/env";
+    import { createZenMode } from "#lib/components/layout/zen-mode.svelte.js";
+    import { createSettings } from "#lib/components/Visualizer/settings.svelte.js";
+    import Footer from "#lib/components/layout/Footer.svelte";
+    import Header from "#lib/components/layout/Header.svelte";
+    import ProgressBar from "#lib/components/layout/ProgressBar.svelte";
+    import Sidebar from "#lib/components/layout/Sidebar.svelte";
     import { fly } from "svelte/transition";
     import { page } from "$app/state";
 
@@ -22,7 +22,7 @@
 
 <Sidebar {zenMode} {visualizerSettings} />
 
-{#await import("$lib/components/Visualizer/index.svelte") then { default: Visualizer }}
+{#await import("#lib/components/Visualizer/index.svelte") then { default: Visualizer }}
     <Visualizer {zenMode} {visualizerSettings} />
 {/await}
 

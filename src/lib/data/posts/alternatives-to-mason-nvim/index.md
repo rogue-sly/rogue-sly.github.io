@@ -7,7 +7,7 @@ published: true
 ---
 
 <script>
-  import Asciinema from "$lib/components/Asciinema.svelte"
+  import Asciinema from "#lib/components/Asciinema.svelte"
 </script>
 
 ## Why?

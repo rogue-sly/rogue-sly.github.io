@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { email } from "$lib/data/site";
+    import { email } from "#lib/data/site.js";
     import Icon from "@iconify/svelte";
 </script>
 

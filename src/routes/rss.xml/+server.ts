@@ -1,5 +1,5 @@
-import type { PostMetadata } from "$lib/types";
-import * as config from "$lib/data/site";
+import type { PostMetadata } from "#lib/types.js";
+import * as config from "#lib/data/site.js";
 import { create } from "xmlbuilder2";
 import rehypeStringify from "rehype-stringify";
 import remarkGfm from "remark-gfm";

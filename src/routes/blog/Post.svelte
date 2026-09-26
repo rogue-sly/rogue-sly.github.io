@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { formatDate } from "$lib/utils/date";
-    import type { PostMetadata } from "$lib/types";
+    import { formatDate } from "#lib/utils/date.js";
+    import type { PostMetadata } from "#lib/types.js";
 
     let { post }: { post: PostMetadata } = $props();
 </script>

@@ -1,13 +1,10 @@
 <script lang="ts">
     import type { ZenMode } from "./zen-mode.svelte";
-    import type { VisualizerSettings } from "$lib/components/Visualizer/settings.svelte";
+    import type { VisualizerSettings } from "#lib/components/Visualizer/settings.svelte.js";
     import Icon from "@iconify/svelte";
     import { page } from "$app/state";
 
-    let {
-        zenMode,
-        visualizerSettings,
-    }: { zenMode: ZenMode; visualizerSettings: VisualizerSettings } = $props();
+    let { zenMode, visualizerSettings }: { zenMode: ZenMode; visualizerSettings: VisualizerSettings } = $props();
 
     function close() {
         const cb = document.getElementById("sidebar-toggle") as HTMLInputElement;
