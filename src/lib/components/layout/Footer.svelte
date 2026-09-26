@@ -37,7 +37,7 @@
             </a>
             <a href="mailto:{email}">
                 <span class="icon-wrap"><Icon icon="mdi:email" width="20" height="20" /></span>
-                email: {email}
+                {email}
             </a>
         </div>
     </div>
