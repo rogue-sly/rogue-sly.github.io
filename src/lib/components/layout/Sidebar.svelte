@@ -12,16 +12,10 @@
     }
 </script>
 
-<input type="checkbox" id="sidebar-toggle" class="hidden-checkbox" />
+<svelte:window onkeydown={(e) => e.key === "Escape" && close()} />
 
-<!-- svelte-ignore a11y_no_noninteractive_tabindex a11y_no_noninteractive_element_interactions -->
-<label
-    for="sidebar-toggle"
-    class="backdrop"
-    onkeydown={(e) => e.key === "Escape" && close()}
-    tabindex="0"
-    aria-label="Close menu"
-></label>
+<input type="checkbox" id="sidebar-toggle" class="hidden-checkbox" />
+<label for="sidebar-toggle" class="backdrop" aria-label="Close menu"></label>
 
 <aside class="sidebar">
     <div class="header">
