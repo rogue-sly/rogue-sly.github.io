@@ -1,6 +1,9 @@
 <script lang="ts">
     import { email } from "#lib/data/site.js";
-    import Icon from "@iconify/svelte";
+    import MdiGithub from "~icons/mdi/github";
+    import MdiGitlab from "~icons/mdi/gitlab";
+    import MdiYoutube from "~icons/mdi/youtube";
+    import MdiEmail from "~icons/mdi/email";
 </script>
 
 <footer>
@@ -24,19 +27,19 @@
 
         <div class="footer-socials">
             <a href="https://github.com/rogue-sly" target="_blank">
-                <span class="icon-wrap"><Icon icon="mdi:github" width="20" height="20" /></span>
+                <span class="icon-wrap"><MdiGithub width="20" height="20" /></span>
                 github
             </a>
             <a href="https://gitlab.com/rogue-sly" target="_blank">
-                <span class="icon-wrap"><Icon icon="mdi:gitlab" width="20" height="20" /></span>
+                <span class="icon-wrap"><MdiGitlab width="20" height="20" /></span>
                 gitlab
             </a>
             <a href="https://www.youtube.com/@rogue-sly" target="_blank">
-                <span class="icon-wrap"><Icon icon="mdi:youtube" width="20" height="20" /></span>
+                <span class="icon-wrap"><MdiYoutube width="20" height="20" /></span>
                 youtube
             </a>
             <a href="mailto:{email}">
-                <span class="icon-wrap"><Icon icon="mdi:email" width="20" height="20" /></span>
+                <span class="icon-wrap"><MdiEmail width="20" height="20" /></span>
                 {email}
             </a>
         </div>

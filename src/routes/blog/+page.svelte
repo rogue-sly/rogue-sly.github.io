@@ -5,7 +5,7 @@
     import { page } from "$app/state";
     import { goto } from "$app/navigation";
     import { browser } from "$app/env";
-    import Icon from "@iconify/svelte";
+    import MdiRss from "~icons/mdi/rss";
 
     let { data } = $props();
 
@@ -91,7 +91,7 @@
 
 <div class="rss">
     <a href={`${url}/rss.xml`} aria-label="rss" target="_blank">
-        <span class="rss-icon"><Icon icon="mdi:rss" width="2rem" /></span>
+        <span class="rss-icon"><MdiRss width="2rem" height="2rem" /></span>
     </a>
 </div>
 

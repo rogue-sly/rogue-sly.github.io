@@ -1,7 +1,10 @@
 <script lang="ts">
     import type { ZenMode } from "./zen-mode.svelte";
     import type { VisualizerSettings } from "#lib/components/Visualizer/settings.svelte.js";
-    import Icon from "@iconify/svelte";
+    import LucideEyeOff from "~icons/lucide/eye-off";
+    import LucideEye from "~icons/lucide/eye";
+    import LucideTvMinimal from "~icons/lucide/tv-minimal";
+    import LucideX from "~icons/lucide/x";
     import { page } from "$app/state";
 
     let { zenMode, visualizerSettings }: { zenMode: ZenMode; visualizerSettings: VisualizerSettings } = $props();
@@ -29,11 +32,11 @@
                 >
                     {#if zenMode.enabled}
                         <span class="icon-wrap">
-                            <Icon icon="lucide:eye-off" width="18" height="18" />
+                            <LucideEyeOff width="18" height="18" />
                         </span>
                     {:else}
                         <span class="icon-wrap">
-                            <Icon icon="lucide:eye" width="18" height="18" />
+                            <LucideEye width="18" height="18" />
                         </span>
                     {/if}
                 </button>
@@ -44,14 +47,14 @@
                     aria-label={visualizerSettings.enabled ? "Disable Visualizer" : "Enable Visualizer"}
                 >
                     <span class="icon-wrap">
-                        <Icon icon="lucide:tv-minimal" width="18" height="18" />
+                        <LucideTvMinimal width="18" height="18" />
                     </span>
                 </button>
             </div>
 
             <label for="sidebar-toggle" class="btn-close" aria-label="Close Sidebar">
                 <span class="icon-wrap">
-                    <Icon icon="lucide:x" width="20" height="20" />
+                    <LucideX width="20" height="20" />
                 </span>
             </label>
         </div>

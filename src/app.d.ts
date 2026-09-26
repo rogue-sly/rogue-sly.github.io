@@ -1,6 +1,7 @@
 // See https://svelte.dev/docs/kit/types#app
 // for information about these interfaces
 import type { AppError } from "#lib/errors.js";
+import "unplugin-icons/types/svelte";
 
 declare global {
     namespace App {
