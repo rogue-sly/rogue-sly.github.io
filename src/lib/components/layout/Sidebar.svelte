@@ -1,11 +1,6 @@
 <script lang="ts">
-    import type { ZenMode } from "./zen-mode.svelte";
-    import LucideEyeOff from "~icons/lucide/eye-off";
-    import LucideEye from "~icons/lucide/eye";
     import LucideX from "~icons/lucide/x";
     import { page } from "$app/state";
-
-    let { zenMode }: { zenMode: ZenMode } = $props();
 
     function close() {
         const cb = document.getElementById("sidebar-toggle") as HTMLInputElement;
@@ -21,25 +16,6 @@
 <aside class="sidebar">
     <div class="header">
         <div class="header-actions">
-            <div>
-                <button
-                    onclick={() => zenMode.toggle()}
-                    class="btn-settings"
-                    class:active={zenMode.enabled}
-                    aria-label={zenMode.enabled ? "Show Content" : "Hide Content"}
-                >
-                    {#if zenMode.enabled}
-                        <span class="icon-wrap">
-                            <LucideEyeOff width="18" height="18" />
-                        </span>
-                    {:else}
-                        <span class="icon-wrap">
-                            <LucideEye width="18" height="18" />
-                        </span>
-                    {/if}
-                </button>
-            </div>
-
             <label for="sidebar-toggle" class="btn-close" aria-label="Close Sidebar">
                 <span class="icon-wrap">
                     <LucideX width="20" height="20" />
