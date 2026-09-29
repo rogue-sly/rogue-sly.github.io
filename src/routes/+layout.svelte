@@ -1,8 +1,6 @@
 <script lang="ts">
     import "../app.css";
-    import { browser } from "$app/env";
     import { createZenMode } from "#lib/components/layout/zen-mode.svelte.js";
-    import { createSettings } from "#lib/components/Visualizer/settings.svelte.js";
     import Footer from "#lib/components/layout/Footer.svelte";
     import Header from "#lib/components/layout/Header.svelte";
     import ProgressBar from "#lib/components/layout/ProgressBar.svelte";
@@ -13,17 +11,16 @@
     let { children } = $props();
 
     const zenMode = createZenMode();
-    const visualizerSettings = createSettings(browser ? localStorage : null);
 </script>
 
 <ProgressBar />
 
 <Header />
 
-<Sidebar {zenMode} {visualizerSettings} />
+<Sidebar {zenMode} />
 
-{#await import("#lib/components/Visualizer/index.svelte") then { default: Visualizer }}
-    <Visualizer {zenMode} {visualizerSettings} />
+{#await import("#lib/components/layout/Cube/index.svelte") then { default: Cube }}
+    <Cube />
 {/await}
 
 {#key page.url.pathname}

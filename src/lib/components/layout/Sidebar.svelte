@@ -1,13 +1,11 @@
 <script lang="ts">
     import type { ZenMode } from "./zen-mode.svelte";
-    import type { VisualizerSettings } from "#lib/components/Visualizer/settings.svelte.js";
     import LucideEyeOff from "~icons/lucide/eye-off";
     import LucideEye from "~icons/lucide/eye";
-    import LucideTvMinimal from "~icons/lucide/tv-minimal";
     import LucideX from "~icons/lucide/x";
     import { page } from "$app/state";
 
-    let { zenMode, visualizerSettings }: { zenMode: ZenMode; visualizerSettings: VisualizerSettings } = $props();
+    let { zenMode }: { zenMode: ZenMode } = $props();
 
     function close() {
         const cb = document.getElementById("sidebar-toggle") as HTMLInputElement;
@@ -39,16 +37,6 @@
                             <LucideEye width="18" height="18" />
                         </span>
                     {/if}
-                </button>
-                <button
-                    onclick={() => visualizerSettings.toggle()}
-                    class="btn-settings"
-                    class:active={!visualizerSettings.enabled}
-                    aria-label={visualizerSettings.enabled ? "Disable Visualizer" : "Enable Visualizer"}
-                >
-                    <span class="icon-wrap">
-                        <LucideTvMinimal width="18" height="18" />
-                    </span>
                 </button>
             </div>
 
