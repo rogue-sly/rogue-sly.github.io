@@ -1,1 +1,4 @@
-[settings]
+[tools]
+
+[env]
+_.path = ["./node_modules/.bin"]
