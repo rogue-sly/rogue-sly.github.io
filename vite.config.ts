@@ -1,5 +1,5 @@
-import { mdsvex, escapeSvelte } from "mdsvex";
-import { createHighlighter } from "shiki";
+import { mdsvex, escapeSvelte, MdsvexOptions } from "mdsvex";
+import { BundledTheme, createHighlighter } from "shiki";
 import adapter from "@sveltejs/adapter-static";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import rehypeSlug from "rehype-slug";
@@ -9,7 +9,7 @@ import { defineConfig } from "vite";
 import { sveltekit } from "@sveltejs/kit/vite";
 import Icons from "unplugin-icons/vite";
 
-/** @type {import('shiki').BundledTheme} */ const theme = "kanagawa-dragon";
+const theme: BundledTheme = "kanagawa-dragon";
 
 const highlighter = await createHighlighter({
     themes: [theme],
@@ -27,14 +27,13 @@ const highlighter = await createHighlighter({
     ],
 });
 
-/** @type {import('mdsvex').MdsvexOptions} */ const mdsvexOptions = {
+const mdsvexOptions: MdsvexOptions = {
     extensions: [".md"],
     rehypePlugins: [rehypeSlug, rehypeTocExtract],
     remarkPlugins: [relativeImages],
     highlight: {
         highlighter: async (code, lang = "text") => {
             const html = escapeSvelte(highlighter.codeToHtml(code, { lang, theme }));
-
             return `{@html \`${html}\` }`;
         },
     },
