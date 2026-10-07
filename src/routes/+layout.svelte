@@ -3,15 +3,12 @@
     import Cube from "#lib/components/layout/Cube.svelte";
     import Footer from "#lib/components/layout/Footer.svelte";
     import Header from "#lib/components/layout/Header.svelte";
-    import ProgressBar from "#lib/components/layout/ProgressBar.svelte";
     import Sidebar from "#lib/components/layout/Sidebar.svelte";
     import { fly } from "svelte/transition";
     import { page } from "$app/state";
 
     let { children } = $props();
 </script>
-
-<ProgressBar />
 
 <Header />
 
