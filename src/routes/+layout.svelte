@@ -1,5 +1,6 @@
 <script lang="ts">
     import "../app.css";
+    import Cube from "#lib/components/layout/Cube.svelte";
     import Footer from "#lib/components/layout/Footer.svelte";
     import Header from "#lib/components/layout/Header.svelte";
     import ProgressBar from "#lib/components/layout/ProgressBar.svelte";
@@ -16,9 +17,7 @@
 
 <Sidebar />
 
-{#await import("#lib/components/layout/Cube/index.svelte") then { default: Cube }}
-    <Cube />
-{/await}
+<Cube />
 
 {#key page.url.pathname}
     {@const pathname = page.url.pathname}
