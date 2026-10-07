@@ -1,9 +1,6 @@
 <script lang="ts">
+    import Icon from "#lib/components/Icon.svelte";
     import { email } from "#lib/data/site.js";
-    import MdiGithub from "~icons/mdi/github";
-    import MdiGitlab from "~icons/mdi/gitlab";
-    import MdiYoutube from "~icons/mdi/youtube";
-    import MdiEmail from "~icons/mdi/email";
 </script>
 
 <footer>
@@ -27,19 +24,23 @@
 
         <div class="footer-socials">
             <a href="https://github.com/rogue-sly" target="_blank">
-                <span class="icon-wrap"><MdiGithub width="20" height="20" /></span>
+                <span class="icon-wrap"><Icon name="github" size="20px" /></span>
                 github
             </a>
             <a href="https://gitlab.com/rogue-sly" target="_blank">
-                <span class="icon-wrap"><MdiGitlab width="20" height="20" /></span>
+                <span class="icon-wrap"><Icon name="gitlab" size="20px" /></span>
                 gitlab
             </a>
             <a href="https://www.youtube.com/@rogue-sly" target="_blank">
-                <span class="icon-wrap"><MdiYoutube width="20" height="20" /></span>
+                <span class="icon-wrap"><Icon name="youtube" size="20px" /></span>
                 youtube
             </a>
+            <a href="https://matrix.to/#/@rogue-sly:matrix.org" target="_blank">
+                <span class="icon-wrap"> <Icon name="matrix" size="20px" /></span>
+                matrix
+            </a>
             <a href="mailto:{email}">
-                <span class="icon-wrap"><MdiEmail width="20" height="20" /></span>
+                <span class="icon-wrap"><Icon name="email" size="20px" /></span>
                 {email}
             </a>
         </div>

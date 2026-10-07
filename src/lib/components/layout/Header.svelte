@@ -1,5 +1,5 @@
 <script lang="ts">
-    import LucideMenu from "~icons/lucide/menu";
+    import Icon from "#lib/components/Icon.svelte";
 </script>
 
 <header>
@@ -13,7 +13,7 @@
         </div>
 
         <label for="sidebar-toggle" class="menu-btn" aria-label="Toggle Menu">
-            <span class="menu-icon"><LucideMenu width="24" height="24" /></span>
+            <span class="menu-icon"><Icon name="menu" size="24px" /></span>
         </label>
     </div>
 </header>

@@ -7,7 +7,6 @@ import rehypeTocExtract from "./src/lib/utils/rehype/toc-extract.js";
 import relativeImages from "mdsvex-relative-images";
 import { defineConfig } from "vite";
 import { sveltekit } from "@sveltejs/kit/vite";
-import Icons from "unplugin-icons/vite";
 
 const theme: BundledTheme = "kanagawa-dragon";
 
@@ -56,7 +55,6 @@ export default defineConfig({
                 strict: true,
             }),
         }),
-        Icons({ compiler: "svelte" }),
     ],
     esbuild: { treeShaking: true },
     optimizeDeps: { include: ["svelte", "@sveltejs/kit"] },

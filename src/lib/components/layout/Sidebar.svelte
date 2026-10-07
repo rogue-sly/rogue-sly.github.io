@@ -1,5 +1,5 @@
 <script lang="ts">
-    import LucideX from "~icons/lucide/x";
+    import Icon from "#lib/components/Icon.svelte";
     import { page } from "$app/state";
 
     function close() {
@@ -18,7 +18,7 @@
         <div class="header-actions">
             <label for="sidebar-toggle" class="btn-close" aria-label="Close Sidebar">
                 <span class="icon-wrap">
-                    <LucideX width="20" height="20" />
+                    <Icon name="x" size="20px" />
                 </span>
             </label>
         </div>
