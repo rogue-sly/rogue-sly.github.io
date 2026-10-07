@@ -124,35 +124,6 @@
         justify-content: space-between;
         width: 100%;
         gap: 0.5rem;
-
-        & div {
-            display: flex;
-            gap: 0.5rem;
-        }
-    }
-
-    .btn-settings {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.5rem;
-        color: var(--fg-primary);
-        border: 1px solid var(--border-primary);
-        border-radius: calc(var(--radius) / 2);
-        transition:
-            background 0.2s,
-            color 0.2s;
-    }
-
-    .btn-settings:hover {
-        background: var(--fg-primary);
-        color: var(--bg-primary);
-    }
-
-    .btn-settings.active {
-        background: var(--bg-accent);
-        border-color: var(--bg-accent);
-        color: var(--fg-primary-light);
     }
 
     nav {
@@ -209,23 +180,6 @@
     nav a.active::before {
         content: "> ";
         color: var(--fg-accent);
-    }
-
-    button {
-        background: transparent;
-        border: 1px solid var(--border-primary);
-        color: var(--fg-primary);
-        cursor: pointer;
-        transition:
-            background 0.2s,
-            color 0.2s;
-        text-transform: uppercase;
-        border-radius: calc(var(--radius) / 2);
-    }
-
-    button:hover {
-        background: var(--fg-primary-dark);
-        color: var(--bg-primary);
     }
 
     .btn-close {
