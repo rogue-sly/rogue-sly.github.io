@@ -1,6 +1,6 @@
 <script lang="ts">
     import "../app.css";
-    import Cube from "#lib/components/layout/Cube.svelte";
+    import Pipes from "#lib/components/layout/3d-backgrounds/Pipes.svelte";
     import Footer from "#lib/components/layout/Footer.svelte";
     import Header from "#lib/components/layout/Header.svelte";
     import Sidebar from "#lib/components/layout/Sidebar.svelte";
@@ -14,7 +14,7 @@
 
 <Sidebar />
 
-<Cube />
+<Pipes />
 
 {#key page.url.pathname}
     {@const pathname = page.url.pathname}
