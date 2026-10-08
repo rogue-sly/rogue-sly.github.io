@@ -17,7 +17,7 @@
     <Pipes />
 {/await}
 
-{#await import("#lib/components/Radio.svelte") then { default: Radio }}
+{#await import("#lib/components/layout/Radio.svelte") then { default: Radio }}
     <Radio />
 {/await}
 
