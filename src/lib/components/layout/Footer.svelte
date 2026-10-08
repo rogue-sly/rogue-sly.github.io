@@ -8,17 +8,17 @@
     <div class="footer-inner">
         <div class="footer-info">
             <p>
-                icons are licensed under the
+                Icons are licensed under the
                 <a href="https://en.wikipedia.org/wiki/MIT_License" target="_blank">MIT license</a>.
             </p>
             <p>
-                both "Quantico" and "JetBrains Mono" fonts are licensed under
+                Both "Quantico" and "JetBrains Mono" fonts are licensed under
                 <a href="https://openfontlicense.org/open-font-license-official-text/" target="_blank"
                     >open font license</a
                 >.
             </p>
             <p>
-                consider other content is licensed under the
+                Consider other content is licensed under the
                 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.
             </p>
             <p>
