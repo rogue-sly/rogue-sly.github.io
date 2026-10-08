@@ -22,7 +22,7 @@
                 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.
             </p>
             <p>
-                Music brought to you by <a href={radio.homepage}>{radio.name}</a>
+                Music brought to you by <a href={radio.homepage}>{radio.name}</a>.
             </p>
         </div>
 
