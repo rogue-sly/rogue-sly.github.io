@@ -27,7 +27,7 @@
         in:fly={{ duration: 400 }}
         class:blog={pathname === "/blog/"}
         class:centered={pathname === "/"}
-        class:padded={pathname.startsWith("/whoami") || pathname.startsWith("/blog") || pathname === "/settings/"}
+        class:padded={pathname.startsWith("/whoami") || pathname.startsWith("/blog")}
     >
         {@render children()}
     </main>
