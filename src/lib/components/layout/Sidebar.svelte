@@ -33,7 +33,7 @@
                 <a href="/whoami" class:active={page.url.pathname === "/whoami/"} onclick={close}>/whoami</a>
             </li>
             <li>
-                <a href="/blog" class:active={page.url.pathname.startsWith("/blog")} onclick={close}>/blog</a>
+                <a href="/blog" class:active={page.url.pathname === "/blog/"} onclick={close}>/blog</a>
             </li>
             <li>
                 <a href="/projects/" class:active={page.url.pathname === "/projects/"} onclick={close}>

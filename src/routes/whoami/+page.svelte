@@ -5,7 +5,7 @@
 <SEO title="Who Am I" type="profile" />
 
 <section>
-    <p>ah! so you're actually interested in reading a random guy's web page that you know nothing about? cool!</p>
+    <p style="margin-top: 0 !important;">ah! so you're actually interested in reading a random guy's web page that you know nothing about? cool!</p>
 
     <p>
         My name is Ali. I'm a guy who happens to know a thing or two about computers. My first programming language
