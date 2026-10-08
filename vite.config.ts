@@ -9,21 +9,9 @@ import { defineConfig } from "vite";
 import { sveltekit } from "@sveltejs/kit/vite";
 
 const theme: BundledTheme = "kanagawa-dragon";
-
 const highlighter = await createHighlighter({
     themes: [theme],
-    /** @type {import('shiki').BundledLanguage[]} */ langs: [
-        "bash",
-        "json",
-        "lua",
-        "nix",
-        "rust",
-        "sh",
-        "svelte",
-        "toml",
-        "typescript",
-        "yaml",
-    ],
+    langs: ["bash", "json", "lua", "nix", "rust", "sh", "svelte", "toml", "typescript", "yaml"],
 });
 
 const mdsvexOptions: MdsvexOptions = {
