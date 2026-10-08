@@ -1,5 +1,6 @@
 <script lang="ts">
     import Icon from "#lib/components/Icon.svelte";
+    import { radio } from "#lib/data/radio.ts";
     import { email } from "#lib/data/site.js";
 </script>
 
@@ -19,6 +20,9 @@
             <p>
                 consider other content is licensed under the
                 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.
+            </p>
+            <p>
+                Music brought to you by <a href={radio.homepage}>{radio.name}</a>
             </p>
         </div>
 

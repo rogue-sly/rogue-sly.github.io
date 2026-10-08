@@ -1,6 +1,5 @@
 <script lang="ts">
     import "../app.css";
-    import Pipes from "#lib/components/layout/3d-backgrounds/Pipes.svelte";
     import Footer from "#lib/components/layout/Footer.svelte";
     import Header from "#lib/components/layout/Header.svelte";
     import Sidebar from "#lib/components/layout/Sidebar.svelte";
@@ -14,7 +13,13 @@
 
 <Sidebar />
 
-<Pipes />
+{#await import("#lib/components/layout/3d-backgrounds/Pipes.svelte") then { default: Pipes }}
+    <Pipes />
+{/await}
+
+{#await import("#lib/components/Radio.svelte") then { default: Radio }}
+    <Radio />
+{/await}
 
 {#key page.url.pathname}
     {@const pathname = page.url.pathname}
