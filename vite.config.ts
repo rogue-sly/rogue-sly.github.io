@@ -44,6 +44,5 @@ export default defineConfig({
             }),
         }),
     ],
-    esbuild: { treeShaking: true },
     optimizeDeps: { include: ["svelte", "@sveltejs/kit"] },
 });
