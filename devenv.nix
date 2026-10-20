@@ -1,14 +1,8 @@
-{
-  lib,
-  pkgs,
-  ...
-}:
-
+{ pkgs, ... }:
 {
   languages.javascript = {
     enable = true;
     npm.enable = true;
-    lsp.enable = true;
   };
 
   packages = with pkgs; [
