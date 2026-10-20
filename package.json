@@ -40,7 +40,6 @@
         "shiki": "^4.2.0",
         "svelte": "^5.57.1",
         "svelte-check": "^4.7.5",
-        "svelte-language-server": "^0.18.4",
         "typescript": "^6.0.3",
         "unified": "^11.0.5",
         "unist-util-visit": "^5.1.0",
